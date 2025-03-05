@@ -152,31 +152,3 @@
 .typing-dot {
   animation: typingBounce 1.4s infinite ease-in-out;
 }
-
-/* Bounce animation for icons */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-.animate-bounce {
-  animation: bounce 1s ease infinite;
-}
-
-/* Pulse animation for buttons */
-@keyframes pulse-light {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-.animate-pulse {
-  animation: pulse-light 2s ease-in-out infinite;
-}
