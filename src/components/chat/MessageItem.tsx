@@ -69,11 +69,7 @@ const MessageItem = ({
     
     // Check for thumbs up message
     if (text.includes("👍")) {
-      return (
-        <div className="bg-[#202C33] text-white p-3 rounded-md w-full">
-          {text}
-        </div>
-      );
+      return text;
     }
 
     // For regular messages, split by new lines first
@@ -104,25 +100,27 @@ const MessageItem = ({
 
   return (
     <div 
-      className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} 
+      className={`mb-3 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} 
       onAnimationEnd={onAnimationEnd}
     >
       <div 
-        className={`relative py-1.5 px-3 rounded-lg message-animation ${
+        className={`relative py-2 px-3 rounded-lg message-animation ${
           message.sender === 'user' 
-            ? 'bg-[#005C4B] text-white max-w-[95%]' 
-            : message.text.includes("👍") 
-              ? 'w-4/5 p-0 bg-transparent' 
-              : 'bg-[#202C33] text-white w-4/5'
+            ? 'bg-[#005C4B] text-white max-w-[85%]' 
+            : message.chartData || message.text.includes("aumentaram em")
+              ? 'bg-white border border-gray-200 text-black w-[85%]'
+              : message.text.includes("👍") 
+                ? 'bg-[#202C33] text-white w-[85%]' 
+                : 'bg-white border border-gray-200 text-black w-[85%]'
         }`}
       >
         <div className="flex items-end justify-between gap-2">
           <div className={`text-sm ${message.chartData ? 'w-full' : 'self-center'}`}>
             {formatMessageText(message.text)}
           </div>
-          <div className="text-[10px] text-gray-300 flex items-center whitespace-nowrap self-end">
+          <div className="text-[10px] text-gray-500 flex items-center whitespace-nowrap self-end">
             <span>{message.time}</span>
-            {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-300" />}
+            {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-400" />}
           </div>
         </div>
       </div>

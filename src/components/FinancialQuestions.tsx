@@ -135,6 +135,7 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
             Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
           </p>
           
+          {/* Only show action button if chat hasn't started */}
           {!chatStarted && (
             <div className="flex justify-center mb-8">
               <ActionButton 
@@ -146,27 +147,23 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
         </div>
       </div>
 
-      {/* Messages area */}
-      {messages.length > 0 && (
-        <div className="mt-8 bg-[#0A1014] rounded-lg p-3 max-h-[500px] overflow-y-auto">
-          <div className="min-h-[50px]">
-            {messages.map(message => (
-              <MessageItem 
-                key={message.id} 
-                message={message} 
-                onAnimationEnd={handleAnimationEnd} 
-              />
-            ))}
-            
-            {/* Typing indicators */}
-            {isTyping && <TypingIndicator />}
-            {isTypingSecondMessage && <TypingIndicator />}
-            {isTypingThirdMessage && <TypingIndicator />}
-            
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-      )}
+      {/* Messages area - now directly in the main component */}
+      <div className="min-h-[50px] mt-8">
+        {messages.map(message => (
+          <MessageItem 
+            key={message.id} 
+            message={message} 
+            onAnimationEnd={handleAnimationEnd} 
+          />
+        ))}
+        
+        {/* Typing indicators */}
+        {isTyping && <TypingIndicator />}
+        {isTypingSecondMessage && <TypingIndicator />}
+        {isTypingThirdMessage && <TypingIndicator />}
+        
+        <div ref={messagesEndRef} />
+      </div>
     </div>
   );
 };
