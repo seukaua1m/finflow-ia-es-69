@@ -32,7 +32,6 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
             title={title}
             subtitle={subtitle}
             footer={footer}
-            time={time}
           />
         );
       } else {
@@ -42,7 +41,6 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
             title={title}
             subtitle={subtitle}
             footer={footer}
-            time={time}
           />
         );
       }
@@ -54,9 +52,12 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
 
   return (
     <div className="mb-2 flex justify-start" onAnimationEnd={onAnimationEnd}>
-      <div className="relative py-1.5 px-2 rounded-lg message-animation bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
+      <div className="relative py-1.5 px-1 rounded-lg message-animation bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
         <div className="flex flex-col">
           <div className="text-sm self-center w-full text-left">{renderChart(messageText)}</div>
+          <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center mr-2">
+            <span>{time}</span>
+          </div>
         </div>
       </div>
     </div>

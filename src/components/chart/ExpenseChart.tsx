@@ -12,10 +12,9 @@ interface ExpenseChartProps {
   title: string;
   subtitle: string;
   footer: string;
-  time?: string;
 }
 
-const ExpenseChart = ({ chartData, title, subtitle, footer, time }: ExpenseChartProps) => {
+const ExpenseChart = ({ chartData, title, subtitle, footer }: ExpenseChartProps) => {
   // Calculate responsive bar size based on data length
   const getBarSize = () => {
     const screenWidth = window.innerWidth;
@@ -26,7 +25,7 @@ const ExpenseChart = ({ chartData, title, subtitle, footer, time }: ExpenseChart
   };
 
   return (
-    <div className="w-full rounded-md overflow-hidden border border-[#2a3942]/60 bg-white p-3 sm:p-4 relative">
+    <div className="w-full rounded-md overflow-hidden border border-[#2a3942]/40 bg-white p-3 sm:p-4 relative">
       {/* Smaller, more natural gradient overlay in the bottom right corner */}
       <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-black/10 to-transparent rounded-bl-md pointer-events-none"></div>
       
@@ -83,13 +82,6 @@ const ExpenseChart = ({ chartData, title, subtitle, footer, time }: ExpenseChart
       <div className="flex items-center gap-2 border-t border-gray-200 pt-2 mt-1 sm:mt-2">
         <div className="text-black text-xs sm:text-sm font-medium">{footer}</div>
       </div>
-
-      {/* Time indicator without background in the bottom right corner */}
-      {time && (
-        <div className="absolute bottom-1 right-1 text-[10px] text-white z-10">
-          {time}
-        </div>
-      )}
     </div>
   );
 };

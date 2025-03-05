@@ -14,10 +14,9 @@ interface ExpensePieChartProps {
   title: string;
   subtitle: string;
   footer: string;
-  time?: string;
 }
 
-const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePieChartProps) => {
+const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChartProps) => {
   // Custom renderer for the legend
   const renderLegend = () => {
     return (
@@ -66,7 +65,7 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePi
   };
 
   return (
-    <div className="w-full rounded-md overflow-hidden border border-[#2a3942]/60 bg-white p-3 sm:p-4 relative">
+    <div className="w-full rounded-md overflow-hidden border border-[#2a3942]/40 bg-white p-3 sm:p-4 relative">
       {/* Smaller, more natural gradient overlay in the bottom right corner */}
       <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-black/10 to-transparent rounded-bl-md pointer-events-none"></div>
       
@@ -102,13 +101,6 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePi
       <div className="flex items-center gap-2 border-t border-gray-200 pt-2 mt-1 sm:mt-2">
         <div className="text-black text-xs sm:text-sm font-medium">{footer}</div>
       </div>
-
-      {/* Time indicator without background in the bottom right corner */}
-      {time && (
-        <div className="absolute bottom-1 right-1 text-[10px] text-white z-10">
-          {time}
-        </div>
-      )}
     </div>
   );
 };
