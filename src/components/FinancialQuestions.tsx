@@ -4,20 +4,12 @@ import MessageItem from './chat/MessageItem';
 import ChartMessage from './chat/ChartMessage';
 import TypingIndicator from './chat/TypingIndicator';
 import { Message } from '@/types/chat';
-import { 
-  createUserMessage, 
-  createChartMessage, 
-  createFollowUpMessage,
-  createPieChartMessage,
-  createPieChartFollowUpMessage 
-} from '@/services/chatService';
+import { createUserMessage, createChartMessage, createFollowUpMessage, createPieChartMessage, createPieChartFollowUpMessage } from '@/services/chatService';
 import { ArrowRight, SendHorizontal } from 'lucide-react';
 import ContinueButton from './common/ContinueButton';
-
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
-
 const FinancialQuestions = ({
   onContinue
 }: FinancialQuestionsProps) => {
@@ -40,7 +32,6 @@ const FinancialQuestions = ({
       behavior: 'smooth'
     });
   };
-
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, isTypingSecondMessage, isTypingThirdMessage, isTypingFourthMessage, isTypingFifthMessage, showComparisonText]);
@@ -49,75 +40,74 @@ const FinancialQuestions = ({
   const handleAnimationEnd = () => {
     setAnimationComplete(true);
   };
-
   const handleActionClick = () => {
     // Hide the button
     setButtonClicked(true);
-    
+
     // Disable animations while processing
     setAnimationComplete(false);
-    
+
     // Create user message with button text
     const buttonText = "quanto eu gastei nos últimos dias?";
     const userMessage = createUserMessage(buttonText);
-    
+
     // Add user message to chat
     setMessages(prev => [...prev, userMessage]);
-    
+
     // Show typing indicator after a brief delay
     setTimeout(() => {
       setIsTyping(true);
-      
+
       // After 2 seconds, show the chart response
       setTimeout(() => {
         setIsTyping(false);
-        
+
         // First bot message with chart
         const chartMessage = createChartMessage();
         setMessages(prev => [...prev, chartMessage]);
-        
+
         // Show typing indicator for second message
         setTimeout(() => {
           setIsTypingSecondMessage(true);
-          
+
           // After another delay, show the second bot message
           setTimeout(() => {
             setIsTypingSecondMessage(false);
-            
+
             // Second bot message with call to action
             const followUpMessage = createFollowUpMessage();
             setMessages(prev => [...prev, followUpMessage]);
-            
+
             // Add user message asking for expense breakdown
             setTimeout(() => {
               const categoryQuestionMessage = createUserMessage("me mostre a divisão dos meus gastos por categoria");
               setMessages(prev => [...prev, categoryQuestionMessage]);
-              
+
               // Show typing indicator for the pie chart response
               setTimeout(() => {
                 setIsTypingThirdMessage(true);
-                
+
                 // After delay, show the pie chart response
                 setTimeout(() => {
                   setIsTypingThirdMessage(false);
-                  
+
                   // Third bot message with pie chart
                   const pieChartMessage = createPieChartMessage();
                   setMessages(prev => [...prev, pieChartMessage]);
-                  
+
                   // Show typing indicator for the final follow-up message
                   setTimeout(() => {
                     setIsTypingFourthMessage(true);
-                    
+
                     // After final delay, show the last follow-up message
                     setTimeout(() => {
                       setIsTypingFourthMessage(false);
-                      
+
                       // Fourth bot message with call to action for pie chart
                       const pieChartFollowUpMessage = createPieChartFollowUpMessage();
                       setMessages(prev => [...prev, pieChartFollowUpMessage]);
                       setAnimationComplete(true);
-                      
+
                       // Show next step and continue to next component after a delay
                       setShowNextStep(true);
                       setTimeout(() => {
@@ -133,26 +123,25 @@ const FinancialQuestions = ({
       }, 2000);
     }, 800);
   };
-
   const handleSuggestionClick = () => {
     // Hide the suggestion button
     setSuggestionButtonClicked(true);
-    
+
     // Create user message with suggestion text
     const suggestionText = "O que eu gastei a mais essa semana?";
     const userMessage = createUserMessage(suggestionText);
-    
+
     // Add user message to chat
     setMessages(prev => [...prev, userMessage]);
-    
+
     // Show typing indicator after a brief delay
     setTimeout(() => {
       setIsTypingFifthMessage(true);
-      
+
       // After delay, show the comparison response
       setTimeout(() => {
         setIsTypingFifthMessage(false);
-        
+
         // Bot message with expense comparison
         const comparisonMessage: Message = {
           id: Date.now() + 1,
@@ -161,7 +150,7 @@ const FinancialQuestions = ({
           time: '18:19'
         };
         setMessages(prev => [...prev, comparisonMessage]);
-        
+
         // Show comparison text after a delay
         setTimeout(() => {
           setShowComparisonText(true);
@@ -169,9 +158,7 @@ const FinancialQuestions = ({
       }, 2000);
     }, 800);
   };
-
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
         <div className="bg-sales-orange font-medium rounded-full transition-all duration-300 text-slate-950 px-[15px] py-[2px]">
           Demonstração
@@ -187,35 +174,25 @@ const FinancialQuestions = ({
             Você pode perguntar <span className="text-sales-green font-bold">TUDO SOBRE SUAS FINANÇAS.</span>
           </p>
           
-          <p className="text-lg mb-8 text-[#254d39]">
+          <p className="text-lg mb-8 text-[#254d39] font-semibold">
             Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
           </p>
           
           {/* Only show button if it hasn't been clicked yet */}
-          {!buttonClicked && (
-            <div className="flex justify-center mb-8">
+          {!buttonClicked && <div className="flex justify-center mb-8">
               <ActionButton onClick={handleActionClick} text="quanto eu gastei nos últimos dias?" />
-            </div>
-          )}
+            </div>}
         </div>
       </div>
 
       {/* Chat area */}
       <div className="min-h-[50px]">
         {messages.map(message => {
-          if (message.isChartMessage) {
-            return (
-              <ChartMessage 
-                key={message.id}
-                messageText={message.text}
-                time={message.time}
-                onAnimationEnd={handleAnimationEnd}
-                isPieChart={message.isPieChart}
-              />
-            );
-          }
-          return <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />;
-        })}
+        if (message.isChartMessage) {
+          return <ChartMessage key={message.id} messageText={message.text} time={message.time} onAnimationEnd={handleAnimationEnd} isPieChart={message.isPieChart} />;
+        }
+        return <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />;
+      })}
         
         {/* Typing indicators */}
         {isTyping && <TypingIndicator />}
@@ -227,28 +204,21 @@ const FinancialQuestions = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {showNextStep && (
-        <div className="mt-8 space-y-6">
+      {showNextStep && <div className="mt-8 space-y-6">
           {/* Suggestion section from the image */}
           <div className="text-center">
             <p className="text-sales-green text-lg font-medium mb-3">
               Imaginando que esses gastos sejam os seus, pergunte algo ao seu assistente:
             </p>
             
-            {!suggestionButtonClicked && (
-              <button 
-                onClick={handleSuggestionClick}
-                className="flex items-center justify-center bg-[#2FA179] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto animate-[jump_2s_ease-in-out_infinite]"
-              >
+            {!suggestionButtonClicked && <button onClick={handleSuggestionClick} className="flex items-center justify-center bg-[#2FA179] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto animate-[jump_2s_ease-in-out_infinite]">
                 <SendHorizontal size={24} className="mr-2" />
                 <span>O que eu gastei a mais essa semana?</span>
-              </button>
-            )}
+              </button>}
           </div>
           
           {/* Show comparison text after responding to suggestion */}
-          {showComparisonText && (
-            <div className="text-center mt-8 space-y-3">
+          {showComparisonText && <div className="text-center mt-8 space-y-3">
               <p className="text-lg">
                 Você nunca mais vai se fazer a pergunta 
                 <span className="text-sales-green font-semibold"> "onde que eu gastei tanto esse mês"</span>, sem 
@@ -258,12 +228,8 @@ const FinancialQuestions = ({
               <div className="mt-8">
                 <ContinueButton onClick={onContinue} />
               </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+            </div>}
+        </div>}
+    </div>;
 };
-
 export default FinancialQuestions;
