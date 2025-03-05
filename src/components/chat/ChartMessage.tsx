@@ -54,10 +54,9 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
 
   return (
     <div className="mb-2 flex justify-start" onAnimationEnd={onAnimationEnd}>
-      <div className="relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
+      <div className="relative py-1.5 px-2 rounded-lg message-animation bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
         <div className="flex flex-col">
           <div className="text-sm self-center w-full text-left">{renderChart(messageText)}</div>
-          {/* Removed time display here as it's now passed to the chart components */}
         </div>
       </div>
     </div>

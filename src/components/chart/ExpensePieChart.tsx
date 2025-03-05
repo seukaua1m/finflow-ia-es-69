@@ -66,9 +66,9 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePi
   };
 
   return (
-    <div className="w-full rounded-md overflow-hidden border border-[#2a3942] bg-white p-3 sm:p-4 relative">
-      {/* Dark gradient overlay in the bottom right corner */}
-      <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-black/20 to-transparent rounded-bl-md pointer-events-none"></div>
+    <div className="w-full rounded-md overflow-hidden border border-[#2a3942]/60 bg-white p-3 sm:p-4 relative">
+      {/* Smaller, more natural gradient overlay in the bottom right corner */}
+      <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-black/10 to-transparent rounded-bl-md pointer-events-none"></div>
       
       <div className="mb-1">
         <h3 className="text-base sm:text-xl font-bold text-black text-center">{title}</h3>
