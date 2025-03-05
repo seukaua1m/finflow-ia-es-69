@@ -3,6 +3,8 @@ import React from 'react';
 import { useReminderDemo } from '@/hooks/useReminderDemo';
 import DemoHeader from './financial-questions/DemoHeader';
 import ReminderIntroSection from './reminder-demo/ReminderIntroSection';
+import ReminderNotificationSection from './reminder-demo/ReminderNotificationSection';
+import SpendingLimitsSection from './reminder-demo/SpendingLimitsSection';
 import ChatMessages from './financial-questions/ChatMessages';
 import ContinueButton from './common/ContinueButton';
 
@@ -13,11 +15,6 @@ interface ReminderDemoProps {
 const ReminderDemo = ({ onContinue }: ReminderDemoProps) => {
   const {
     messages,
-    isTyping,
-    isTypingSecondMessage,
-    isTypingThirdMessage,
-    isTypingFourthMessage,
-    isTypingFifthMessage,
     showContinueButton,
     animationComplete,
     handleAnimationEnd
@@ -32,13 +29,17 @@ const ReminderDemo = ({ onContinue }: ReminderDemoProps) => {
       {/* Chat area */}
       <ChatMessages 
         messages={messages}
-        isTyping={isTyping}
-        isTypingSecondMessage={isTypingSecondMessage}
-        isTypingThirdMessage={isTypingThirdMessage}
-        isTypingFourthMessage={isTypingFourthMessage}
-        isTypingFifthMessage={isTypingFifthMessage}
+        isTyping={false}
+        isTypingSecondMessage={false}
+        isTypingThirdMessage={false}
+        isTypingFourthMessage={false}
+        isTypingFifthMessage={false}
         onAnimationEnd={handleAnimationEnd}
       />
+
+      {/* New Sections */}
+      <ReminderNotificationSection />
+      <SpendingLimitsSection />
 
       {showContinueButton && (
         <div className="mt-6">

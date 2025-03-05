@@ -45,12 +45,13 @@ const MessageItem = ({
         const parts = line.split(/<strong>|<\/strong>/);
         return (
           <React.Fragment key={lineIndex}>
-            {parts.map((part, partIndex) => partIndex % 2 === 1 ?
-              // Odd indexes are between <strong> tags
-              <strong key={partIndex}>{part}</strong> :
-              // Even indexes are outside <strong> tags
-              <span key={partIndex}>{part}</span>
-            )}
+            {parts.map((part, partIndex) => (
+              partIndex % 2 === 1 ?
+                // Odd indexes are between <strong> tags
+                <strong key={partIndex}>{part}</strong> :
+                // Even indexes are outside <strong> tags
+                <span key={partIndex}>{part}</span>
+            ))}
             {lineIndex < lines.length - 1 && <br />}
           </React.Fragment>
         );
