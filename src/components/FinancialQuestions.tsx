@@ -1,29 +1,46 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ActionButton from './common/ActionButton';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
 import { Message } from '@/types/chat';
 import { getCurrentTime } from '@/utils/messageUtils';
-import FinancialChart from './charts/FinancialChart';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
 
 const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
-  const [showNextStep, setShowNextStep] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [isTypingThirdMessage, setIsTypingThirdMessage] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
+  const [chatStarted, setChatStarted] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom of messages
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping, isTypingSecondMessage, isTypingThirdMessage]);
+
+  // Handle animation end
+  const handleAnimationEnd = () => {
+    setAnimationComplete(true);
+  };
 
   const handleActionClick = () => {
-    setShowNextStep(true);
+    if (!animationComplete || chatStarted) return;
+    setChatStarted(true);
     setAnimationComplete(false);
     
-    // Add user message
+    // Add user message with the text from the button
     const userMessage: Message = {
       id: Date.now(),
       text: "quanto eu gastei nos últimos dias?",
@@ -97,11 +114,6 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
     }, 800);
   };
 
-  // Handle animation end for messages
-  const handleAnimationEnd = () => {
-    setAnimationComplete(true);
-  };
-
   return (
     <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
@@ -123,15 +135,20 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
             Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
           </p>
           
-          <div className="flex justify-center mb-8">
-            <ActionButton onClick={handleActionClick} text="quanto eu gastei nos últimos dias?" />
-          </div>
+          {!chatStarted && (
+            <div className="flex justify-center mb-8">
+              <ActionButton 
+                onClick={handleActionClick} 
+                text="quanto eu gastei nos últimos dias?" 
+              />
+            </div>
+          )}
         </div>
       </div>
 
-      {showNextStep && (
+      {/* Messages area */}
+      {messages.length > 0 && (
         <div className="mt-8 bg-[#0A1014] rounded-lg p-3 max-h-[500px] overflow-y-auto">
-          {/* Messages area */}
           <div className="min-h-[50px]">
             {messages.map(message => (
               <MessageItem 
@@ -145,6 +162,8 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
             {isTyping && <TypingIndicator />}
             {isTypingSecondMessage && <TypingIndicator />}
             {isTypingThirdMessage && <TypingIndicator />}
+            
+            <div ref={messagesEndRef} />
           </div>
         </div>
       )}
