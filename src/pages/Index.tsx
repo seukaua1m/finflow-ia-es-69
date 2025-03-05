@@ -48,7 +48,7 @@ const Index = () => {
             <SalesCard title="Perdido nas dívidas">
               <p>
                 Não sabe quanto paga de parcela, quanto tempo falta, quem deve,{' '}
-                <span className="font-bold">e não tem um plano para pagar.</span>
+                <span className="font-bold text-[#254d39]">e não tem um plano para pagar.</span>
               </p>
             </SalesCard>
 
