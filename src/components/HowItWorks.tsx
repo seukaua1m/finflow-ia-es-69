@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -6,7 +5,6 @@ import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
-
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,7 +20,6 @@ const HowItWorks = () => {
       behavior: 'smooth'
     });
   };
-  
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, isTypingSecondMessage]);
@@ -87,11 +84,11 @@ const HowItWorks = () => {
         // Show typing indicator again after first message
         setTimeout(() => {
           setIsTypingSecondMessage(true);
-          
+
           // Wait for a moment before showing second bot message
           setTimeout(() => {
             setIsTypingSecondMessage(false);
-            
+
             // Add reminder message with bold text for the limit
             const reminderMessage: Message = {
               id: Date.now() + 2,
@@ -117,9 +114,7 @@ const HowItWorks = () => {
     // Add continue functionality here
     console.log("Continue button clicked");
   };
-  
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -130,7 +125,7 @@ const HowItWorks = () => {
       </p>
 
       <div className="flex justify-center mb-10">
-        <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 px-[13px] py-[10px] mx-0 my-0">
+        <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 mx-0 py-0 px-[14px] my-[2px]">
           Demonstração
         </button>
       </div>
@@ -156,13 +151,7 @@ const HowItWorks = () => {
 
       {/* Chat area */}
       <div className="min-h-[50px]">
-        {messages.map(message => (
-          <MessageItem 
-            key={message.id} 
-            message={message} 
-            onAnimationEnd={handleAnimationEnd} 
-          />
-        ))}
+        {messages.map(message => <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />)}
         
         {/* Typing indicator */}
         {isTyping && <TypingIndicator />}
@@ -175,19 +164,8 @@ const HowItWorks = () => {
 
       {/* Message input form or continue button */}
       <div className="mt-4">
-        {!showContinueButton ? (
-          <ChatInput 
-            inputValue={inputValue}
-            onInputChange={handleInputChange}
-            onSubmit={handleSubmit}
-            isDisabled={!animationComplete}
-          />
-        ) : (
-          <ContinueButton onClick={handleContinue} />
-        )}
+        {!showContinueButton ? <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} /> : <ContinueButton onClick={handleContinue} />}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HowItWorks;
