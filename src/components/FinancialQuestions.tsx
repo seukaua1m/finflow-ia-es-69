@@ -12,6 +12,7 @@ import {
   createPieChartMessage,
   createPieChartFollowUpMessage 
 } from '@/services/chatService';
+import { ArrowRight } from 'lucide-react';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
@@ -130,6 +131,17 @@ const FinancialQuestions = ({
     }, 800);
   };
 
+  const handleSuggestionClick = () => {
+    // Create user message with suggestion text
+    const suggestionText = "O que eu gastei a mais essa semana?";
+    const userMessage = createUserMessage(suggestionText);
+    
+    // Add user message to chat
+    setMessages(prev => [...prev, userMessage]);
+    
+    // Implement future behavior here
+  };
+
   return (
     <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
@@ -186,9 +198,24 @@ const FinancialQuestions = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {showNextStep && <div className="mt-8">
-          {/* Future implementation: Financial data visualization will appear here */}
-        </div>}
+      {showNextStep && (
+        <div className="mt-8 space-y-6">
+          {/* Suggestion section from the image */}
+          <div className="text-center">
+            <p className="text-sales-green text-lg font-medium mb-3">
+              Imaginando que esses gastos sejam os seus, pergunte algo ao seu assistente:
+            </p>
+            
+            <button 
+              onClick={handleSuggestionClick}
+              className="flex items-center justify-start bg-[#2FA179] text-white rounded-full px-5 py-4 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto"
+            >
+              <ArrowRight size={20} className="mr-3" />
+              <span>O que eu gastei a mais essa semana?</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
