@@ -1,11 +1,8 @@
-
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
-
 const Index = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-  
   const handleContinue = () => {
     setShowHowItWorks(true);
     window.scrollTo({
@@ -13,7 +10,6 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
-  
   return <div className="min-h-screen bg-white flex flex-col items-center">
       {!showHowItWorks ? <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
@@ -38,7 +34,7 @@ const Index = () => {
             <SalesCard title="Para onde vai seu dinheiro?">
               <p>
                 Você trabalha o mês inteiro, mas no final{' '}
-                <span className="font-bold">nunca sabe onde foi parar tudo que ganhou.</span>
+                <span className="font-bold text-[#254d39]">nunca sabe onde foi parar tudo que ganhou.</span>
               </p>
             </SalesCard>
 
@@ -71,5 +67,4 @@ const Index = () => {
         </div> : <HowItWorks />}
     </div>;
 };
-
 export default Index;
