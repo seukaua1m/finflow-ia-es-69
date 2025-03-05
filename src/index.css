@@ -120,3 +120,19 @@
     transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
     focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50;
 }
+
+/* Chat animations */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-animation {
+  animation: messageSlideIn 0.3s ease-out;
+}

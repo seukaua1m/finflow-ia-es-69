@@ -1,11 +1,121 @@
-import React, { useState } from 'react';
-import { SendHorizontal } from 'lucide-react';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { SendHorizontal, CheckCheck } from 'lucide-react';
+
+interface Message {
+  id: number;
+  text: string;
+  sender: 'user' | 'bot';
+  time: string;
+}
+
+// Typing indicator component
+const TypingIndicator = () => {
+  return (
+    <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 animate-fade-in max-w-[100px]">
+      <div className="flex space-x-2">
+        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '600ms' }}></div>
+      </div>
+    </div>
+  );
+};
+
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Function to get current time in HH:MM format
+  const getCurrentTime = () => {
+    const now = new Date();
+    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+  };
+
+  // Scroll to bottom of messages
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-  return <div className="w-full max-w-3xl bg-white px-4 py-12">
+
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now(),
+      text: inputValue,
+      sender: 'user',
+      time: getCurrentTime()
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    
+    // Show typing indicator
+    setIsTyping(true);
+    
+    // Simulate bot response after delay
+    setTimeout(() => {
+      setIsTyping(false);
+      
+      // Add bot messages
+      const botMessages: Message[] = [
+        {
+          id: Date.now() + 1,
+          text: "Gasto adicionado",
+          sender: 'bot',
+          time: getCurrentTime()
+        },
+        {
+          id: Date.now() + 2,
+          text: `📌 ${inputValue.split(' ')[0].toUpperCase()} (Delivery)`,
+          sender: 'bot',
+          time: getCurrentTime()
+        },
+        {
+          id: Date.now() + 3,
+          text: `R$ ${inputValue.split(' ')[1] || '0'},00`,
+          sender: 'bot',
+          time: getCurrentTime()
+        },
+        {
+          id: Date.now() + 4,
+          text: new Date().toLocaleDateString('pt-BR'),
+          sender: 'bot',
+          time: getCurrentTime()
+        },
+        {
+          id: Date.now() + 5,
+          text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
+          sender: 'bot',
+          time: getCurrentTime()
+        }
+      ];
+      
+      // Add each bot message with slight delay between them
+      botMessages.forEach((msg, index) => {
+        setTimeout(() => {
+          setMessages(prev => [...prev, msg]);
+        }, index * 500);
+      });
+    }, 2000);
+  };
+
+  return (
+    <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -40,12 +150,55 @@ const HowItWorks = () => {
         </div>
       </div>
 
-      <div className="flex gap-4 mt-10">
-        <input type="text" placeholder="Exemplo: ifood 44" value={inputValue} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green" />
-        <button className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]">
+      {/* Chat area */}
+      <div className="bg-gray-100 rounded-lg p-4 mb-4 h-[400px] overflow-y-auto flex flex-col">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div
+              className={`relative p-3 rounded-lg max-w-[80%] animate-fade-in ${
+                message.sender === 'user'
+                  ? 'bg-[#154D39] text-white'
+                  : 'bg-[#242625] text-white'
+              }`}
+            >
+              <p>{message.text}</p>
+              <div className={`text-xs text-gray-300 ${message.sender === 'user' ? 'text-right' : 'text-right'} mt-1 flex items-center ${message.sender === 'user' ? 'justify-end' : 'justify-end'}`}>
+                <span>{message.time}</span>
+                {message.sender === 'user' && (
+                  <CheckCheck size={16} className="ml-1 text-gray-300" />
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+        
+        {/* Typing indicator */}
+        {isTyping && <TypingIndicator />}
+        
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Message input form */}
+      <form onSubmit={handleSubmit} className="flex gap-4">
+        <input
+          type="text"
+          placeholder="Exemplo: ifood 44"
+          value={inputValue}
+          onChange={handleInputChange}
+          className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
+        />
+        <button
+          type="submit"
+          className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
+        >
           <SendHorizontal size={24} />
         </button>
-      </div>
-    </div>;
+      </form>
+    </div>
+  );
 };
+
 export default HowItWorks;
