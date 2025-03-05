@@ -1,16 +1,11 @@
-
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -21,7 +16,7 @@ const HowItWorks = () => {
       </p>
 
       <div className="flex justify-center mb-10">
-        <button className="bg-sales-orange text-white font-medium py-2 px-6 rounded-full transition-all duration-300 hover:bg-opacity-90">
+        <button className="bg-sales-orange font-medium py-2 px-6 rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950">
           Demonstração
         </button>
       </div>
@@ -49,19 +44,11 @@ const HowItWorks = () => {
       </div>
 
       <div className="flex mt-10">
-        <input
-          type="text"
-          placeholder="Exemplo: ifood 44"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="w-full px-4 py-3 border border-gray-300 rounded-l-full focus:outline-none focus:ring-1 focus:ring-sales-green"
-        />
+        <input type="text" placeholder="Exemplo: ifood 44" value={inputValue} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-l-full focus:outline-none focus:ring-1 focus:ring-sales-green" />
         <button className="bg-green-500 text-white p-3 rounded-r-full flex items-center justify-center">
           <ArrowRight size={24} />
         </button>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HowItWorks;
