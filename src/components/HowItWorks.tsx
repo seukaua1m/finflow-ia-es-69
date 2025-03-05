@@ -1,10 +1,14 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
 import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
+import ActionButton from './common/ActionButton';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
+import { BarChart, PieChart } from 'recharts';
+
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -12,6 +16,11 @@ const HowItWorks = () => {
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [showContinueButton, setShowContinueButton] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showSecondStep, setShowSecondStep] = useState(false);
+  const [isTypingStepTwo, setIsTypingStepTwo] = useState(false);
+  const [showChartButton, setShowChartButton] = useState(false);
+  const [showPieChartButton, setShowPieChartButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
@@ -20,9 +29,10 @@ const HowItWorks = () => {
       behavior: 'smooth'
     });
   };
+  
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping, isTypingSecondMessage]);
+  }, [messages, isTyping, isTypingSecondMessage, isTypingStepTwo, showSecondStep]);
 
   // Handle animation end
   const handleAnimationEnd = () => {
@@ -111,9 +121,128 @@ const HowItWorks = () => {
 
   // Handle continue button click
   const handleContinue = () => {
-    // Add continue functionality here
-    console.log("Continue button clicked");
+    setShowContinueButton(false);
+    setCurrentStep(2);
+    setShowSecondStep(true);
   };
+
+  // Handle the action button click for charts
+  const handleExpensesButtonClick = () => {
+    if (!animationComplete) return;
+    
+    // Disable animations while processing
+    setAnimationComplete(false);
+    
+    // Add user message for expenses query
+    const userMessage: Message = {
+      id: Date.now(),
+      text: "quanto eu gastei nos últimos dias?",
+      sender: 'user',
+      time: getCurrentTime()
+    };
+    setMessages(prev => [...prev, userMessage]);
+    
+    // Wait for user message animation to complete
+    setTimeout(() => {
+      // Show typing indicator
+      setIsTypingStepTwo(true);
+      
+      // Simulate bot response after delay
+      setTimeout(() => {
+        setIsTypingStepTwo(false);
+        
+        // Create the expense summary message with chart
+        const currentTime = getCurrentTime();
+        
+        // Add expense graph message
+        const expenseGraphMessage: Message = {
+          id: Date.now() + 1,
+          text: `Últimos 7 dias\nR$ 632,00 - 27/02 a 05/03\n\n155\n105\n53\n64\n131\n52\n72\n\nqui\nsex\nsab\ndom\nseg\nter\nqua\n\n📈 Seus gastos aumentaram em <strong>20%</strong> essa semana`,
+          sender: 'bot',
+          time: currentTime,
+          isChartMessage: true
+        };
+        setMessages(prev => [...prev, expenseGraphMessage]);
+        
+        // Show the button for chart
+        setTimeout(() => {
+          setShowChartButton(true);
+          setAnimationComplete(true);
+        }, 1000);
+      }, 2000);
+    }, 800);
+  };
+  
+  // Handle the pie chart button click
+  const handleChartButtonClick = () => {
+    if (!animationComplete) return;
+    
+    // Disable animations while processing
+    setAnimationComplete(false);
+    
+    // Add chart button message
+    const buttonMessage: Message = {
+      id: Date.now(),
+      text: "Segue gráfico dos seus gastos dos últimos 7 dias 👆",
+      sender: 'bot',
+      time: getCurrentTime(),
+      isButtonMessage: true
+    };
+    setMessages(prev => [...prev, buttonMessage]);
+    
+    // Show typing indicator
+    setTimeout(() => {
+      setIsTypingStepTwo(true);
+      
+      // Simulate bot response after delay
+      setTimeout(() => {
+        setIsTypingStepTwo(false);
+        
+        // Create the pie chart message
+        const currentTime = getCurrentTime();
+        
+        // Add pie chart message
+        const pieChartMessage: Message = {
+          id: Date.now() + 1,
+          text: `Divisão de gastos\n27/02 a 05/03\n\n[PIE_CHART]\n\n🔵 Alimentação\n🟦 Transporte\n🟪 Lazer\n🟧 Contas Fixas\n🟨 Jantar fora`,
+          sender: 'bot',
+          time: currentTime,
+          isPieChartMessage: true
+        };
+        setMessages(prev => [...prev, pieChartMessage]);
+        
+        // Show the button for pie chart
+        setTimeout(() => {
+          setShowPieChartButton(true);
+          setAnimationComplete(true);
+        }, 1000);
+      }, 2000);
+    }, 1000);
+  };
+  
+  // Handle the pie chart button click
+  const handlePieChartButtonClick = () => {
+    if (!animationComplete) return;
+    
+    // Disable animations while processing
+    setAnimationComplete(false);
+    
+    // Add chart button message
+    const buttonMessage: Message = {
+      id: Date.now(),
+      text: "Segue o gráfico da divisão dos seus gastos por categoria 👆",
+      sender: 'bot',
+      time: getCurrentTime(),
+      isButtonMessage: true
+    };
+    setMessages(prev => [...prev, buttonMessage]);
+    
+    // Enable animations
+    setTimeout(() => {
+      setAnimationComplete(true);
+    }, 800);
+  };
+
   return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
@@ -130,24 +259,51 @@ const HowItWorks = () => {
         </button>
       </div>
 
-      <div className="mb-8">
-        <div className="flex items-start mb-4">
-          <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
-            1.
-          </div>
-          <div>
-            <p className="text-lg mb-2">
-              Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
-            </p>
-            <p className="text-lg mb-4 text-sales-green">
-              Registre um gasto (real ou falso) para testar.
-            </p>
-            <p className="text-sm text-sales-green italic">
-              Não se preocupe com vírgulas, nem com por "R$", escreva do seu jeito.
-            </p>
+      {currentStep === 1 && (
+        <div className="mb-8">
+          <div className="flex items-start mb-4">
+            <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
+              1.
+            </div>
+            <div>
+              <p className="text-lg mb-2">
+                Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
+              </p>
+              <p className="text-lg mb-4 text-sales-green">
+                Registre um gasto (real ou falso) para testar.
+              </p>
+              <p className="text-sm text-sales-green italic">
+                Não se preocupe com vírgulas, nem com por "R$", escreva do seu jeito.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {currentStep === 2 && showSecondStep && (
+        <div className="mb-8">
+          <div className="flex items-start mb-4">
+            <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
+              2.
+            </div>
+            <div>
+              <p className="text-lg mb-2">
+                Você pode perguntar <span className="font-bold text-sales-green">TUDO SOBRE SUAS FINANÇAS</span>.
+              </p>
+              <p className="text-lg mb-4">
+                Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
+              </p>
+              <div className="mt-4">
+                <ActionButton 
+                  text="quanto eu gastei nos últimos dias?" 
+                  onClick={handleExpensesButtonClick} 
+                  disabled={!animationComplete}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Chat area */}
       <div className="min-h-[50px]">
@@ -159,13 +315,58 @@ const HowItWorks = () => {
         {/* Second typing indicator between bot messages */}
         {isTypingSecondMessage && <TypingIndicator />}
         
+        {/* Step two typing indicator */}
+        {isTypingStepTwo && <TypingIndicator />}
+        
         <div ref={messagesEndRef} />
       </div>
 
       {/* Message input form or continue button */}
       <div className="mt-4">
-        {!showContinueButton ? <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} /> : <ContinueButton onClick={handleContinue} />}
+        {currentStep === 1 && !showContinueButton ? (
+          <ChatInput 
+            inputValue={inputValue}
+            onInputChange={handleInputChange}
+            onSubmit={handleSubmit}
+            isDisabled={!animationComplete}
+          />
+        ) : currentStep === 1 && showContinueButton ? (
+          <ContinueButton onClick={handleContinue} />
+        ) : null}
+        
+        {/* Chart button */}
+        {showChartButton && !showPieChartButton && (
+          <div className="mt-2">
+            <button
+              onClick={handleChartButtonClick}
+              className="w-full bg-[#1E1E1E] text-white font-medium py-3 px-6 rounded-lg
+                transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
+                focus:outline-none animate-fade-in flex items-center justify-between"
+              disabled={!animationComplete}
+            >
+              <span>Segue gráfico dos seus gastos dos últimos 7 dias</span>
+              <span className="text-yellow-400">👆</span>
+            </button>
+          </div>
+        )}
+        
+        {/* Pie chart button */}
+        {showPieChartButton && (
+          <div className="mt-2">
+            <button
+              onClick={handlePieChartButtonClick}
+              className="w-full bg-[#1E1E1E] text-white font-medium py-3 px-6 rounded-lg
+                transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
+                focus:outline-none animate-fade-in flex items-center justify-between"
+              disabled={!animationComplete}
+            >
+              <span>Segue o gráfico da divisão dos seus gastos por categoria</span>
+              <span className="text-yellow-400">👆</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>;
 };
+
 export default HowItWorks;
