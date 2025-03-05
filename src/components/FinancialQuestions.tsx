@@ -1,14 +1,12 @@
-
 import React, { useState } from 'react';
 import ActionButton from './common/ActionButton';
-
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
-
-const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
+const FinancialQuestions = ({
+  onContinue
+}: FinancialQuestionsProps) => {
   const [showNextStep, setShowNextStep] = useState(false);
-
   const handleActionClick = () => {
     setShowNextStep(true);
     // Future implementation: Show chat sequence with financial data visualization
@@ -16,16 +14,14 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
       onContinue();
     }, 3000);
   };
-
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
         <div className="bg-sales-orange font-medium rounded-full transition-all duration-300 text-slate-950 px-[15px] py-[2px]">
           Demonstração
         </div>
       </div>
 
-      <div className="flex items-start mb-8">
+      <div className="flex items-start mb-4">
         <div className="text-sales-orange font-bold rounded-full text-5xl mr-4 flex-shrink-0">
           2.
         </div>
@@ -44,13 +40,9 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
         </div>
       </div>
 
-      {showNextStep && (
-        <div className="mt-8">
+      {showNextStep && <div className="mt-8">
           {/* Future implementation: Financial data visualization will appear here */}
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 export default FinancialQuestions;
