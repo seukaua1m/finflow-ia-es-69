@@ -96,10 +96,13 @@ const HowItWorks = () => {
         const now = new Date();
         const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
         
-        // Add grouped expense info message
+        // Calculate limit as 1.5x the entered value
+        const limit = Math.round(Number(price) * 1.5);
+        
+        // Add expense info message with proper formatting
         const expenseMessage: Message = {
           id: Date.now() + 1,
-          text: `Gasto adicionado\n\n📌 ${itemName} (Delivery)\n\nR$ ${price},00\n\n${formattedDate}`,
+          text: `<strong>Gasto adicionado</strong>\n\n📌 ${itemName} (Delivery)\n\n<strong>R$ ${price},00</strong>\n\n${formattedDate}`,
           sender: 'bot',
           time: currentTime,
           isGroupMessage: true
@@ -109,10 +112,10 @@ const HowItWorks = () => {
         
         // Wait for first bot message animation to complete
         setTimeout(() => {
-          // Add reminder message
+          // Add reminder message with bold text for the limit
           const reminderMessage: Message = {
             id: Date.now() + 2,
-            text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
+            text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
             sender: 'bot',
             time: currentTime
           };
@@ -129,14 +132,41 @@ const HowItWorks = () => {
     }, 800);
   };
 
-  // Format multi-line text with line breaks
+  // Format message text with HTML
   const formatMessageText = (text: string) => {
-    return text.split('\n').map((line, i) => (
-      <React.Fragment key={i}>
-        {line}
-        {i < text.split('\n').length - 1 && <br />}
-      </React.Fragment>
-    ));
+    // Split by new lines first
+    const lines = text.split('\n');
+    
+    return lines.map((line, lineIndex) => {
+      // Check if line contains HTML
+      const hasHTML = line.includes('<strong>');
+      
+      if (hasHTML) {
+        // Parse simple HTML tags in the line
+        const parts = line.split(/<strong>|<\/strong>/);
+        
+        return (
+          <React.Fragment key={lineIndex}>
+            {parts.map((part, partIndex) => (
+              partIndex % 2 === 1 ? 
+                // Odd indexes are between <strong> tags
+                <strong key={partIndex}>{part}</strong> : 
+                // Even indexes are outside <strong> tags
+                <span key={partIndex}>{part}</span>
+            ))}
+            {lineIndex < lines.length - 1 && <br />}
+          </React.Fragment>
+        );
+      } else {
+        // Regular line without HTML
+        return (
+          <React.Fragment key={lineIndex}>
+            {line}
+            {lineIndex < lines.length - 1 && <br />}
+          </React.Fragment>
+        );
+      }
+    });
   };
 
   // Handle continue button click
@@ -181,8 +211,8 @@ const HowItWorks = () => {
         </div>
       </div>
 
-      {/* Chat area without dark container */}
-      <div className="mb-4 min-h-[300px]">
+      {/* Chat area without container, just messages */}
+      <div className="min-h-[50px]">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -196,7 +226,7 @@ const HowItWorks = () => {
                   : 'bg-[#242625] text-white w-4/5'
               }`}
             >
-              <p>{formatMessageText(message.text)}</p>
+              <div>{formatMessageText(message.text)}</div>
               <div className={`text-xs text-gray-300 text-right mt-1 flex items-center justify-end`}>
                 <span>{message.time}</span>
                 {message.sender === 'user' && (
@@ -214,32 +244,34 @@ const HowItWorks = () => {
       </div>
 
       {/* Message input form or continue button */}
-      {!showContinueButton ? (
-        <form onSubmit={handleSubmit} className="flex gap-4">
-          <input
-            type="text"
-            placeholder="Exemplo: ifood 44"
-            value={inputValue}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
-          />
-          <button
-            type="submit"
-            className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
-            disabled={!animationComplete}
-          >
-            <SendHorizontal size={24} />
+      <div className="mt-4">
+        {!showContinueButton ? (
+          <form onSubmit={handleSubmit} className="flex gap-4">
+            <input
+              type="text"
+              placeholder="Exemplo: ifood 44"
+              value={inputValue}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
+            />
+            <button
+              type="submit"
+              className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
+              disabled={!animationComplete}
+            >
+              <SendHorizontal size={24} />
+            </button>
+          </form>
+        ) : (
+          <button 
+            onClick={handleContinue} 
+            className="w-full bg-[#FFA35B] text-slate-950 font-semibold py-4 px-6 rounded-lg
+              transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
+              focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50 animate-fade-in">
+            Continuar
           </button>
-        </form>
-      ) : (
-        <button 
-          onClick={handleContinue} 
-          className="w-full bg-sales-orange text-slate-950 font-semibold py-4 px-6 rounded-lg
-            transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
-            focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50 animate-fade-in">
-          Continuar
-        </button>
-      )}
+        )}
+      </div>
     </div>
   );
 };

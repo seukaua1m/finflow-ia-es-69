@@ -64,11 +64,12 @@ const Index = () => {
             </SalesCard>
           </div>
 
-          {/* Botão Continuar - Removed icon and updated text color */}
-          <button onClick={handleContinue} className="btn-continue animate-fade-in text-slate-950">
+          {/* Botão Continuar - with text color black */}
+          <button onClick={handleContinue} className="btn-continue animate-fade-in">
             Continuar
           </button>
         </div> : <HowItWorks />}
     </div>;
 };
+
 export default Index;
