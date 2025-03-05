@@ -47,20 +47,20 @@ const MessageItem = ({ message, onAnimationEnd }: MessageItemProps) => {
 
   return (
     <div 
-      className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} 
+      className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} 
       onAnimationEnd={onAnimationEnd}
     >
       <div 
-        className={`relative p-3 rounded-lg message-animation ${
+        className={`relative py-1.5 px-3 rounded-lg message-animation ${
           message.sender === 'user' 
-            ? 'bg-[#005C4B] text-white' 
+            ? 'bg-[#005C4B] text-white max-w-[85%]' 
             : 'bg-[#202C33] text-white w-4/5'
         }`}
       >
-        <div>{formatMessageText(message.text)}</div>
-        <div className={`text-xs text-gray-300 text-right mt-1 flex items-center justify-end`}>
+        <div className="text-sm">{formatMessageText(message.text)}</div>
+        <div className={`text-[11px] text-gray-300 text-right mt-0.5 flex items-center justify-end`}>
           <span>{message.time}</span>
-          {message.sender === 'user' && <CheckCheck size={16} className="ml-1 text-gray-300" />}
+          {message.sender === 'user' && <CheckCheck size={14} className="ml-1 text-gray-300" />}
         </div>
       </div>
     </div>
