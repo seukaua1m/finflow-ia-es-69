@@ -120,8 +120,8 @@ export default {
 					'0%': {
 						transform: 'translateY(0)'
 					},
-					'30%': {
-						transform: 'translateY(-3px)'
+					'25%': {
+						transform: 'translateY(-8px)'
 					},
 					'50%': {
 						transform: 'translateY(0)'

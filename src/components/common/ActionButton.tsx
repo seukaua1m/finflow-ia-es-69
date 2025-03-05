@@ -11,11 +11,11 @@ const ActionButton = ({ onClick, text }: ActionButtonProps) => {
   return (
     <button 
       onClick={onClick} 
-      className="flex items-center bg-[#3ABB8D] text-white font-medium py-4 px-6 rounded-full
+      className="flex items-center bg-[#2FA179] text-white font-medium py-3 px-6 rounded-full
         transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
-        focus:outline-none focus:ring-2 focus:ring-[#3ABB8D] focus:ring-opacity-50 animate-[jump_2s_ease-in-out_infinite]"
+        focus:outline-none focus:ring-2 focus:ring-[#2FA179] focus:ring-opacity-50 animate-[jump_3s_ease-in-out_infinite]"
     >
-      <Send size={20} className="mr-2" />
+      <Send size={20} className="mr-2 transform rotate-90" />
       {text}
     </button>
   );
