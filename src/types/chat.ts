@@ -5,5 +5,8 @@ export interface Message {
   sender: 'user' | 'bot';
   time: string;
   isGroupMessage?: boolean;
+  isBarChart?: boolean;
+  isPieChart?: boolean;
+  isAction?: boolean;
   status?: 'sent' | 'delivered' | 'read';
 }
