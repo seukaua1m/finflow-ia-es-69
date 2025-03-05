@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -115,7 +114,7 @@
 }
 
 .btn-continue {
-  @apply w-full bg-sales-orange text-white font-semibold py-4 px-6 rounded-full
+  @apply w-full bg-sales-orange text-white font-semibold py-4 px-6 rounded-lg
     transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
     focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50;
 }

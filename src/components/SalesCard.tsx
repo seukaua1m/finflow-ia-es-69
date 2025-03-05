@@ -12,7 +12,7 @@ const SalesCard = ({ title, children, className }: SalesCardProps) => {
   return (
     <div 
       className={cn(
-        "card-glass rounded-2xl p-6 flex flex-col items-center text-center h-full animate-scale-in",
+        "card-glass rounded-2xl p-6 flex flex-col items-center text-center h-full min-h-[220px] justify-center animate-scale-in",
         className
       )}
     >

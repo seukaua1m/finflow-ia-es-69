@@ -24,18 +24,18 @@ const Index = () => {
           <span className="text-sales-green font-bold">é inteligência artificial de ponta.</span>
         </p>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full mb-12">
+        {/* Cards - Updated to 2x2 grid */}
+        <div className="grid grid-cols-2 gap-5 w-full mb-12">
           <SalesCard title="Para onde vai seu dinheiro?">
             <p>
-              Você <span className="text-sales-orange">trabalha o mês inteiro</span>, mas no final{' '}
+              Você trabalha o mês inteiro, mas no final{' '}
               <span className="font-bold">nunca sabe onde foi parar tudo que ganhou.</span>
             </p>
           </SalesCard>
 
           <SalesCard title="Sem planilhas ou apps">
             <p>
-              São soluções <span className="text-sales-orange">complicadas que dão preguiça</span> de usar.{' '}
+              São soluções complicadas que dão preguiça de usar.{' '}
               <span className="font-bold">Aqui você resolve tudo no Whatsapp.</span>
             </p>
           </SalesCard>
