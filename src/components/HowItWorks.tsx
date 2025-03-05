@@ -16,7 +16,7 @@ const HowItWorks = () => {
       </p>
 
       <div className="flex justify-center mb-10">
-        <button className="bg-sales-orange font-medium py-2 px-6 rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950">
+        <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 px-[13px] py-[10px] mx-0 my-0">
           Demonstração
         </button>
       </div>
