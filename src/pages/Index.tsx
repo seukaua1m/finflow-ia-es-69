@@ -19,7 +19,7 @@ const Index = () => {
 
           {/* Headline principal */}
           <h1 className="text-sales-green text-3xl sm:text-4xl font-bold text-center mb-6 leading-tight animate-fade-in">
-            Economize <span className="highlight-text">+ de 300 Reais Em 30 Dias</span> Sem Cortar Os "Luxos"<br />
+            Economize <span className="highlight-text font-bold">+ de 300 Reais Em 30 Dias</span> Sem Cortar Os "Luxos"<br />
             E Apenas Com O Whatsapp.
           </h1>
 
