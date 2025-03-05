@@ -11,7 +11,29 @@ interface MessageItemProps {
 const MessageItem = ({ message, onAnimationEnd }: MessageItemProps) => {
   // Format message text with HTML
   const formatMessageText = (text: string) => {
-    // Split by new lines first
+    // Check if it's an expense message with specific formatting
+    if (message.isGroupMessage) {
+      // Parse the expense message with specific layout
+      const parts = text.split('\n\n');
+      
+      return (
+        <>
+          {/* Title - "Gasto adicionado" */}
+          <div className="font-bold">{parts[0].replace(/<strong>|<\/strong>/g, '')}</div>
+          
+          {/* Item name - no line space */}
+          <div>{parts[1]}</div>
+          
+          {/* Price - no line space */}
+          <div className="font-bold">{parts[2].replace(/<strong>|<\/strong>/g, '')}</div>
+          
+          {/* Date - with line space above */}
+          <div className="mt-1">{parts[3]}</div>
+        </>
+      );
+    }
+    
+    // For regular messages, split by new lines first
     const lines = text.split('\n');
     return lines.map((line, lineIndex) => {
       // Check if line contains HTML
