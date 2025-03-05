@@ -1,16 +1,11 @@
-
 import React, { useState } from 'react';
 import { SendHorizontal } from 'lucide-react';
-
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
-  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-  
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -33,7 +28,7 @@ const HowItWorks = () => {
           </div>
           <div>
             <p className="text-lg mb-2">
-              Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">camisa 110</span>.
+              Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;.</span>.
             </p>
             <p className="text-lg mb-4 text-sales-green">
               Registre um gasto (real ou falso) para testar.
@@ -46,19 +41,11 @@ const HowItWorks = () => {
       </div>
 
       <div className="flex gap-4 mt-10">
-        <input 
-          type="text" 
-          placeholder="Exemplo: ifood 44" 
-          value={inputValue} 
-          onChange={handleInputChange} 
-          className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green" 
-        />
+        <input type="text" placeholder="Exemplo: ifood 44" value={inputValue} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green" />
         <button className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]">
           <SendHorizontal size={24} />
         </button>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HowItWorks;
