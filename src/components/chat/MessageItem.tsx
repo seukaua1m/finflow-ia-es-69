@@ -53,8 +53,8 @@ const MessageItem = ({ message, onAnimationEnd }: MessageItemProps) => {
       <div 
         className={`relative p-3 rounded-lg message-animation ${
           message.sender === 'user' 
-            ? 'bg-[#154D39] text-white' 
-            : 'bg-[#242625] text-white w-4/5'
+            ? 'bg-[#005C4B] text-white' 
+            : 'bg-[#202C33] text-white w-4/5'
         }`}
       >
         <div>{formatMessageText(message.text)}</div>
