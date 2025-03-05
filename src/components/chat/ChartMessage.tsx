@@ -1,14 +1,16 @@
 
 import React from 'react';
 import ExpenseChart from '../chart/ExpenseChart';
+import ExpensePieChart from '../chart/ExpensePieChart';
 
 interface ChartMessageProps {
   messageText: string;
   time: string;
   onAnimationEnd: () => void;
+  isPieChart?: boolean;
 }
 
-const ChartMessage = ({ messageText, time, onAnimationEnd }: ChartMessageProps) => {
+const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMessageProps) => {
   // Extract chart data from message text
   const renderChart = (messageText: string) => {
     try {
@@ -23,14 +25,25 @@ const ChartMessage = ({ messageText, time, onAnimationEnd }: ChartMessageProps) 
       const chartData = dataMatch ? JSON.parse(dataMatch[1]) : [];
       const footer = footerMatch ? footerMatch[1] : '';
       
-      return (
-        <ExpenseChart 
-          chartData={chartData}
-          title={title}
-          subtitle={subtitle}
-          footer={footer}
-        />
-      );
+      if (isPieChart) {
+        return (
+          <ExpensePieChart 
+            chartData={chartData}
+            title={title}
+            subtitle={subtitle}
+            footer={footer}
+          />
+        );
+      } else {
+        return (
+          <ExpenseChart 
+            chartData={chartData}
+            title={title}
+            subtitle={subtitle}
+            footer={footer}
+          />
+        );
+      }
     } catch (error) {
       console.error("Error rendering chart:", error);
       return <div>Error rendering chart</div>;
