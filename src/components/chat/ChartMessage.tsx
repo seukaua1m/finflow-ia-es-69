@@ -2,6 +2,7 @@
 import React from 'react';
 import ExpenseChart from '../chart/ExpenseChart';
 import ExpensePieChart from '../chart/ExpensePieChart';
+import SpendingLimitsChart from '../chart/SpendingLimitsChart';
 
 interface ChartMessageProps {
   messageText: string;
@@ -25,7 +26,19 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
       const chartData = dataMatch ? JSON.parse(dataMatch[1]) : [];
       const footer = footerMatch ? footerMatch[1] : '';
       
-      if (isPieChart) {
+      // Check if this is a "Limites definidos" chart
+      const isLimitsChart = title === 'Limites definidos';
+      
+      if (isLimitsChart) {
+        return (
+          <SpendingLimitsChart 
+            chartData={chartData}
+            title={title}
+            subtitle={subtitle}
+            footer={footer}
+          />
+        );
+      } else if (isPieChart) {
         return (
           <ExpensePieChart 
             chartData={chartData}

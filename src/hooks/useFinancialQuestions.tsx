@@ -95,11 +95,8 @@ export const useFinancialQuestions = (onContinue: () => void) => {
                       setMessages(prev => [...prev, pieChartFollowUpMessage]);
                       setAnimationComplete(true);
 
-                      // Show next step and continue to next component after a delay
+                      // Show next step
                       setShowNextStep(true);
-                      setTimeout(() => {
-                        onContinue();
-                      }, 5000);
                     }, 1500);
                   }, 1000);
                 }, 2000);
@@ -161,6 +158,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
     showComparisonText,
     handleAnimationEnd,
     handleActionClick,
-    handleSuggestionClick
+    handleSuggestionClick,
+    onContinue
   };
 };

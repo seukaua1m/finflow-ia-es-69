@@ -5,6 +5,7 @@ import TypingIndicator from './chat/TypingIndicator';
 import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
 import FinancialQuestions from './FinancialQuestions';
+import ReminderDemo from './ReminderDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
 
@@ -118,14 +119,22 @@ const HowItWorks = () => {
     setCurrentStep(2);
   };
 
-  const handleNextStep = () => {
-    // This will be implemented when we add the third step
-    console.log("Moving to the next step");
+  // Handle next step from Financial Questions
+  const handleFinancialQuestionsContinue = () => {
+    setCurrentStep(3);
+  };
+
+  // Handle next step from Reminder Demo
+  const handleReminderDemoContinue = () => {
+    // This will be implemented when we add more steps
+    console.log("Moving to the next step after Reminder Demo");
   };
 
   // Render different steps based on currentStep
-  if (currentStep === 2) {
-    return <FinancialQuestions onContinue={handleNextStep} />;
+  if (currentStep === 3) {
+    return <ReminderDemo onContinue={handleReminderDemoContinue} />;
+  } else if (currentStep === 2) {
+    return <FinancialQuestions onContinue={handleFinancialQuestionsContinue} />;
   }
 
   return <div className="w-full max-w-3xl bg-white px-4 py-12">

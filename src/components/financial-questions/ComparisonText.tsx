@@ -8,14 +8,12 @@ interface ComparisonTextProps {
 
 const ComparisonText = ({ onContinue }: ComparisonTextProps) => {
   return (
-    <div className="text-center mt-8 space-y-3 animate-fade-in">
-      <p className="text-lg">
-        Você nunca mais vai se fazer a pergunta 
-        <span className="text-sales-green font-semibold"> "onde que eu gastei tanto esse mês"</span>, sem 
-        ter a resposta.
-      </p>
-      
-      <div className="mt-8 animate-scale-in">
+    <div className="mt-8 space-y-4 animate-fade-in">
+      <div className="border-t border-gray-200 pt-6">
+        <p className="text-lg mb-4">
+          Viu como é fácil adicionar gastos e ver seu histórico? Veja agora como funcionam os lembretes.
+        </p>
+
         <ContinueButton onClick={onContinue} />
       </div>
     </div>
