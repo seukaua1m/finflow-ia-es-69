@@ -39,9 +39,9 @@ const ChartMessage = ({ messageText, time, onAnimationEnd }: ChartMessageProps) 
 
   return (
     <div className="mb-2 flex justify-start" onAnimationEnd={onAnimationEnd}>
-      <div className="relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white w-4/5">
+      <div className="relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white w-full md:w-3/5 lg:w-2/3">
         <div className="flex flex-col">
-          <div className="text-sm self-center w-full">{renderChart(messageText)}</div>
+          <div className="text-sm self-center w-full text-left">{renderChart(messageText)}</div>
           <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
             <span>{time}</span>
           </div>

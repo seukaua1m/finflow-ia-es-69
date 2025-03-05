@@ -2,10 +2,12 @@
 import React from 'react';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '@/types/chat';
+
 interface MessageItemProps {
   message: Message;
   onAnimationEnd: () => void;
 }
+
 const MessageItem = ({
   message,
   onAnimationEnd
@@ -56,16 +58,23 @@ const MessageItem = ({
       }
     });
   };
-  return <div className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={onAnimationEnd}>
-      <div className={`relative py-1.5 px-3 rounded-lg message-animation ${message.sender === 'user' ? 'bg-[#005C4B] text-white max-w-[95%]' : 'bg-[#202C33] text-white w-4/5'}`}>
+
+  return (
+    <div className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={onAnimationEnd}>
+      <div className={`relative py-1.5 px-3 rounded-lg message-animation 
+        ${message.sender === 'user' 
+          ? 'bg-[#005C4B] text-white max-w-[95%]' 
+          : 'bg-[#202C33] text-white w-full md:w-3/5 lg:w-2/3'}`}>
         <div className="flex flex-col">
           <div className="text-sm text-left">{formatMessageText(message.text)}</div>
           <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
-            <span>{message.time}</span>
+            <span>{time}</span>
             {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-300" />}
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default MessageItem;
