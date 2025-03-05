@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import ActionButton from './common/ActionButton';
 import MessageItem from './chat/MessageItem';
@@ -12,7 +11,8 @@ import {
   createPieChartMessage,
   createPieChartFollowUpMessage 
 } from '@/services/chatService';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, SendHorizontal } from 'lucide-react';
+import ContinueButton from './common/ContinueButton';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
@@ -27,8 +27,11 @@ const FinancialQuestions = ({
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [isTypingThirdMessage, setIsTypingThirdMessage] = useState(false);
   const [isTypingFourthMessage, setIsTypingFourthMessage] = useState(false);
+  const [isTypingFifthMessage, setIsTypingFifthMessage] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [suggestionButtonClicked, setSuggestionButtonClicked] = useState(false);
+  const [showComparisonText, setShowComparisonText] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
@@ -40,7 +43,7 @@ const FinancialQuestions = ({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping, isTypingSecondMessage, isTypingThirdMessage, isTypingFourthMessage]);
+  }, [messages, isTyping, isTypingSecondMessage, isTypingThirdMessage, isTypingFourthMessage, isTypingFifthMessage, showComparisonText]);
 
   // Handle animation end
   const handleAnimationEnd = () => {
@@ -132,6 +135,9 @@ const FinancialQuestions = ({
   };
 
   const handleSuggestionClick = () => {
+    // Hide the suggestion button
+    setSuggestionButtonClicked(true);
+    
     // Create user message with suggestion text
     const suggestionText = "O que eu gastei a mais essa semana?";
     const userMessage = createUserMessage(suggestionText);
@@ -139,7 +145,29 @@ const FinancialQuestions = ({
     // Add user message to chat
     setMessages(prev => [...prev, userMessage]);
     
-    // Implement future behavior here
+    // Show typing indicator after a brief delay
+    setTimeout(() => {
+      setIsTypingFifthMessage(true);
+      
+      // After delay, show the comparison response
+      setTimeout(() => {
+        setIsTypingFifthMessage(false);
+        
+        // Bot message with expense comparison
+        const comparisonMessage: Message = {
+          id: Date.now() + 1,
+          text: `Os gastos aumentaram nesta semana em comparação com a semana passada, totalizando R$100 a mais.\n\nO principal motivo foi a compra de <strong>gás de cozinha, realizada na segunda-feira (20/01), no valor de R$100</strong>, o que não ocorreu na semana anterior.`,
+          sender: 'bot',
+          time: '18:19'
+        };
+        setMessages(prev => [...prev, comparisonMessage]);
+        
+        // Show comparison text after a delay
+        setTimeout(() => {
+          setShowComparisonText(true);
+        }, 2000);
+      }, 2000);
+    }, 800);
   };
 
   return (
@@ -194,6 +222,7 @@ const FinancialQuestions = ({
         {isTypingSecondMessage && <TypingIndicator />}
         {isTypingThirdMessage && <TypingIndicator />}
         {isTypingFourthMessage && <TypingIndicator />}
+        {isTypingFifthMessage && <TypingIndicator />}
         
         <div ref={messagesEndRef} />
       </div>
@@ -206,14 +235,31 @@ const FinancialQuestions = ({
               Imaginando que esses gastos sejam os seus, pergunte algo ao seu assistente:
             </p>
             
-            <button 
-              onClick={handleSuggestionClick}
-              className="flex items-center justify-start bg-[#2FA179] text-white rounded-full px-5 py-4 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto"
-            >
-              <ArrowRight size={20} className="mr-3" />
-              <span>O que eu gastei a mais essa semana?</span>
-            </button>
+            {!suggestionButtonClicked && (
+              <button 
+                onClick={handleSuggestionClick}
+                className="flex items-center justify-center bg-[#2FA179] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto animate-[jump_2s_ease-in-out_infinite]"
+              >
+                <SendHorizontal size={24} className="mr-2" />
+                <span>O que eu gastei a mais essa semana?</span>
+              </button>
+            )}
           </div>
+          
+          {/* Show comparison text after responding to suggestion */}
+          {showComparisonText && (
+            <div className="text-center mt-8 space-y-3">
+              <p className="text-lg">
+                Você nunca mais vai se fazer a pergunta 
+                <span className="text-sales-green font-semibold"> "onde que eu gastei tanto esse mês"</span>, sem 
+                ter a resposta.
+              </p>
+              
+              <div className="mt-8">
+                <ContinueButton onClick={onContinue} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
