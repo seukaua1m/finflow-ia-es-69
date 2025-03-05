@@ -11,6 +11,7 @@ const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [showContinueButton, setShowContinueButton] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ const HowItWorks = () => {
   
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isTyping, isTypingSecondMessage]);
 
   // Handle animation end
   const handleAnimationEnd = () => {
@@ -83,22 +84,29 @@ const HowItWorks = () => {
         };
         setMessages(prev => [...prev, expenseMessage]);
 
-        // Wait for first bot message animation to complete
+        // Show typing indicator again after first message
         setTimeout(() => {
-          // Add reminder message with bold text for the limit
-          const reminderMessage: Message = {
-            id: Date.now() + 2,
-            text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
-            sender: 'bot',
-            time: currentTime
-          };
-          setMessages(prev => [...prev, reminderMessage]);
-
-          // Show continue button after all messages are displayed
+          setIsTypingSecondMessage(true);
+          
+          // Wait for a moment before showing second bot message
           setTimeout(() => {
-            setShowContinueButton(true);
-            setAnimationComplete(true);
-          }, 800);
+            setIsTypingSecondMessage(false);
+            
+            // Add reminder message with bold text for the limit
+            const reminderMessage: Message = {
+              id: Date.now() + 2,
+              text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
+              sender: 'bot',
+              time: currentTime
+            };
+            setMessages(prev => [...prev, reminderMessage]);
+
+            // Show continue button after all messages are displayed
+            setTimeout(() => {
+              setShowContinueButton(true);
+              setAnimationComplete(true);
+            }, 800);
+          }, 2000);
         }, 800);
       }, 2000);
     }, 800);
@@ -158,6 +166,9 @@ const HowItWorks = () => {
         
         {/* Typing indicator */}
         {isTyping && <TypingIndicator />}
+        
+        {/* Second typing indicator between bot messages */}
+        {isTypingSecondMessage && <TypingIndicator />}
         
         <div ref={messagesEndRef} />
       </div>
