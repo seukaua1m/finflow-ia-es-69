@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SendHorizontal } from 'lucide-react';
 interface ActionButtonProps {
@@ -9,7 +8,7 @@ const ActionButton = ({
   onClick,
   text
 }: ActionButtonProps) => {
-  return <button onClick={onClick} className="flex items-center justify-start bg-[#2FA179] text-white rounded-full transition-all duration-300 hover:bg-opacity-90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#2FA179] focus:ring-opacity-50 px-[16px] font-semibold py-[4px] my-0">
+  return <button onClick={onClick} className="flex items-center justify-start bg-[#2FA179] text-white rounded-full transition-all duration-300 hover:bg-opacity-90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#2FA179] focus:ring-opacity-50 font-semibold my-0 px-[19px] py-[12px]">
       <SendHorizontal size={24} className="mr-2" />
       {text}
     </button>;
