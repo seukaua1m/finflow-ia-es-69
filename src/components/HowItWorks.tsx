@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SendHorizontal, CheckCheck } from 'lucide-react';
+
 interface Message {
   id: number;
   text: string;
@@ -24,6 +25,7 @@ const TypingIndicator = () => {
       </div>
     </div>;
 };
+
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -182,7 +184,7 @@ const HowItWorks = () => {
 
       <div className="mb-8">
         <div className="flex items-start mb-4">
-          <div className="text-orange font-bold rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+          <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
             1.
           </div>
           <div>
@@ -232,4 +234,5 @@ const HowItWorks = () => {
       </div>
     </div>;
 };
+
 export default HowItWorks;
