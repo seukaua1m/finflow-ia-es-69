@@ -117,11 +117,17 @@ export default {
 					}
 				},
 				'jump': {
-					'0%, 100%': {
+					'0%': {
 						transform: 'translateY(0)'
 					},
+					'30%': {
+						transform: 'translateY(-3px)'
+					},
 					'50%': {
-						transform: 'translateY(-5px)'
+						transform: 'translateY(0)'
+					},
+					'100%': {
+						transform: 'translateY(0)'
 					}
 				}
 			},
