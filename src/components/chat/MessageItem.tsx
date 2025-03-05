@@ -41,20 +41,25 @@ const MessageItem = ({
       if (hasHTML) {
         // Parse simple HTML tags in the line
         const parts = line.split(/<strong>|<\/strong>/);
-        return <React.Fragment key={lineIndex}>
+        return (
+          <React.Fragment key={lineIndex}>
             {parts.map((part, partIndex) => partIndex % 2 === 1 ?
-          // Odd indexes are between <strong> tags
-          <strong key={partIndex}>{part}</strong> :
-          // Even indexes are outside <strong> tags
-          <span key={partIndex}>{part}</span>)}
+              // Odd indexes are between <strong> tags
+              <strong key={partIndex}>{part}</strong> :
+              // Even indexes are outside <strong> tags
+              <span key={partIndex}>{part}</span>
+            )}
             {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>;
+          </React.Fragment>
+        );
       } else {
         // Regular line without HTML
-        return <React.Fragment key={lineIndex}>
+        return (
+          <React.Fragment key={lineIndex}>
             {line}
             {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>;
+          </React.Fragment>
+        );
       }
     });
   };
