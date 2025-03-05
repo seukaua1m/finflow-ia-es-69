@@ -67,6 +67,9 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePi
 
   return (
     <div className="w-full rounded-md overflow-hidden border border-[#2a3942] bg-white p-3 sm:p-4 relative">
+      {/* Dark gradient overlay in the bottom right corner */}
+      <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-black/20 to-transparent rounded-bl-md pointer-events-none"></div>
+      
       <div className="mb-1">
         <h3 className="text-base sm:text-xl font-bold text-black text-center">{title}</h3>
         <p className="text-xs sm:text-sm text-gray-600 text-center">{subtitle}</p>
@@ -100,9 +103,9 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePi
         <div className="text-black text-xs sm:text-sm font-medium">{footer}</div>
       </div>
 
-      {/* Time indicator with shadow in the bottom right corner */}
+      {/* Time indicator without background in the bottom right corner */}
       {time && (
-        <div className="absolute bottom-1 right-1 text-[10px] text-white bg-black/30 px-2 py-0.5 rounded-sm shadow-md">
+        <div className="absolute bottom-1 right-1 text-[10px] text-white z-10">
           {time}
         </div>
       )}
