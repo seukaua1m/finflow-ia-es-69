@@ -11,8 +11,8 @@ const HowItWorks = () => {
       </h2>
 
       <p className="text-center mb-8 text-lg">
-        Um assistente financeiro <span className="font-bold">no seu WhatsApp</span>,{' '}
-        disponível 24h para ser seu <span className="font-bold">controle financeiro interativo</span>.
+        Um assistente financeiro <span className="font-bold text-[#254d39]">no seu WhatsApp</span>,{' '}
+        disponível 24h para ser seu <span className="font-bold text-[#254d39]">controle financeiro interativo</span>.
       </p>
 
       <div className="flex justify-center mb-10">
