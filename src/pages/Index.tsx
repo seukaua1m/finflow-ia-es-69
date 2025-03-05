@@ -1,11 +1,65 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import SalesCard from '@/components/SalesCard';
+import { ArrowRight } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
+        {/* Subtítulo superior */}
+        <h2 className="text-sales-gray text-center text-lg mb-8 italic font-light animate-fade-in">
+          A mesma tecnologia usada por<br />gerentes de investimentos.
+        </h2>
+
+        {/* Headline principal */}
+        <h1 className="text-sales-green text-3xl sm:text-4xl font-bold text-center mb-6 leading-tight animate-fade-in">
+          Economize <span className="highlight-text">+ de 300 Reais Em 30 Dias</span> Sem Cortar Os "Luxos"<br />
+          E Apenas Com O Whatsapp.
+        </h1>
+
+        {/* Subheadline */}
+        <p className="text-center text-lg mb-12 animate-fade-in">
+          Não é app, nem planilha, nem Notion,<br />
+          <span className="text-sales-green font-bold">é inteligência artificial de ponta.</span>
+        </p>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full mb-12">
+          <SalesCard title="Para onde vai seu dinheiro?">
+            <p>
+              Você <span className="text-sales-orange">trabalha o mês inteiro</span>, mas no final{' '}
+              <span className="font-bold">nunca sabe onde foi parar tudo que ganhou.</span>
+            </p>
+          </SalesCard>
+
+          <SalesCard title="Sem planilhas ou apps">
+            <p>
+              São soluções <span className="text-sales-orange">complicadas que dão preguiça</span> de usar.{' '}
+              <span className="font-bold">Aqui você resolve tudo no Whatsapp.</span>
+            </p>
+          </SalesCard>
+
+          <SalesCard title="Perdido nas dívidas">
+            <p>
+              Não sabe quanto paga de parcela, quanto tempo falta, quem deve,{' '}
+              <span className="font-bold">e não tem um plano para pagar.</span>
+            </p>
+          </SalesCard>
+
+          <SalesCard title="Pagando mais caro sempre">
+            <p>
+              Você compra por impulso ou não pesquisa antes,{' '}
+              <span className="font-bold">gastando mais e deixando de economizar.</span>
+            </p>
+          </SalesCard>
+        </div>
+
+        {/* Botão Continuar */}
+        <button className="btn-continue flex items-center justify-center gap-2 animate-fade-in">
+          Continuar
+          <ArrowRight size={20} />
+        </button>
       </div>
     </div>
   );
