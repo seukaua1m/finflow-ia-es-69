@@ -1,18 +1,19 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { SendHorizontal, CheckCheck } from 'lucide-react';
+import { SendHorizontal, CheckCheck, CircleDollarSign } from 'lucide-react';
 
 interface Message {
   id: number;
   text: string;
   sender: 'user' | 'bot';
   time: string;
+  isGroupMessage?: boolean;
 }
 
 // Typing indicator component
 const TypingIndicator = () => {
   return (
-    <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 animate-fade-in max-w-[100px]">
+    <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 message-animation max-w-[100px]">
       <div className="flex space-x-2">
         <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
         <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
@@ -71,47 +72,55 @@ const HowItWorks = () => {
     setTimeout(() => {
       setIsTyping(false);
       
-      // Add bot messages
-      const botMessages: Message[] = [
-        {
-          id: Date.now() + 1,
-          text: "Gasto adicionado",
-          sender: 'bot',
-          time: getCurrentTime()
-        },
-        {
-          id: Date.now() + 2,
-          text: `📌 ${inputValue.split(' ')[0].toUpperCase()} (Delivery)`,
-          sender: 'bot',
-          time: getCurrentTime()
-        },
-        {
-          id: Date.now() + 3,
-          text: `R$ ${inputValue.split(' ')[1] || '0'},00`,
-          sender: 'bot',
-          time: getCurrentTime()
-        },
-        {
-          id: Date.now() + 4,
-          text: new Date().toLocaleDateString('pt-BR'),
-          sender: 'bot',
-          time: getCurrentTime()
-        },
-        {
-          id: Date.now() + 5,
-          text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
-          sender: 'bot',
-          time: getCurrentTime()
-        }
-      ];
+      // Create the grouped expense message
+      const currentTime = getCurrentTime();
       
-      // Add each bot message with slight delay between them
-      botMessages.forEach((msg, index) => {
+      // Extract first word as item name and second word as price
+      const parts = inputValue.split(' ');
+      const itemName = parts[0].toUpperCase();
+      const price = parts[1] || '0';
+      
+      // Format date as DD/MM/YYYY
+      const now = new Date();
+      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+      
+      // Add grouped expense info message
+      const expenseMessage: Message = {
+        id: Date.now() + 1,
+        text: `Gasto adicionado\n\n📌 ${itemName} (Delivery)\n\nR$ ${price},00\n\n${formattedDate}`,
+        sender: 'bot',
+        time: currentTime,
+        isGroupMessage: true
+      };
+      
+      // Add reminder message
+      const reminderMessage: Message = {
+        id: Date.now() + 2,
+        text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
+        sender: 'bot',
+        time: currentTime
+      };
+      
+      // Add messages with slight delay between them
+      setTimeout(() => {
+        setMessages(prev => [...prev, expenseMessage]);
+        
+        // Add reminder message after another delay
         setTimeout(() => {
-          setMessages(prev => [...prev, msg]);
-        }, index * 500);
-      });
+          setMessages(prev => [...prev, reminderMessage]);
+        }, 1000);
+      }, 500);
     }, 2000);
+  };
+
+  // Format multi-line text with line breaks
+  const formatMessageText = (text: string) => {
+    return text.split('\n').map((line, i) => (
+      <React.Fragment key={i}>
+        {line}
+        {i < text.split('\n').length - 1 && <br />}
+      </React.Fragment>
+    ));
   };
 
   return (
@@ -150,22 +159,22 @@ const HowItWorks = () => {
         </div>
       </div>
 
-      {/* Chat area */}
-      <div className="bg-gray-100 rounded-lg p-4 mb-4 h-[400px] overflow-y-auto flex flex-col">
+      {/* Chat area - now without the dark container */}
+      <div className="mb-4 min-h-[300px]">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`relative p-3 rounded-lg max-w-[80%] animate-fade-in ${
+              className={`relative p-3 rounded-lg max-w-[80%] message-animation ${
                 message.sender === 'user'
                   ? 'bg-[#154D39] text-white'
                   : 'bg-[#242625] text-white'
               }`}
             >
-              <p>{message.text}</p>
-              <div className={`text-xs text-gray-300 ${message.sender === 'user' ? 'text-right' : 'text-right'} mt-1 flex items-center ${message.sender === 'user' ? 'justify-end' : 'justify-end'}`}>
+              <p>{formatMessageText(message.text)}</p>
+              <div className={`text-xs text-gray-300 text-right mt-1 flex items-center justify-end`}>
                 <span>{message.time}</span>
                 {message.sender === 'user' && (
                   <CheckCheck size={16} className="ml-1 text-gray-300" />
