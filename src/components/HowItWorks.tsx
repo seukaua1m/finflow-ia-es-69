@@ -28,7 +28,7 @@ const HowItWorks = () => {
           </div>
           <div>
             <p className="text-lg mb-2">
-              Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;.</span>.
+              Digite o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
             </p>
             <p className="text-lg mb-4 text-sales-green">
               Registre um gasto (real ou falso) para testar.
