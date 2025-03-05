@@ -58,10 +58,10 @@ const MessageItem = ({ message, onAnimationEnd }: MessageItemProps) => {
         }`}
       >
         <div className="flex items-end justify-between gap-2">
-          <div className="text-sm">{formatMessageText(message.text)}</div>
-          <div className="text-[11px] text-gray-300 flex items-center whitespace-nowrap">
+          <div className="text-sm self-center">{formatMessageText(message.text)}</div>
+          <div className="text-[10px] text-gray-300 flex items-center whitespace-nowrap self-end">
             <span>{message.time}</span>
-            {message.sender === 'user' && <CheckCheck size={14} className="ml-1 text-gray-300" />}
+            {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-300" />}
           </div>
         </div>
       </div>
