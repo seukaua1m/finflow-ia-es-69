@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Message } from '@/types/chat';
 import { 
@@ -141,9 +142,6 @@ export const useFinancialQuestions = (onContinue: () => void) => {
         // Show comparison text after a delay
         setTimeout(() => {
           setShowComparisonText(true);
-          
-          // Wait a bit before calling onContinue
-          // Removed automatic onContinue call here to let the user control when to continue
         }, 2000);
       }, 2000);
     }, 800);

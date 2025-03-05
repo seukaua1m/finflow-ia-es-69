@@ -5,7 +5,6 @@ import TypingIndicator from './chat/TypingIndicator';
 import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
 import FinancialQuestions from './FinancialQuestions';
-import ReminderDemo from './ReminderDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
 
@@ -120,13 +119,12 @@ const HowItWorks = () => {
   };
 
   const handleNextStep = () => {
-    setCurrentStep(3);
+    // This will be implemented when we add the third step
+    console.log("Moving to the next step");
   };
 
   // Render different steps based on currentStep
-  if (currentStep === 3) {
-    return <ReminderDemo onContinue={() => console.log("Demo complete")} />;
-  } else if (currentStep === 2) {
+  if (currentStep === 2) {
     return <FinancialQuestions onContinue={handleNextStep} />;
   }
 
