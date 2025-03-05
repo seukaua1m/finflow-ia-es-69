@@ -68,7 +68,7 @@ const MessageItem = ({
         <div className="flex flex-col">
           <div className="text-sm text-left">{formatMessageText(message.text)}</div>
           <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
-            <span>{time}</span>
+            <span>{message.time}</span>
             {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-300" />}
           </div>
         </div>
