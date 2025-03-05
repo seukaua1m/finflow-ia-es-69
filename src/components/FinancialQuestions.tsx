@@ -5,11 +5,13 @@ import ChartMessage from './chat/ChartMessage';
 import TypingIndicator from './chat/TypingIndicator';
 import { Message } from '@/types/chat';
 import { createUserMessage, createChartMessage, createFollowUpMessage, createPieChartMessage, createPieChartFollowUpMessage } from '@/services/chatService';
-import { ArrowRight, SendHorizontal } from 'lucide-react';
+import { SendHorizontal, ArrowRight } from 'lucide-react';
 import ContinueButton from './common/ContinueButton';
+
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
+
 const FinancialQuestions = ({
   onContinue
 }: FinancialQuestionsProps) => {
@@ -123,6 +125,7 @@ const FinancialQuestions = ({
       }, 2000);
     }, 800);
   };
+  
   const handleSuggestionClick = () => {
     // Hide the suggestion button
     setSuggestionButtonClicked(true);
@@ -158,6 +161,7 @@ const FinancialQuestions = ({
       }, 2000);
     }, 800);
   };
+
   return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
         <div className="bg-sales-orange font-medium rounded-full transition-all duration-300 text-slate-950 px-[15px] py-[2px]">
@@ -205,16 +209,20 @@ const FinancialQuestions = ({
       </div>
 
       {showNextStep && <div className="mt-8 space-y-6">
-          {/* Suggestion section from the image */}
-          <div className="text-center">
-            <p className="text-sales-green text-lg font-medium mb-3">
-              Imaginando que esses gastos sejam os seus, pergunte algo ao seu assistente:
-            </p>
-            
-            {!suggestionButtonClicked && <button onClick={handleSuggestionClick} className="flex items-center justify-center bg-[#2FA179] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto animate-[jump_2s_ease-in-out_infinite]">
-                <SendHorizontal size={24} className="mr-2" />
-                <span>O que eu gastei a mais essa semana?</span>
-              </button>}
+          {/* Suggestion section - now with right alignment for text */}
+          <div className="text-right">
+            {!suggestionButtonClicked && (
+              <>
+                <p className="text-sales-green text-lg font-medium mb-3">
+                  Imaginando que esses gastos sejam os seus, pergunte algo ao seu assistente:
+                </p>
+                
+                <button onClick={handleSuggestionClick} className="flex items-center justify-start bg-[#2FA179] text-white rounded-full px-4 py-2 hover:bg-opacity-90 transition-all duration-300 w-full max-w-lg mx-auto">
+                  <SendHorizontal size={24} className="mr-2" />
+                  <span>O que eu gastei a mais essa semana?</span>
+                </button>
+              </>
+            )}
           </div>
           
           {/* Show comparison text after responding to suggestion */}
@@ -232,4 +240,5 @@ const FinancialQuestions = ({
         </div>}
     </div>;
 };
+
 export default FinancialQuestions;
