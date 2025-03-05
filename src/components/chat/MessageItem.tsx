@@ -53,14 +53,16 @@ const MessageItem = ({ message, onAnimationEnd }: MessageItemProps) => {
       <div 
         className={`relative py-1.5 px-3 rounded-lg message-animation ${
           message.sender === 'user' 
-            ? 'bg-[#005C4B] text-white max-w-[85%]' 
+            ? 'bg-[#005C4B] text-white max-w-[95%]' 
             : 'bg-[#202C33] text-white w-4/5'
         }`}
       >
-        <div className="text-sm">{formatMessageText(message.text)}</div>
-        <div className={`text-[11px] text-gray-300 text-right mt-0.5 flex items-center justify-end`}>
-          <span>{message.time}</span>
-          {message.sender === 'user' && <CheckCheck size={14} className="ml-1 text-gray-300" />}
+        <div className="flex items-end justify-between gap-2">
+          <div className="text-sm">{formatMessageText(message.text)}</div>
+          <div className="text-[11px] text-gray-300 flex items-center whitespace-nowrap">
+            <span>{message.time}</span>
+            {message.sender === 'user' && <CheckCheck size={14} className="ml-1 text-gray-300" />}
+          </div>
         </div>
       </div>
     </div>
