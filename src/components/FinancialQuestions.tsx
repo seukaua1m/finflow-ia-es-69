@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import ActionButton from './common/ActionButton';
 import MessageItem from './chat/MessageItem';
@@ -225,15 +226,15 @@ const FinancialQuestions = ({
             )}
           </div>
           
-          {/* Show comparison text after responding to suggestion */}
-          {showComparisonText && <div className="text-center mt-8 space-y-3">
+          {/* Show comparison text after responding to suggestion - now with animation */}
+          {showComparisonText && <div className="text-center mt-8 space-y-3 animate-fade-in">
               <p className="text-lg">
                 Você nunca mais vai se fazer a pergunta 
                 <span className="text-sales-green font-semibold"> "onde que eu gastei tanto esse mês"</span>, sem 
                 ter a resposta.
               </p>
               
-              <div className="mt-8">
+              <div className="mt-8 animate-scale-in">
                 <ContinueButton onClick={onContinue} />
               </div>
             </div>}
