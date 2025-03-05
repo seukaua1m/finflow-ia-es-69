@@ -41,7 +41,7 @@ const Index = () => {
             <SalesCard title="Sem planilhas ou apps">
               <p>
                 São soluções complicadas que dão preguiça de usar.{' '}
-                <span className="font-bold">Aqui você resolve tudo no Whatsapp.</span>
+                <span className="font-bold text-[#254d39]">Aqui você resolve tudo no Whatsapp.</span>
               </p>
             </SalesCard>
 
