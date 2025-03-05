@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '@/types/chat';
@@ -57,9 +58,9 @@ const MessageItem = ({
   };
   return <div className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={onAnimationEnd}>
       <div className={`relative py-1.5 px-3 rounded-lg message-animation ${message.sender === 'user' ? 'bg-[#005C4B] text-white max-w-[95%]' : 'bg-[#202C33] text-white w-4/5'}`}>
-        <div className="flex items-end justify-between gap-2">
+        <div className="flex flex-col">
           <div className="text-sm self-center">{formatMessageText(message.text)}</div>
-          <div className="text-[10px] text-gray-300 flex items-center whitespace-nowrap self-end">
+          <div className="text-[10px] text-gray-300 mt-1 text-left">
             <span>{message.time}</span>
             {message.sender === 'user' && <CheckCheck size={12} className="ml-1 text-gray-300" />}
           </div>

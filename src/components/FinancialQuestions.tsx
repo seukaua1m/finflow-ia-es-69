@@ -19,6 +19,7 @@ const FinancialQuestions = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
+  const [buttonClicked, setButtonClicked] = useState(false); // New state to track if button was clicked
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
@@ -49,6 +50,9 @@ const FinancialQuestions = ({
   ];
 
   const handleActionClick = () => {
+    // Hide the button
+    setButtonClicked(true);
+    
     // Disable animations while processing
     setAnimationComplete(false);
     
@@ -197,9 +201,12 @@ const FinancialQuestions = ({
             Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
           </p>
           
-          <div className="flex justify-center mb-8">
-            <ActionButton onClick={handleActionClick} text="quanto eu gastei nos últimos dias?" />
-          </div>
+          {/* Only show button if it hasn't been clicked yet */}
+          {!buttonClicked && (
+            <div className="flex justify-center mb-8">
+              <ActionButton onClick={handleActionClick} text="quanto eu gastei nos últimos dias?" />
+            </div>
+          )}
         </div>
       </div>
 
@@ -210,9 +217,9 @@ const FinancialQuestions = ({
             return (
               <div key={message.id} className={`mb-2 flex justify-start`} onAnimationEnd={handleAnimationEnd}>
                 <div className={`relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white w-4/5`}>
-                  <div className="flex items-end justify-between gap-2">
+                  <div className="flex flex-col">
                     <div className="text-sm self-center w-full">{renderChart(message.text)}</div>
-                    <div className="text-[10px] text-gray-300 flex items-center whitespace-nowrap self-end">
+                    <div className="text-[10px] text-gray-300 mt-1 text-left">
                       <span>{message.time}</span>
                     </div>
                   </div>
