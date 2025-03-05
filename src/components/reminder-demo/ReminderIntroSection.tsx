@@ -15,29 +15,6 @@ const ReminderIntroSection = () => {
           </p>
         </div>
       </div>
-      
-      <div className="flex items-start mb-4">
-        <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
-          4.
-        </div>
-        <div>
-          <p className="text-lg mb-2">
-            E seja lembrado com antecedência.
-          </p>
-        </div>
-      </div>
-      
-      <div className="flex items-start mb-6">
-        <div className="text-sales-orange font-bold rounded-full text-4xl mr-3 flex-shrink-0">
-          5.
-        </div>
-        <div>
-          <p className="text-lg mb-2">
-            Defina limites de gastos por categoria.{' '}
-            <span className="text-sales-green font-medium">Controle quanto quer gastar.</span>
-          </p>
-        </div>
-      </div>
     </div>
   );
 };

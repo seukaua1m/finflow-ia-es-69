@@ -18,7 +18,8 @@ const MessageItem = ({
     if (message.isGroupMessage) {
       // Parse the expense message with specific layout
       const parts = text.split('\n\n');
-      return <>
+      return (
+        <>
           {/* Title - "Gasto adicionado" */}
           <div className="font-bold">{parts[0].replace(/<strong>|<\/strong>/g, '')}</div>
           
@@ -30,7 +31,8 @@ const MessageItem = ({
           
           {/* Date - with line space above */}
           <div className="mt-4 py-px my-0">{parts[3]}</div>
-        </>;
+        </>
+      );
     }
 
     // For regular messages, split by new lines first
