@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { SendHorizontal, CheckCheck, CircleDollarSign } from 'lucide-react';
+import { SendHorizontal, CheckCheck } from 'lucide-react';
 
 interface Message {
   id: number;
@@ -15,9 +15,9 @@ const TypingIndicator = () => {
   return (
     <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 message-animation max-w-[100px]">
       <div className="flex space-x-2">
-        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-        <div className="w-3 h-3 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '600ms' }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '0ms' }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '300ms' }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '600ms' }}></div>
       </div>
     </div>
   );
@@ -27,6 +27,8 @@ const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [showContinueButton, setShowContinueButton] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Function to get current time in HH:MM format
@@ -44,6 +46,11 @@ const HowItWorks = () => {
     scrollToBottom();
   }, [messages, isTyping]);
 
+  // Handle animation end
+  const handleAnimationEnd = () => {
+    setAnimationComplete(true);
+  };
+
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -52,7 +59,10 @@ const HowItWorks = () => {
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || !animationComplete) return;
+
+    // Disable animations while processing
+    setAnimationComplete(false);
 
     // Add user message
     const userMessage: Message = {
@@ -65,52 +75,58 @@ const HowItWorks = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     
-    // Show typing indicator
-    setIsTyping(true);
-    
-    // Simulate bot response after delay
+    // Wait for user message animation to complete (0.8s)
     setTimeout(() => {
-      setIsTyping(false);
+      // Show typing indicator
+      setIsTyping(true);
       
-      // Create the grouped expense message
-      const currentTime = getCurrentTime();
-      
-      // Extract first word as item name and second word as price
-      const parts = inputValue.split(' ');
-      const itemName = parts[0].toUpperCase();
-      const price = parts[1] || '0';
-      
-      // Format date as DD/MM/YYYY
-      const now = new Date();
-      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
-      
-      // Add grouped expense info message
-      const expenseMessage: Message = {
-        id: Date.now() + 1,
-        text: `Gasto adicionado\n\n📌 ${itemName} (Delivery)\n\nR$ ${price},00\n\n${formattedDate}`,
-        sender: 'bot',
-        time: currentTime,
-        isGroupMessage: true
-      };
-      
-      // Add reminder message
-      const reminderMessage: Message = {
-        id: Date.now() + 2,
-        text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
-        sender: 'bot',
-        time: currentTime
-      };
-      
-      // Add messages with slight delay between them
+      // Simulate bot response after delay
       setTimeout(() => {
+        setIsTyping(false);
+        
+        // Create the grouped expense message
+        const currentTime = getCurrentTime();
+        
+        // Extract first word as item name and second word as price
+        const parts = inputValue.split(' ');
+        const itemName = parts[0].toUpperCase();
+        const price = parts[1] || '0';
+        
+        // Format date as DD/MM/YYYY
+        const now = new Date();
+        const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+        
+        // Add grouped expense info message
+        const expenseMessage: Message = {
+          id: Date.now() + 1,
+          text: `Gasto adicionado\n\n📌 ${itemName} (Delivery)\n\nR$ ${price},00\n\n${formattedDate}`,
+          sender: 'bot',
+          time: currentTime,
+          isGroupMessage: true
+        };
+        
         setMessages(prev => [...prev, expenseMessage]);
         
-        // Add reminder message after another delay
+        // Wait for first bot message animation to complete
         setTimeout(() => {
+          // Add reminder message
+          const reminderMessage: Message = {
+            id: Date.now() + 2,
+            text: "Lembrete: Você está quase chegando no seu limite definido de R$ 66 por mês com Delivery.",
+            sender: 'bot',
+            time: currentTime
+          };
+          
           setMessages(prev => [...prev, reminderMessage]);
-        }, 1000);
-      }, 500);
-    }, 2000);
+          
+          // Show continue button after all messages are displayed
+          setTimeout(() => {
+            setShowContinueButton(true);
+            setAnimationComplete(true);
+          }, 800);
+        }, 800);
+      }, 2000);
+    }, 800);
   };
 
   // Format multi-line text with line breaks
@@ -121,6 +137,12 @@ const HowItWorks = () => {
         {i < text.split('\n').length - 1 && <br />}
       </React.Fragment>
     ));
+  };
+
+  // Handle continue button click
+  const handleContinue = () => {
+    // Add continue functionality here
+    console.log("Continue button clicked");
   };
 
   return (
@@ -159,18 +181,19 @@ const HowItWorks = () => {
         </div>
       </div>
 
-      {/* Chat area - now without the dark container */}
+      {/* Chat area without dark container */}
       <div className="mb-4 min-h-[300px]">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            onAnimationEnd={handleAnimationEnd}
           >
             <div
-              className={`relative p-3 rounded-lg max-w-[80%] message-animation ${
+              className={`relative p-3 rounded-lg message-animation ${
                 message.sender === 'user'
                   ? 'bg-[#154D39] text-white'
-                  : 'bg-[#242625] text-white'
+                  : 'bg-[#242625] text-white w-4/5'
               }`}
             >
               <p>{formatMessageText(message.text)}</p>
@@ -190,22 +213,33 @@ const HowItWorks = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Message input form */}
-      <form onSubmit={handleSubmit} className="flex gap-4">
-        <input
-          type="text"
-          placeholder="Exemplo: ifood 44"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
-        />
-        <button
-          type="submit"
-          className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
-        >
-          <SendHorizontal size={24} />
+      {/* Message input form or continue button */}
+      {!showContinueButton ? (
+        <form onSubmit={handleSubmit} className="flex gap-4">
+          <input
+            type="text"
+            placeholder="Exemplo: ifood 44"
+            value={inputValue}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
+          />
+          <button
+            type="submit"
+            className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
+            disabled={!animationComplete}
+          >
+            <SendHorizontal size={24} />
+          </button>
+        </form>
+      ) : (
+        <button 
+          onClick={handleContinue} 
+          className="w-full bg-sales-orange text-slate-950 font-semibold py-4 px-6 rounded-lg
+            transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
+            focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50 animate-fade-in">
+          Continuar
         </button>
-      </form>
+      )}
     </div>
   );
 };

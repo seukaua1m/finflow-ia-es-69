@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
-import { ArrowRight } from 'lucide-react';
+
 const Index = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  
   const handleContinue = () => {
     setShowHowItWorks(true);
     window.scrollTo({
@@ -11,6 +13,7 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
+  
   return <div className="min-h-screen bg-white flex flex-col items-center">
       {!showHowItWorks ? <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
@@ -61,10 +64,9 @@ const Index = () => {
             </SalesCard>
           </div>
 
-          {/* Botão Continuar */}
-          <button onClick={handleContinue} className="btn-continue flex items-center justify-center gap-2 animate-fade-in text-slate-950">
+          {/* Botão Continuar - Removed icon and updated text color */}
+          <button onClick={handleContinue} className="btn-continue animate-fade-in text-slate-950">
             Continuar
-            <ArrowRight size={20} />
           </button>
         </div> : <HowItWorks />}
     </div>;
