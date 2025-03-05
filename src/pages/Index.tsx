@@ -1,8 +1,11 @@
+
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
+
 const Index = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  
   const handleContinue = () => {
     setShowHowItWorks(true);
     window.scrollTo({
@@ -10,8 +13,11 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
-  return <div className="min-h-screen bg-white flex flex-col items-center">
-      {!showHowItWorks ? <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
+  
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      {!showHowItWorks ? (
+        <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
           <h2 className="text-sales-gray text-center text-lg mb-8 italic font-light animate-fade-in">
             A mesma tecnologia usada por<br />gerentes de investimentos.
@@ -64,7 +70,12 @@ const Index = () => {
           <button onClick={handleContinue} className="btn-continue animate-fade-in">
             Continuar
           </button>
-        </div> : <HowItWorks />}
-    </div>;
+        </div>
+      ) : (
+        <HowItWorks />
+      )}
+    </div>
+  );
 };
+
 export default Index;
