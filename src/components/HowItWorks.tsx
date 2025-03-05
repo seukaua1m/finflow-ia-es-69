@@ -1,10 +1,13 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
 import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
+import FinancialQuestions from './FinancialQuestions';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
+
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -12,6 +15,7 @@ const HowItWorks = () => {
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [showContinueButton, setShowContinueButton] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
+  const [currentStep, setCurrentStep] = useState(1);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
@@ -111,9 +115,19 @@ const HowItWorks = () => {
 
   // Handle continue button click
   const handleContinue = () => {
-    // Add continue functionality here
-    console.log("Continue button clicked");
+    setCurrentStep(2);
   };
+
+  const handleNextStep = () => {
+    // This will be implemented when we add the third step
+    console.log("Moving to the next step");
+  };
+
+  // Render different steps based on currentStep
+  if (currentStep === 2) {
+    return <FinancialQuestions onContinue={handleNextStep} />;
+  }
+
   return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
@@ -168,4 +182,5 @@ const HowItWorks = () => {
       </div>
     </div>;
 };
+
 export default HowItWorks;
