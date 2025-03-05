@@ -1,21 +1,18 @@
-
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import { ArrowRight } from 'lucide-react';
-
 const Index = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-
   const handleContinue = () => {
     setShowHowItWorks(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
-
-  return (
-    <div className="min-h-screen bg-white flex flex-col items-center">
-      {!showHowItWorks ? (
-        <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
+  return <div className="min-h-screen bg-white flex flex-col items-center">
+      {!showHowItWorks ? <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
           <h2 className="text-sales-gray text-center text-lg mb-8 italic font-light animate-fade-in">
             A mesma tecnologia usada por<br />gerentes de investimentos.
@@ -65,19 +62,11 @@ const Index = () => {
           </div>
 
           {/* Botão Continuar */}
-          <button 
-            className="btn-continue flex items-center justify-center gap-2 animate-fade-in"
-            onClick={handleContinue}
-          >
+          <button onClick={handleContinue} className="btn-continue flex items-center justify-center gap-2 animate-fade-in text-slate-950">
             Continuar
             <ArrowRight size={20} />
           </button>
-        </div>
-      ) : (
-        <HowItWorks />
-      )}
-    </div>
-  );
+        </div> : <HowItWorks />}
+    </div>;
 };
-
 export default Index;
