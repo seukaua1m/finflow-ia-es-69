@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { SendHorizontal, CheckCheck } from 'lucide-react';
-
 interface Message {
   id: number;
   text: string;
@@ -12,17 +10,20 @@ interface Message {
 
 // Typing indicator component
 const TypingIndicator = () => {
-  return (
-    <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 message-animation max-w-[100px]">
+  return <div className="flex items-center justify-center bg-[#242625] text-white p-3 rounded-lg self-start mb-4 message-animation max-w-[100px]">
       <div className="flex space-x-2">
-        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '0ms' }}></div>
-        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '300ms' }}></div>
-        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{ animationDelay: '600ms' }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{
+        animationDelay: '0ms'
+      }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{
+        animationDelay: '300ms'
+      }}></div>
+        <div className="typing-dot w-3 h-3 bg-gray-400 rounded-full" style={{
+        animationDelay: '600ms'
+      }}></div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 const HowItWorks = () => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -39,9 +40,10 @@ const HowItWorks = () => {
 
   // Scroll to bottom of messages
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
-
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
@@ -71,34 +73,33 @@ const HowItWorks = () => {
       sender: 'user',
       time: getCurrentTime()
     };
-    
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-    
+
     // Wait for user message animation to complete (0.8s)
     setTimeout(() => {
       // Show typing indicator
       setIsTyping(true);
-      
+
       // Simulate bot response after delay
       setTimeout(() => {
         setIsTyping(false);
-        
+
         // Create the grouped expense message
         const currentTime = getCurrentTime();
-        
+
         // Extract first word as item name and second word as price
         const parts = inputValue.split(' ');
         const itemName = parts[0].toUpperCase();
         const price = parts[1] || '0';
-        
+
         // Format date as DD/MM/YYYY
         const now = new Date();
         const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
-        
+
         // Calculate limit as 1.5x the entered value
         const limit = Math.round(Number(price) * 1.5);
-        
+
         // Add expense info message with proper formatting
         const expenseMessage: Message = {
           id: Date.now() + 1,
@@ -107,9 +108,8 @@ const HowItWorks = () => {
           time: currentTime,
           isGroupMessage: true
         };
-        
         setMessages(prev => [...prev, expenseMessage]);
-        
+
         // Wait for first bot message animation to complete
         setTimeout(() => {
           // Add reminder message with bold text for the limit
@@ -119,9 +119,8 @@ const HowItWorks = () => {
             sender: 'bot',
             time: currentTime
           };
-          
           setMessages(prev => [...prev, reminderMessage]);
-          
+
           // Show continue button after all messages are displayed
           setTimeout(() => {
             setShowContinueButton(true);
@@ -136,35 +135,26 @@ const HowItWorks = () => {
   const formatMessageText = (text: string) => {
     // Split by new lines first
     const lines = text.split('\n');
-    
     return lines.map((line, lineIndex) => {
       // Check if line contains HTML
       const hasHTML = line.includes('<strong>');
-      
       if (hasHTML) {
         // Parse simple HTML tags in the line
         const parts = line.split(/<strong>|<\/strong>/);
-        
-        return (
-          <React.Fragment key={lineIndex}>
-            {parts.map((part, partIndex) => (
-              partIndex % 2 === 1 ? 
-                // Odd indexes are between <strong> tags
-                <strong key={partIndex}>{part}</strong> : 
-                // Even indexes are outside <strong> tags
-                <span key={partIndex}>{part}</span>
-            ))}
+        return <React.Fragment key={lineIndex}>
+            {parts.map((part, partIndex) => partIndex % 2 === 1 ?
+          // Odd indexes are between <strong> tags
+          <strong key={partIndex}>{part}</strong> :
+          // Even indexes are outside <strong> tags
+          <span key={partIndex}>{part}</span>)}
             {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>
-        );
+          </React.Fragment>;
       } else {
         // Regular line without HTML
-        return (
-          <React.Fragment key={lineIndex}>
+        return <React.Fragment key={lineIndex}>
             {line}
             {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>
-        );
+          </React.Fragment>;
       }
     });
   };
@@ -174,9 +164,7 @@ const HowItWorks = () => {
     // Add continue functionality here
     console.log("Continue button clicked");
   };
-
-  return (
-    <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -194,7 +182,7 @@ const HowItWorks = () => {
 
       <div className="mb-8">
         <div className="flex items-start mb-4">
-          <div className="bg-sales-orange text-white font-bold rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
+          <div className="text-orange font-bold rounded-full w-8 h-8 flex items-center justify-center mr-3 flex-shrink-0">
             1.
           </div>
           <div>
@@ -213,29 +201,15 @@ const HowItWorks = () => {
 
       {/* Chat area without container, just messages */}
       <div className="min-h-[50px]">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-            onAnimationEnd={handleAnimationEnd}
-          >
-            <div
-              className={`relative p-3 rounded-lg message-animation ${
-                message.sender === 'user'
-                  ? 'bg-[#154D39] text-white'
-                  : 'bg-[#242625] text-white w-4/5'
-              }`}
-            >
+        {messages.map(message => <div key={message.id} className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={handleAnimationEnd}>
+            <div className={`relative p-3 rounded-lg message-animation ${message.sender === 'user' ? 'bg-[#154D39] text-white' : 'bg-[#242625] text-white w-4/5'}`}>
               <div>{formatMessageText(message.text)}</div>
               <div className={`text-xs text-gray-300 text-right mt-1 flex items-center justify-end`}>
                 <span>{message.time}</span>
-                {message.sender === 'user' && (
-                  <CheckCheck size={16} className="ml-1 text-gray-300" />
-                )}
+                {message.sender === 'user' && <CheckCheck size={16} className="ml-1 text-gray-300" />}
               </div>
             </div>
-          </div>
-        ))}
+          </div>)}
         
         {/* Typing indicator */}
         {isTyping && <TypingIndicator />}
@@ -245,35 +219,17 @@ const HowItWorks = () => {
 
       {/* Message input form or continue button */}
       <div className="mt-4">
-        {!showContinueButton ? (
-          <form onSubmit={handleSubmit} className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Exemplo: ifood 44"
-              value={inputValue}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green"
-            />
-            <button
-              type="submit"
-              className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]"
-              disabled={!animationComplete}
-            >
+        {!showContinueButton ? <form onSubmit={handleSubmit} className="flex gap-4">
+            <input type="text" placeholder="Exemplo: ifood 44" value={inputValue} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-1 focus:ring-sales-green" />
+            <button type="submit" className="bg-[#1DA861] text-white p-3 rounded-full flex items-center justify-center min-w-[56px] h-[56px]" disabled={!animationComplete}>
               <SendHorizontal size={24} />
             </button>
-          </form>
-        ) : (
-          <button 
-            onClick={handleContinue} 
-            className="w-full bg-[#FFA35B] text-slate-950 font-semibold py-4 px-6 rounded-lg
+          </form> : <button onClick={handleContinue} className="w-full bg-[#FFA35B] text-slate-950 font-semibold py-4 px-6 rounded-lg
               transition-all duration-300 hover:bg-opacity-90 hover:shadow-md
               focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50 animate-fade-in">
             Continuar
-          </button>
-        )}
+          </button>}
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HowItWorks;
