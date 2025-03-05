@@ -1,6 +1,11 @@
 
 import React, { useState } from 'react';
 import ActionButton from './common/ActionButton';
+import MessageItem from './chat/MessageItem';
+import TypingIndicator from './chat/TypingIndicator';
+import { Message } from '@/types/chat';
+import { getCurrentTime } from '@/utils/messageUtils';
+import FinancialChart from './charts/FinancialChart';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
@@ -8,13 +13,93 @@ interface FinancialQuestionsProps {
 
 const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
   const [showNextStep, setShowNextStep] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
+  const [isTypingThirdMessage, setIsTypingThirdMessage] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(true);
 
   const handleActionClick = () => {
     setShowNextStep(true);
-    // Future implementation: Show chat sequence with financial data visualization
+    setAnimationComplete(false);
+    
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now(),
+      text: "quanto eu gastei nos últimos dias?",
+      sender: 'user',
+      time: getCurrentTime()
+    };
+    setMessages([userMessage]);
+    
+    // Show typing indicator after user message
     setTimeout(() => {
-      onContinue();
-    }, 3000);
+      setIsTyping(true);
+      
+      // First bot response - chart message
+      setTimeout(() => {
+        setIsTyping(false);
+        
+        const chartMessage: Message = {
+          id: Date.now() + 1,
+          text: `<strong>Últimos 7 dias</strong>\n\nR$ 632,00 - 27/02 a 05/03`,
+          sender: 'bot',
+          time: getCurrentTime(),
+          chartData: true
+        };
+        
+        setMessages(prev => [...prev, chartMessage]);
+        
+        // Second typing indicator
+        setTimeout(() => {
+          setIsTypingSecondMessage(true);
+          
+          // Second bot message
+          setTimeout(() => {
+            setIsTypingSecondMessage(false);
+            
+            const percentageMessage: Message = {
+              id: Date.now() + 2,
+              text: "Seus gastos aumentaram em 20% essa semana",
+              sender: 'bot',
+              time: getCurrentTime()
+            };
+            
+            setMessages(prev => [...prev, percentageMessage]);
+            
+            // Third typing indicator
+            setTimeout(() => {
+              setIsTypingThirdMessage(true);
+              
+              // Final message
+              setTimeout(() => {
+                setIsTypingThirdMessage(false);
+                
+                const finalMessage: Message = {
+                  id: Date.now() + 3,
+                  text: "Segue gráfico dos seus gastos dos últimos 7 dias 👍",
+                  sender: 'bot',
+                  time: getCurrentTime()
+                };
+                
+                setMessages(prev => [...prev, finalMessage]);
+                setAnimationComplete(true);
+                
+                // Continue to next step after entire sequence
+                setTimeout(() => {
+                  onContinue();
+                }, 3000);
+              }, 1500);
+            }, 800);
+          }, 1500);
+        }, 800);
+      }, 2000);
+    }, 800);
+  };
+
+  // Handle animation end for messages
+  const handleAnimationEnd = () => {
+    setAnimationComplete(true);
   };
 
   return (
@@ -45,8 +130,22 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
       </div>
 
       {showNextStep && (
-        <div className="mt-8">
-          {/* Future implementation: Financial data visualization will appear here */}
+        <div className="mt-8 bg-[#0A1014] rounded-lg p-3 max-h-[500px] overflow-y-auto">
+          {/* Messages area */}
+          <div className="min-h-[50px]">
+            {messages.map(message => (
+              <MessageItem 
+                key={message.id} 
+                message={message} 
+                onAnimationEnd={handleAnimationEnd} 
+              />
+            ))}
+            
+            {/* Typing indicators */}
+            {isTyping && <TypingIndicator />}
+            {isTypingSecondMessage && <TypingIndicator />}
+            {isTypingThirdMessage && <TypingIndicator />}
+          </div>
         </div>
       )}
     </div>
