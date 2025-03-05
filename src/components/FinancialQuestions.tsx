@@ -1,18 +1,24 @@
+
 import React, { useState } from 'react';
 import ActionButton from './common/ActionButton';
-import ContinueButton from './common/ContinueButton';
+
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
-const FinancialQuestions = ({
-  onContinue
-}: FinancialQuestionsProps) => {
+
+const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
   const [showNextStep, setShowNextStep] = useState(false);
+
   const handleActionClick = () => {
     setShowNextStep(true);
     // Future implementation: Show chat sequence with financial data visualization
+    setTimeout(() => {
+      onContinue();
+    }, 3000);
   };
-  return <div className="w-full max-w-3xl bg-white px-4 py-12">
+
+  return (
+    <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
         <div className="bg-sales-orange font-medium rounded-full transition-all duration-300 text-slate-950 px-[15px] py-[2px]">
           Demonstração
@@ -38,14 +44,13 @@ const FinancialQuestions = ({
         </div>
       </div>
 
-      {showNextStep && <div className="mt-8">
+      {showNextStep && (
+        <div className="mt-8">
           {/* Future implementation: Financial data visualization will appear here */}
-          <ContinueButton onClick={onContinue} />
-        </div>}
-
-      {!showNextStep && <div className="mt-12">
-          <ContinueButton onClick={onContinue} />
-        </div>}
-    </div>;
+        </div>
+      )}
+    </div>
+  );
 };
+
 export default FinancialQuestions;
