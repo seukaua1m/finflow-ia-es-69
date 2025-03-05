@@ -5,7 +5,7 @@ import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
 import { Message } from '@/types/chat';
 import { getCurrentTime } from '@/utils/messageUtils';
-import { BarChart, Bar, XAxis, Cell, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, Cell, ResponsiveContainer, LabelList } from 'recharts';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
@@ -145,7 +145,7 @@ const FinancialQuestions = ({
           
           <div className="h-40 my-2">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
+              <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
                 <XAxis 
                   dataKey="name" 
                   axisLine={false} 
@@ -157,15 +157,27 @@ const FinancialQuestions = ({
                   radius={[10, 10, 10, 10]} 
                   barSize={30}
                 >
+                  <LabelList 
+                    dataKey="value" 
+                    position="top" 
+                    fill="#2FA179"
+                    formatter={(value: number) => `${value}`}
+                  />
                   {chartData.map((entry, index) => (
                     <Cell 
                       key={`cell-${index}`} 
-                      fill="#D8E9E3" 
+                      fill="url(#colorGradient)" 
                       stroke="#2FA179" 
                       strokeWidth={1}
                     />
                   ))}
                 </Bar>
+                <defs>
+                  <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#2FA179" stopOpacity={0.8}/>
+                    <stop offset="100%" stopColor="#D8E9E3" stopOpacity={0.9}/>
+                  </linearGradient>
+                </defs>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -219,7 +231,7 @@ const FinancialQuestions = ({
                 <div className={`relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white w-4/5`}>
                   <div className="flex flex-col">
                     <div className="text-sm self-center w-full">{renderChart(message.text)}</div>
-                    <div className="text-[10px] text-gray-300 mt-1 text-left">
+                    <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                       <span>{message.time}</span>
                     </div>
                   </div>
