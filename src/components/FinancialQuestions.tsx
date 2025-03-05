@@ -2,10 +2,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ActionButton from './common/ActionButton';
 import MessageItem from './chat/MessageItem';
+import ChartMessage from './chat/ChartMessage';
 import TypingIndicator from './chat/TypingIndicator';
 import { Message } from '@/types/chat';
-import { getCurrentTime } from '@/utils/messageUtils';
-import { BarChart, Bar, XAxis, Cell, ResponsiveContainer, LabelList } from 'recharts';
+import { createUserMessage, createChartMessage, createFollowUpMessage } from '@/services/chatService';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
@@ -19,7 +19,7 @@ const FinancialQuestions = ({
   const [isTyping, setIsTyping] = useState(false);
   const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
-  const [buttonClicked, setButtonClicked] = useState(false); // New state to track if button was clicked
+  const [buttonClicked, setButtonClicked] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages
@@ -38,17 +38,6 @@ const FinancialQuestions = ({
     setAnimationComplete(true);
   };
 
-  // Chart data for the last 7 days
-  const chartData = [
-    { name: 'qui', value: 155 },
-    { name: 'sex', value: 105 },
-    { name: 'sáb', value: 53 },
-    { name: 'dom', value: 64 },
-    { name: 'seg', value: 131 },
-    { name: 'ter', value: 52 },
-    { name: 'qua', value: 72 }
-  ];
-
   const handleActionClick = () => {
     // Hide the button
     setButtonClicked(true);
@@ -58,12 +47,7 @@ const FinancialQuestions = ({
     
     // Create user message with button text
     const buttonText = "quanto eu gastei nos últimos dias?";
-    const userMessage: Message = {
-      id: Date.now(),
-      text: buttonText,
-      sender: 'user',
-      time: getCurrentTime()
-    };
+    const userMessage = createUserMessage(buttonText);
     
     // Add user message to chat
     setMessages(prev => [...prev, userMessage]);
@@ -77,19 +61,7 @@ const FinancialQuestions = ({
         setIsTyping(false);
         
         // First bot message with chart
-        const chartMessage: Message = {
-          id: Date.now() + 1,
-          text: `<chart>
-            <title>Últimos 7 dias</title>
-            <subtitle>R$ 632,00 - 27/02 à 05/03</subtitle>
-            <data>${JSON.stringify(chartData)}</data>
-            <footer>↗ Seus gastos aumentaram em 20% essa semana</footer>
-          </chart>`,
-          sender: 'bot',
-          time: getCurrentTime(),
-          isChartMessage: true
-        };
-        
+        const chartMessage = createChartMessage();
         setMessages(prev => [...prev, chartMessage]);
         
         // Show typing indicator for second message
@@ -101,13 +73,7 @@ const FinancialQuestions = ({
             setIsTypingSecondMessage(false);
             
             // Second bot message with call to action
-            const followUpMessage: Message = {
-              id: Date.now() + 2,
-              text: 'Segue gráfico dos seus gastos dos últimos 7 dias 👆',
-              sender: 'bot',
-              time: getCurrentTime()
-            };
-            
+            const followUpMessage = createFollowUpMessage();
             setMessages(prev => [...prev, followUpMessage]);
             setAnimationComplete(true);
             
@@ -122,78 +88,8 @@ const FinancialQuestions = ({
     }, 800);
   };
 
-  // Render chart from message content
-  const renderChart = (messageText: string) => {
-    try {
-      // Extract chart data from message text
-      const titleMatch = messageText.match(/<title>(.*?)<\/title>/);
-      const subtitleMatch = messageText.match(/<subtitle>(.*?)<\/subtitle>/);
-      const dataMatch = messageText.match(/<data>(.*?)<\/data>/);
-      const footerMatch = messageText.match(/<footer>(.*?)<\/footer>/);
-      
-      const title = titleMatch ? titleMatch[1] : '';
-      const subtitle = subtitleMatch ? subtitleMatch[1] : '';
-      const chartData = dataMatch ? JSON.parse(dataMatch[1]) : [];
-      const footer = footerMatch ? footerMatch[1] : '';
-      
-      return (
-        <div className="w-full rounded-lg overflow-hidden border border-[#202C33] bg-white p-4">
-          <div className="mb-1">
-            <h3 className="text-xl font-bold text-black">{title}</h3>
-            <p className="text-gray-600 text-sm">{subtitle}</p>
-          </div>
-          
-          <div className="h-40 my-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
-                <XAxis 
-                  dataKey="name" 
-                  axisLine={false} 
-                  tickLine={false}
-                  tick={{ fill: '#2FA179' }}
-                />
-                <Bar 
-                  dataKey="value" 
-                  radius={[10, 10, 10, 10]} 
-                  barSize={30}
-                >
-                  <LabelList 
-                    dataKey="value" 
-                    position="top" 
-                    fill="#2FA179"
-                    formatter={(value: number) => `${value}`}
-                  />
-                  {chartData.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
-                      fill="url(#colorGradient)" 
-                      stroke="#2FA179" 
-                      strokeWidth={1}
-                    />
-                  ))}
-                </Bar>
-                <defs>
-                  <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#2FA179" stopOpacity={0.8}/>
-                    <stop offset="100%" stopColor="#D8E9E3" stopOpacity={0.9}/>
-                  </linearGradient>
-                </defs>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          
-          <div className="flex items-center gap-2 border-t border-gray-200 pt-2 mt-2">
-            <div className="text-black font-medium">{footer}</div>
-          </div>
-        </div>
-      );
-    } catch (error) {
-      console.error("Error rendering chart:", error);
-      return <div>Error rendering chart</div>;
-    }
-  };
-
-  return <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return (
+    <div className="w-full max-w-3xl bg-white px-4 py-12">
       <div className="flex justify-center mb-8">
         <div className="bg-sales-orange font-medium rounded-full transition-all duration-300 text-slate-950 px-[15px] py-[2px]">
           Demonstração
@@ -227,16 +123,12 @@ const FinancialQuestions = ({
         {messages.map(message => {
           if (message.isChartMessage) {
             return (
-              <div key={message.id} className={`mb-2 flex justify-start`} onAnimationEnd={handleAnimationEnd}>
-                <div className={`relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white w-4/5`}>
-                  <div className="flex flex-col">
-                    <div className="text-sm self-center w-full">{renderChart(message.text)}</div>
-                    <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
-                      <span>{message.time}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ChartMessage 
+                key={message.id}
+                messageText={message.text}
+                time={message.time}
+                onAnimationEnd={handleAnimationEnd}
+              />
             );
           }
           return <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />;
@@ -254,7 +146,8 @@ const FinancialQuestions = ({
       {showNextStep && <div className="mt-8">
           {/* Future implementation: Financial data visualization will appear here */}
         </div>}
-    </div>;
+    </div>
+  );
 };
 
 export default FinancialQuestions;
