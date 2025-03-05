@@ -64,7 +64,7 @@ const MessageItem = ({
       <div className={`relative py-1.5 px-3 rounded-lg message-animation 
         ${message.sender === 'user' 
           ? 'bg-[#005C4B] text-white max-w-[95%]' 
-          : 'bg-[#202C33] text-white w-full md:w-3/5 lg:w-2/3'}`}>
+          : 'bg-[#202C33] text-white max-w-[80%] md:max-w-[70%] lg:max-w-[60%]'}`}>
         <div className="flex flex-col">
           <div className="text-sm text-left">{formatMessageText(message.text)}</div>
           <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
