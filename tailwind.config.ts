@@ -73,7 +73,6 @@ export default {
 				"sales-orange": "#FFA35B",
 				"sales-mint": "#D3E9DE",
 				"sales-highlight": "#e0f0e8",
-				"chart-bar": "#D3E9DE",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -122,7 +121,7 @@ export default {
 						transform: 'translateY(0)'
 					},
 					'25%': {
-						transform: 'translateY(-15px)'
+						transform: 'translateY(-8px)'
 					},
 					'50%': {
 						transform: 'translateY(0)'
@@ -136,8 +135,7 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
-				'scale-in': 'scale-in 0.4s ease-out',
-				'jump': 'jump 3s ease-in-out infinite'
+				'scale-in': 'scale-in 0.4s ease-out'
 			}
 		}
 	},

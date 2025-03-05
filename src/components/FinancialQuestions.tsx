@@ -1,117 +1,20 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import ActionButton from './common/ActionButton';
-import MessageItem from './chat/MessageItem';
-import TypingIndicator from './chat/TypingIndicator';
-import { Message } from '@/types/chat';
-import { getCurrentTime } from '@/utils/messageUtils';
 
 interface FinancialQuestionsProps {
   onContinue: () => void;
 }
 
 const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [isTypingSecondMessage, setIsTypingSecondMessage] = useState(false);
-  const [isTypingThirdMessage, setIsTypingThirdMessage] = useState(false);
-  const [animationComplete, setAnimationComplete] = useState(true);
-  const [chatStarted, setChatStarted] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Scroll to bottom of messages
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: 'smooth'
-    });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping, isTypingSecondMessage, isTypingThirdMessage]);
-
-  // Handle animation end
-  const handleAnimationEnd = () => {
-    setAnimationComplete(true);
-  };
+  const [showNextStep, setShowNextStep] = useState(false);
 
   const handleActionClick = () => {
-    if (!animationComplete || chatStarted) return;
-    setChatStarted(true);
-    setAnimationComplete(false);
-    
-    // Add user message with the text from the button
-    const userMessage: Message = {
-      id: Date.now(),
-      text: "quanto eu gastei nos últimos dias?",
-      sender: 'user',
-      time: getCurrentTime()
-    };
-    setMessages([userMessage]);
-    
-    // Show typing indicator after user message
+    setShowNextStep(true);
+    // Future implementation: Show chat sequence with financial data visualization
     setTimeout(() => {
-      setIsTyping(true);
-      
-      // First bot response - chart message
-      setTimeout(() => {
-        setIsTyping(false);
-        
-        const chartMessage: Message = {
-          id: Date.now() + 1,
-          text: `<strong>Últimos 7 dias</strong>\n\nR$ 632,00 - 27/02 a 05/03`,
-          sender: 'bot',
-          time: getCurrentTime(),
-          chartData: true
-        };
-        
-        setMessages(prev => [...prev, chartMessage]);
-        
-        // Second typing indicator
-        setTimeout(() => {
-          setIsTypingSecondMessage(true);
-          
-          // Second bot message
-          setTimeout(() => {
-            setIsTypingSecondMessage(false);
-            
-            const percentageMessage: Message = {
-              id: Date.now() + 2,
-              text: "Seus gastos aumentaram em 20% essa semana",
-              sender: 'bot',
-              time: getCurrentTime()
-            };
-            
-            setMessages(prev => [...prev, percentageMessage]);
-            
-            // Third typing indicator
-            setTimeout(() => {
-              setIsTypingThirdMessage(true);
-              
-              // Final message
-              setTimeout(() => {
-                setIsTypingThirdMessage(false);
-                
-                const finalMessage: Message = {
-                  id: Date.now() + 3,
-                  text: "Segue gráfico dos seus gastos dos últimos 7 dias 👍",
-                  sender: 'bot',
-                  time: getCurrentTime()
-                };
-                
-                setMessages(prev => [...prev, finalMessage]);
-                setAnimationComplete(true);
-                
-                // Continue to next step after entire sequence
-                setTimeout(() => {
-                  onContinue();
-                }, 3000);
-              }, 1500);
-            }, 800);
-          }, 1500);
-        }, 800);
-      }, 2000);
-    }, 800);
+      onContinue();
+    }, 3000);
   };
 
   return (
@@ -135,35 +38,17 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
             Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
           </p>
           
-          {/* Only show action button if chat hasn't started */}
-          {!chatStarted && (
-            <div className="flex justify-center mb-8">
-              <ActionButton 
-                onClick={handleActionClick} 
-                text="quanto eu gastei nos últimos dias?" 
-              />
-            </div>
-          )}
+          <div className="flex justify-center mb-8">
+            <ActionButton onClick={handleActionClick} text="quanto eu gastei nos últimos dias?" />
+          </div>
         </div>
       </div>
 
-      {/* Messages area - now directly in the main component */}
-      <div className="min-h-[50px] mt-8">
-        {messages.map(message => (
-          <MessageItem 
-            key={message.id} 
-            message={message} 
-            onAnimationEnd={handleAnimationEnd} 
-          />
-        ))}
-        
-        {/* Typing indicators */}
-        {isTyping && <TypingIndicator />}
-        {isTypingSecondMessage && <TypingIndicator />}
-        {isTypingThirdMessage && <TypingIndicator />}
-        
-        <div ref={messagesEndRef} />
-      </div>
+      {showNextStep && (
+        <div className="mt-8">
+          {/* Future implementation: Financial data visualization will appear here */}
+        </div>
+      )}
     </div>
   );
 };
