@@ -14,9 +14,10 @@ interface ExpensePieChartProps {
   title: string;
   subtitle: string;
   footer: string;
+  time?: string;
 }
 
-const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChartProps) => {
+const ExpensePieChart = ({ chartData, title, subtitle, footer, time }: ExpensePieChartProps) => {
   // Custom renderer for the legend
   const renderLegend = () => {
     return (
@@ -65,7 +66,7 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChart
   };
 
   return (
-    <div className="w-full rounded-lg overflow-hidden border border-[#202C33] bg-white p-3 sm:p-4">
+    <div className="w-full rounded-md overflow-hidden border border-[#2a3942] bg-white p-3 sm:p-4 relative">
       <div className="mb-1">
         <h3 className="text-base sm:text-xl font-bold text-black text-center">{title}</h3>
         <p className="text-xs sm:text-sm text-gray-600 text-center">{subtitle}</p>
@@ -83,6 +84,7 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChart
               outerRadius={60}
               fill="#8884d8"
               dataKey="value"
+              animationDuration={1500} /* Increase animation duration */
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -97,6 +99,13 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChart
       <div className="flex items-center gap-2 border-t border-gray-200 pt-2 mt-1 sm:mt-2">
         <div className="text-black text-xs sm:text-sm font-medium">{footer}</div>
       </div>
+
+      {/* Time indicator with shadow in the bottom right corner */}
+      {time && (
+        <div className="absolute bottom-1 right-1 text-[10px] text-white bg-black/30 px-2 py-0.5 rounded-sm shadow-md">
+          {time}
+        </div>
+      )}
     </div>
   );
 };

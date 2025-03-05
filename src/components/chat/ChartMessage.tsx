@@ -32,6 +32,7 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
             title={title}
             subtitle={subtitle}
             footer={footer}
+            time={time}
           />
         );
       } else {
@@ -41,6 +42,7 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
             title={title}
             subtitle={subtitle}
             footer={footer}
+            time={time}
           />
         );
       }
@@ -55,9 +57,7 @@ const ChartMessage = ({ messageText, time, onAnimationEnd, isPieChart }: ChartMe
       <div className="relative py-1.5 px-3 rounded-lg message-animation bg-[#202C33] text-white max-w-[80%] md:max-w-[70%] lg:max-w-[60%]">
         <div className="flex flex-col">
           <div className="text-sm self-center w-full text-left">{renderChart(messageText)}</div>
-          <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
-            <span>{time}</span>
-          </div>
+          {/* Removed time display here as it's now passed to the chart components */}
         </div>
       </div>
     </div>
