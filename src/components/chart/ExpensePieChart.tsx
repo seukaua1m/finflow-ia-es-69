@@ -86,7 +86,10 @@ const ExpensePieChart = ({ chartData, title, subtitle, footer }: ExpensePieChart
               outerRadius={60}
               fill="#8884d8"
               dataKey="value"
-              animationDuration={1500} /* Increase animation duration */
+              animationBegin={0}
+              animationDuration={1200}
+              animationEasing="ease-out"
+              isAnimationActive={true}
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
