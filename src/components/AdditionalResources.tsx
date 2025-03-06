@@ -63,7 +63,7 @@ const AdditionalResources = ({
         </div>
       </div>
       
-      <p className="text-center text-sales-green italic mb-6">e outros recursos...</p>
+      <p className="text-center text-sales-green italic mb-6 font-semibold">e outros recursos...</p>
       
       <p className="text-center mb-4 max-w-md">
         Nosso diferencial é justamente não ser SÓ uma ferramenta que você vai usar uma vez e esquecer.
