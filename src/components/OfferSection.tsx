@@ -113,7 +113,7 @@ const OfferSection = ({
 
       {/* Secure payment */}
       <div className="flex items-center justify-center text-[#254D39] mb-4">
-        <span>🔓</span>
+        <span>🔒</span>
         <span className="ml-2">Pagamento Seguro</span>
       </div>
     </div>;
