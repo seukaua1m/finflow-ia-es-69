@@ -16,6 +16,15 @@ const FinancialGrowthChart: React.FC<FinancialGrowthChartProps> = ({
   chartData, 
   customYTicks 
 }) => {
+  // Define 5 grid lines with specific positions
+  const gridLines = [
+    { y: 50 },    // Line 1 (bottom)
+    { y: 1000 },  // Line 2
+    { y: 3000 },  // Line 3
+    { y: 5000 },  // Line 4
+    { y: 7000 },  // Line 5 (top)
+  ];
+
   return (
     <div className="relative h-80 w-full mb-4">
       {/* Starting value label - positioned at the bottom left */}
@@ -34,14 +43,18 @@ const FinancialGrowthChart: React.FC<FinancialGrowthChartProps> = ({
       <div className="h-full w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 30, right: 10, left: 10, bottom: 30 }}>
-            <CartesianGrid 
-              horizontal={true} 
-              vertical={false} 
-              horizontalCoordinatesGenerator={(props) => customYTicks}
-              stroke="#8E9196"
-              strokeOpacity={0.15}
-              strokeWidth={1}
-            />
+            {/* Custom grid lines with low opacity */}
+            {gridLines.map((line, index) => (
+              <CartesianGrid 
+                key={index}
+                horizontal={true} 
+                vertical={false}
+                horizontalPoints={[line.y]}
+                stroke="#8E9196"
+                strokeOpacity={0.15}
+                strokeWidth={1}
+              />
+            ))}
             <XAxis 
               dataKey="name" 
               axisLine={true}
