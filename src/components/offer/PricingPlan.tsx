@@ -1,10 +1,7 @@
-
 import React from 'react';
-
 const PricingPlan = () => {
-  return (
-    <>
-      <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-3 relative">
+  return <>
+      <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-3 relative my-[164px] mx-0 py-[34px]">
         {/* Promotion tag */}
         <div className="absolute top-4 right-4">
           <div className="bg-[#FFA35B] text-black px-3 py-1 rounded-md font-semibold text-sm">
@@ -14,8 +11,8 @@ const PricingPlan = () => {
         
         {/* Lock emoji (changed from icon) */}
         <div className="mb-1">
-          <div className="bg-[#FFA35B] w-8 h-8 rounded-md flex items-center justify-center">
-            <span className="text-xl">🔓</span>
+          <div className="bg-[#1A1A1A] w-8 h-8 rounded-md flex items-center justify-center">
+            <span className="font-normal text-3xl">🔓</span>
           </div>
         </div>
         
@@ -40,8 +37,6 @@ const PricingPlan = () => {
       <div className="text-center text-[#254D39] mb-8">
         <p className="px-0">(equivalente à menos de R$ 0,16 por dia)</p>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default PricingPlan;
