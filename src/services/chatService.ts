@@ -1,17 +1,49 @@
 
 import { Message } from '@/types/chat';
-import { getCurrentTime } from '@/utils/messageUtils';
+import { getCurrentTime, formatDate } from '@/utils/messageUtils';
+
+// Function to get the last 7 days as array of weekday abbreviations
+const getLast7DaysLabels = () => {
+  const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  const result = [];
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    result.push(days[date.getDay()]);
+  }
+  
+  return result;
+};
+
+// Function to generate date range text for the last 7 days
+const getLast7DaysDateRange = () => {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(endDate.getDate() - 6);
+  
+  const formatDay = (date: Date) => {
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+  };
+  
+  return `${formatDay(startDate)} à ${formatDay(endDate)}`;
+};
 
 // Chart data for the last 7 days
-export const getExpenseChartData = () => [
-  { name: 'qui', value: 155 },
-  { name: 'sex', value: 105 },
-  { name: 'sáb', value: 53 },
-  { name: 'dom', value: 64 },
-  { name: 'seg', value: 131 },
-  { name: 'ter', value: 52 },
-  { name: 'qua', value: 72 }
-];
+export const getExpenseChartData = () => {
+  const dayLabels = getLast7DaysLabels();
+  
+  // Random values for demonstration
+  return [
+    { name: dayLabels[0], value: 155 },
+    { name: dayLabels[1], value: 105 },
+    { name: dayLabels[2], value: 53 },
+    { name: dayLabels[3], value: 64 },
+    { name: dayLabels[4], value: 131 },
+    { name: dayLabels[5], value: 52 },
+    { name: dayLabels[6], value: 72 }
+  ];
+};
 
 // Pie chart data for expense categories
 export const getExpenseCategoryData = () => [
@@ -31,12 +63,13 @@ export const createUserMessage = (text: string): Message => ({
 
 export const createChartMessage = (): Message => {
   const chartData = getExpenseChartData();
+  const dateRange = getLast7DaysDateRange();
   
   return {
     id: Date.now() + 1,
     text: `<chart>
       <title>Últimos 7 dias</title>
-      <subtitle>R$ 632,00 - 27/02 à 05/03</subtitle>
+      <subtitle>R$ 632,00 - ${dateRange}</subtitle>
       <data>${JSON.stringify(chartData)}</data>
       <footer>↗ Seus gastos aumentaram em 20% essa semana</footer>
     </chart>`,
@@ -48,12 +81,13 @@ export const createChartMessage = (): Message => {
 
 export const createPieChartMessage = (): Message => {
   const pieChartData = getExpenseCategoryData();
+  const dateRange = getLast7DaysDateRange();
   
   return {
     id: Date.now() + 1,
     text: `<chart>
       <title>Divisão de gastos</title>
-      <subtitle>27/02 à 05/03</subtitle>
+      <subtitle>${dateRange}</subtitle>
       <data>${JSON.stringify(pieChartData)}</data>
       <footer>Contas Fixas é sua maior categoria de gastos</footer>
     </chart>`,
