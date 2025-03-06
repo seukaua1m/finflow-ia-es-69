@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Lock } from 'lucide-react';
+import { Button } from './ui/button';
+
 interface OfferSectionProps {
   onContinue: () => void;
 }
@@ -119,8 +122,85 @@ const OfferSection = ({
       </div>
 
       {/* Timer container (replacing the button) */}
-      <div className="bg-[#FFA35B] text-[#254D39] px-8 py-3 rounded-full font-semibold flex items-center mt-2 mb-4">
+      <div className="bg-[#FFA35B] text-[#254D39] px-8 py-3 rounded-full font-semibold flex items-center mt-2 mb-8">
         <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: {formattedTime}
+      </div>
+
+      {/* Testimonial */}
+      <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8">
+        <div className="flex items-start">
+          <img 
+            src="/lovable-uploads/c5eac9be-480a-4923-b993-0f3df87dbb63.png" 
+            alt="Amanda Figueiredo profile" 
+            className="w-12 h-12 rounded-full mr-3 object-cover"
+          />
+          <div>
+            <p className="font-bold text-gray-800">Amanda Figueiredo <span className="font-normal text-gray-500">@byamandafigg</span></p>
+            <p className="text-gray-800">
+              Gente eu sou EXTREMAMENTE desorganizada e somente com essa IA eu consegui organizar melhor o meu dinheiro
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Pricing plan card */}
+      <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-3 relative">
+        {/* Promotion tag */}
+        <div className="absolute top-4 right-4">
+          <div className="bg-[#FFA35B] text-black px-3 py-1 rounded-md font-semibold text-sm">
+            PROMOÇÃO 50% OFF
+          </div>
+        </div>
+        
+        {/* Lock icon */}
+        <div className="mb-1">
+          <div className="bg-[#FFA35B] w-8 h-8 rounded-md flex items-center justify-center">
+            <Lock size={18} className="text-black" />
+          </div>
+        </div>
+        
+        {/* Plan name and price */}
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h3 className="text-2xl font-bold">Plano</h3>
+            <h2 className="text-3xl font-extrabold">ANUAL</h2>
+          </div>
+          <div className="text-right">
+            <div className="text-lg">12x de</div>
+            <div className="flex items-baseline">
+              <span className="text-3xl font-bold mr-1">R$ 5</span>
+              <span className="text-lg">,70</span>
+            </div>
+            <div className="text-sm">ou 57 à vista</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Daily price equivalent */}
+      <div className="text-center text-[#254D39] mb-8">
+        <p>(equivalente à menos de R$ 0,16 por dia)</p>
+      </div>
+
+      {/* Sign up button */}
+      <Button 
+        onClick={onContinue} 
+        className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold py-4 text-xl rounded-lg mb-6"
+      >
+        Quero assinar
+      </Button>
+
+      {/* After signing up text */}
+      <div className="text-center max-w-lg mb-6">
+        <p className="text-[#254D39]">
+          Após assinar você receberá o contato<br />
+          da IA para começar a usar.
+        </p>
+      </div>
+
+      {/* Secure payment */}
+      <div className="flex items-center justify-center text-[#254D39] mb-4">
+        <Lock size={18} className="mr-2" />
+        <span>Pagamento Seguro</span>
       </div>
     </div>;
 };
