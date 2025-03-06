@@ -35,7 +35,7 @@ const PricingPlan = () => {
 
       {/* Daily price equivalent */}
       <div className="text-center text-[#254D39] mb-8">
-        <p className="px-0">(equivalente à menos de R$ 0,16 por dia)</p>
+        <p className="px-0 mt-6 ml-9 mr-9">(equivalente à menos de R$ 0,16 por dia)</p>
       </div>
     </>;
 };

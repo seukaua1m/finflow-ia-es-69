@@ -40,7 +40,7 @@ const CountdownTimer = ({
 
   // Format time with leading zeros
   const formattedTime = `${timeLeft.minutes}:${timeLeft.seconds.toString().padStart(2, '0')}`;
-  return <div className="bg-[#FFA35B] text-[#254D39] rounded-full font-semibold flex items-center mt-2 -mb-16 px-[15px] py-[11px] my-0">
+  return <div className="bg-[#FFA35B] text-[#254D39] rounded-full font-semibold flex items-center mt-2 -mb-16 px-[15px] my-0 py-[3px]">
       <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: {formattedTime}
     </div>;
 };
