@@ -1,11 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowDown } from 'lucide-react';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
-
 const OfferSection = ({
   onContinue
 }: OfferSectionProps) => {
@@ -23,11 +20,16 @@ const OfferSection = ({
           clearInterval(timer);
           return prevTime;
         }
-        
         if (prevTime.seconds === 0) {
-          return { minutes: prevTime.minutes - 1, seconds: 59 };
+          return {
+            minutes: prevTime.minutes - 1,
+            seconds: 59
+          };
         } else {
-          return { ...prevTime, seconds: prevTime.seconds - 1 };
+          return {
+            ...prevTime,
+            seconds: prevTime.seconds - 1
+          };
         }
       });
     }, 1000);
@@ -38,7 +40,6 @@ const OfferSection = ({
 
   // Format time with leading zeros
   const formattedTime = `${timeLeft.minutes}:${timeLeft.seconds.toString().padStart(2, '0')}`;
-
   return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
@@ -112,7 +113,7 @@ const OfferSection = ({
       <div className="text-center mb-8 max-w-lg">
         <p className="text-lg text-[#254D39]">
           Sendo assim, por tempo limitado vamos 
-          liberar para você nossa <span className="text-[#0FA0CE]">inteligencia 
+          liberar para você nossa <span className="text-[#254d39] font-normal">inteligencia 
           artificial</span> por apenas:
         </p>
       </div>
@@ -123,5 +124,4 @@ const OfferSection = ({
       </div>
     </div>;
 };
-
 export default OfferSection;
