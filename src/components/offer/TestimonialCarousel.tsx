@@ -18,29 +18,28 @@ const TestimonialCarousel = ({ testimonialImages }: TestimonialCarouselProps) =>
     setCurrentImage((prev) => (prev + 1) % testimonialImages.length);
   };
 
-  // Auto-rotate testimonials
+  // Auto-rotate testimonials with updated interval time
   useEffect(() => {
     const autoRotateInterval = setInterval(() => {
       nextImage();
-    }, 4000); // Change testimonial every 4 seconds
+    }, 3000); // Change testimonial every 3 seconds
     
     return () => clearInterval(autoRotateInterval);
   }, []);
 
   return (
-    <div className="w-full max-w-lg mx-auto my-8 relative">
-      <div className="overflow-hidden rounded-lg shadow-md">
-        {testimonialImages.map((testimonial, index) => (
+    <div className="w-full max-w-lg mx-auto my-8 relative overflow-hidden">
+      <div className="flex transition-transform duration-1000 ease-in-out" 
+           style={{ transform: `translateX(-${currentImage * 100}%)` }}>
+        {testimonialImages.map((testimonial) => (
           <div 
             key={testimonial.id}
-            className={`absolute w-full transition-opacity duration-1000 ease-in-out ${
-              currentImage === index ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
+            className="w-full flex-shrink-0"
           >
             <img 
               src={testimonial.image} 
-              alt={`Depoimento ${index + 1}`} 
-              className="w-full h-auto object-contain" 
+              alt={`Depoimento ${testimonial.id}`} 
+              className="w-full h-[270px] object-contain" 
             />
           </div>
         ))}
