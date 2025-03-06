@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowDown, Lock } from 'lucide-react';
 import { Button } from './ui/button';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
@@ -129,11 +127,7 @@ const OfferSection = ({
       {/* Testimonial */}
       <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8">
         <div className="flex items-start">
-          <img 
-            src="/lovable-uploads/c5eac9be-480a-4923-b993-0f3df87dbb63.png" 
-            alt="Amanda Figueiredo profile" 
-            className="w-12 h-12 rounded-full mr-3 object-cover"
-          />
+          <img src="/lovable-uploads/c5eac9be-480a-4923-b993-0f3df87dbb63.png" alt="Amanda Figueiredo profile" className="w-12 h-12 rounded-full mr-3 object-cover" />
           <div>
             <p className="font-bold text-gray-800">Amanda Figueiredo <span className="font-normal text-gray-500">@byamandafigg</span></p>
             <p className="text-gray-800">
@@ -178,20 +172,17 @@ const OfferSection = ({
 
       {/* Daily price equivalent */}
       <div className="text-center text-[#254D39] mb-8">
-        <p>(equivalente à menos de R$ 0,16 por dia)</p>
+        <p className="px-0">(equivalente à menos de R$ 0,16 por dia)</p>
       </div>
 
       {/* Sign up button */}
-      <Button 
-        onClick={onContinue} 
-        className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold py-4 text-xl rounded-lg mb-6"
-      >
+      <Button onClick={onContinue} className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[38px]">
         Quero assinar
       </Button>
 
       {/* After signing up text */}
       <div className="text-center max-w-lg mb-6">
-        <p className="text-[#254D39]">
+        <p className="text-[#254D39] font-semibold">
           Após assinar você receberá o contato<br />
           da IA para começar a usar.
         </p>
