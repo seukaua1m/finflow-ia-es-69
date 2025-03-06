@@ -8,6 +8,7 @@ interface OfferSectionProps {
 
 const OfferSection = ({ onContinue }: OfferSectionProps) => {
   // Chart data representing financial growth over 6 months with proper curvature
+  // Ensuring January is included at the beginning
   const chartData = [
     { name: 'Jan', value: 50 },
     { name: 'Fev', value: 70 },
