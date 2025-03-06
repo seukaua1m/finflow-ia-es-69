@@ -1,17 +1,80 @@
+
 import React, { useState, useEffect } from 'react';
-import { ArrowDown, Lock } from 'lucide-react';
+import { ArrowDown, Lock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
+
 interface OfferSectionProps {
   onContinue: () => void;
 }
+
+interface Testimonial {
+  id: number;
+  image: string;
+  name: string;
+  username: string;
+  text: string;
+}
+
 const OfferSection = ({
   onContinue
 }: OfferSectionProps) => {
   // State for countdown timer
   const [timeLeft, setTimeLeft] = useState({
-    minutes: 3,
+    minutes: 7,
     seconds: 0
   });
+
+  // Testimonials data
+  const testimonials: Testimonial[] = [
+    {
+      id: 1,
+      image: "/lovable-uploads/c5eac9be-480a-4923-b993-0f3df87dbb63.png",
+      name: "Amanda Figueiredo",
+      username: "@byamandafigg",
+      text: "Gente eu sou EXTREMAMENTE desorganizada e somente com essa IA eu consegui organizar melhor o meu dinheiro"
+    },
+    {
+      id: 2,
+      image: "/lovable-uploads/2d674804-dc36-493d-8420-a2b4bb51428d.png",
+      name: "Jorge Bittencourt",
+      username: "@jorge_bitttenc0urt",
+      text: "Vocês mandaram bem demais! Sou coaching em economia e já uso essa IA há três meses e tem ajudado a mim e a todos os meus alunos"
+    },
+    {
+      id: 3,
+      image: "/lovable-uploads/0ed12eec-a8e8-4d75-ada0-6b75979f974b.png",
+      name: "Paulo Rodrigues",
+      username: "@eupaulorodriguess",
+      text: "Que ideia genial!! Eu sempre fui desorganizado nas minhas finanças mas essa IA tá me salvando muito"
+    },
+    {
+      id: 4,
+      image: "/lovable-uploads/057d606b-a972-4a2f-9616-0629a21dfc54.png",
+      name: "João Guilherme",
+      username: "@iamjoaoguilherme",
+      text: "Consegui até economizar mais depois de usar essa IA kkkk Mt bom"
+    },
+    {
+      id: 5,
+      image: "/lovable-uploads/96fff655-69e0-4d71-953a-84d6730b4308.png",
+      name: "Neide",
+      username: "@neidesilva_amorim",
+      text: "Nunca me dei bem com planilhas ou blocos de nota pra organização!! O fato de eu conseguir ter controle total do meu dinheiro pelo whatsapp é incrível"
+    }
+  ];
+
+  // State for the carousel
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  // Function to navigate to the next testimonial
+  const nextTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  };
+
+  // Function to navigate to the previous testimonial
+  const prevTestimonial = () => {
+    setCurrentTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
 
   // Effect for the countdown timer
   useEffect(() => {
@@ -41,6 +104,7 @@ const OfferSection = ({
 
   // Format time with leading zeros
   const formattedTime = `${timeLeft.minutes}:${timeLeft.seconds.toString().padStart(2, '0')}`;
+  
   return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
@@ -124,16 +188,53 @@ const OfferSection = ({
         <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: {formattedTime}
       </div>
 
-      {/* Testimonial */}
-      <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8">
+      {/* Testimonial Carousel */}
+      <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8 relative">
         <div className="flex items-start">
-          <img src="/lovable-uploads/c5eac9be-480a-4923-b993-0f3df87dbb63.png" alt="Amanda Figueiredo profile" className="w-12 h-12 rounded-full mr-3 object-cover" />
+          <img 
+            src={testimonials[currentTestimonial].image} 
+            alt={`${testimonials[currentTestimonial].name} profile`} 
+            className="w-12 h-12 rounded-full mr-3 object-cover" 
+          />
           <div>
-            <p className="font-bold text-gray-800">Amanda Figueiredo <span className="font-normal text-gray-500">@byamandafigg</span></p>
+            <p className="font-bold text-gray-800">
+              {testimonials[currentTestimonial].name} 
+              <span className="font-normal text-gray-500"> {testimonials[currentTestimonial].username}</span>
+            </p>
             <p className="text-gray-800">
-              Gente eu sou EXTREMAMENTE desorganizada e somente com essa IA eu consegui organizar melhor o meu dinheiro
+              {testimonials[currentTestimonial].text}
             </p>
           </div>
+        </div>
+        
+        {/* Navigation buttons */}
+        <button 
+          onClick={prevTestimonial}
+          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+          aria-label="Previous testimonial"
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <button 
+          onClick={nextTestimonial}
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
+          aria-label="Next testimonial"
+        >
+          <ChevronRight size={16} />
+        </button>
+        
+        {/* Dots navigation */}
+        <div className="flex justify-center gap-1 mt-2">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentTestimonial(index)}
+              className={`h-2 rounded-full ${
+                currentTestimonial === index ? "w-4 bg-[#FFA35B]" : "w-2 bg-gray-300"
+              } transition-all duration-300`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 
@@ -146,10 +247,10 @@ const OfferSection = ({
           </div>
         </div>
         
-        {/* Lock icon */}
+        {/* Lock emoji (changed from icon) */}
         <div className="mb-1">
           <div className="bg-[#FFA35B] w-8 h-8 rounded-md flex items-center justify-center">
-            <Lock size={18} className="text-black" />
+            <span className="text-xl">🔓</span>
           </div>
         </div>
         
@@ -195,4 +296,5 @@ const OfferSection = ({
       </div>
     </div>;
 };
+
 export default OfferSection;
