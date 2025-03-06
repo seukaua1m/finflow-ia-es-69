@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
 import { Button } from './ui/button';
@@ -6,14 +5,13 @@ import TestimonialCarousel from './offer/TestimonialCarousel';
 import CountdownTimer from './offer/CountdownTimer';
 import PricingPlan from './offer/PricingPlan';
 import { testimonialImages } from './offer/testimonialData';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
-
-const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  return (
-    <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
+const OfferSection = ({
+  onContinue
+}: OfferSectionProps) => {
+  return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
         Oferta Por
@@ -101,7 +99,7 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       <PricingPlan />
 
       {/* Sign up button */}
-      <Button onClick={onContinue} className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[38px]">
+      <Button onClick={onContinue} className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]">
         Quero assinar
       </Button>
 
@@ -118,8 +116,6 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
         <span>🔓</span>
         <span className="ml-2">Pagamento Seguro</span>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default OfferSection;
