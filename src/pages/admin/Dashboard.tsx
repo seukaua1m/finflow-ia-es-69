@@ -7,11 +7,12 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [totalPageViews, setTotalPageViews] = useState(0);
   const [totalUserInputs, setTotalUserInputs] = useState(0);
-  const [totalInteractions, setTotalInteractions] = useState(0);
   const [uniqueVisitors, setUniqueVisitors] = useState(0);
   const [pageViewsData, setPageViewsData] = useState<any[]>([]);
   const [stepsData, setStepsData] = useState<any[]>([]);
-  const [interactionsData, setInteractionsData] = useState<any[]>([]);
+  const [countriesData, setCountriesData] = useState<any[]>([]);
+  const [userInputs, setUserInputs] = useState<any[]>([]);
+  const [funnelCompletionRate, setFunnelCompletionRate] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,14 +31,7 @@ const Dashboard = () => {
         
         setTotalUserInputs(inputsCount || 0);
 
-        // Fetch total interactions
-        const { count: interactionsCount } = await supabase
-          .from('component_interactions')
-          .select('*', { count: 'exact', head: true });
-        
-        setTotalInteractions(interactionsCount || 0);
-
-        // Count unique visitors
+        // Count unique visitors (using session IDs)
         const { data: sessions } = await supabase
           .from('page_views')
           .select('user_session_id')
@@ -71,7 +65,7 @@ const Dashboard = () => {
 
         setPageViewsData(chartData);
 
-        // Fetch step data from interactions
+        // Fetch step data from interactions to see funnel progression
         const { data: stepInteractions } = await supabase
           .from('component_interactions')
           .select('*')
@@ -92,31 +86,51 @@ const Dashboard = () => {
         }));
 
         setStepsData(stepsChartData);
-
-        // Fetch component interactions
-        const { data: interactions } = await supabase
-          .from('component_interactions')
-          .select('component_name, interaction_type')
-          .not('interaction_type', 'like', 'MovedToStep%');
-          
-        const interactionCounts: Record<string, number> = {};
         
-        if (interactions) {
-          interactions.forEach(interaction => {
-            const key = `${interaction.component_name} - ${interaction.interaction_type}`;
-            interactionCounts[key] = (interactionCounts[key] || 0) + 1;
+        // Calculate funnel completion rate
+        if (stepsChartData.length > 0) {
+          const step1Count = stepsChartData.find(s => s.name === 'Step 1')?.value || 0;
+          const step4Count = stepsChartData.find(s => s.name === 'Step 4')?.value || 0;
+          
+          if (step1Count > 0) {
+            const completionRate = Math.round((step4Count / step1Count) * 100);
+            setFunnelCompletionRate(completionRate);
+          }
+        }
+
+        // Fetch country data
+        const { data: countryData } = await supabase
+          .from('page_views')
+          .select('country')
+          .not('country', 'is', null);
+          
+        const countryCounts: Record<string, number> = {};
+        
+        if (countryData) {
+          countryData.forEach(view => {
+            const country = view.country || 'Unknown';
+            countryCounts[country] = (countryCounts[country] || 0) + 1;
           });
         }
 
-        const interactionsChartData = Object.entries(interactionCounts)
-          .map(([key, count]) => ({
-            name: key,
+        const countriesChartData = Object.entries(countryCounts)
+          .map(([country, count]) => ({
+            name: country,
             value: count
           }))
-          .sort((a, b) => b.value - a.value)
-          .slice(0, 5); // Top 5 interactions
+          .sort((a, b) => b.value - a.value);
 
-        setInteractionsData(interactionsChartData);
+        setCountriesData(countriesChartData);
+
+        // Fetch user inputs (initial messages)
+        const { data: inputs } = await supabase
+          .from('user_inputs')
+          .select('*')
+          .eq('component_name', 'InitialUserMessage')
+          .order('timestamp', { ascending: false })
+          .limit(10);
+          
+        setUserInputs(inputs || []);
 
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -141,7 +155,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Visão Geral</h1>
+      <h1 className="text-2xl font-bold">Visão Geral do Funil</h1>
       
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -158,40 +172,44 @@ const Dashboard = () => {
           <p className="text-3xl font-bold mt-2">{totalUserInputs}</p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-medium text-gray-500">Total de Interações</h2>
-          <p className="text-3xl font-bold mt-2">{totalInteractions}</p>
+          <h2 className="text-lg font-medium text-gray-500">Taxa de Conclusão</h2>
+          <p className="text-3xl font-bold mt-2">{funnelCompletionRate}%</p>
         </div>
       </div>
       
       {/* Two charts in one row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Page views chart */}
+        {/* Funnel steps chart */}
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-medium mb-4">Visualizações por Página</h2>
+          <h2 className="text-lg font-medium mb-4">Progressão no Funil</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={pageViewsData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                data={stepsData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="path" angle={-45} textAnchor="end" height={60} />
+                <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
-                <Bar dataKey="views" fill="#8884d8" />
+                <Tooltip formatter={(value) => [`${value} visitantes`, 'Quantidade']} />
+                <Bar dataKey="value" fill="#8884d8" label={{ position: 'top' }}>
+                  {stepsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
         
-        {/* User flow/steps chart */}
+        {/* Countries chart */}
         <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-lg font-medium mb-4">Etapas Visualizadas</h2>
+          <h2 className="text-lg font-medium mb-4">Visitantes por País</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={stepsData}
+                  data={countriesData}
                   cx="50%"
                   cy="50%"
                   labelLine={true}
@@ -200,34 +218,59 @@ const Dashboard = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {stepsData.map((entry, index) => (
+                  {countriesData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => [`${value} usuários`, 'Quantidade']} />
+                <Tooltip formatter={(value) => [`${value} visitantes`, 'Quantidade']} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
       
-      {/* Component interactions chart */}
+      {/* User input messages */}
       <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-lg font-medium mb-4">Top Interações dos Usuários</h2>
-        <div className="h-80">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={interactionsData}
-              layout="vertical"
-              margin={{ top: 20, right: 30, left: 150, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis type="category" dataKey="name" width={140} />
-              <Tooltip />
-              <Bar dataKey="value" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
+        <h2 className="text-lg font-medium mb-4">Mensagens dos Usuários</h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Data/Hora
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Mensagem
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  ID da Sessão
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {userInputs.length > 0 ? (
+                userInputs.map((input, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(input.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {input.input_value}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {input.user_session_id?.slice(0, 8) || 'N/A'}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="px-6 py-4 text-center text-sm text-gray-500">
+                    Nenhuma mensagem de usuário encontrada
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

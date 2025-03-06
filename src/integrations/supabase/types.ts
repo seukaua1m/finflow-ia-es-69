@@ -33,30 +33,25 @@ export type Database = {
       component_interactions: {
         Row: {
           component_name: string
-          id: string
           interaction_type: string
           timestamp: string | null
-          user_session_id: string | null
         }
         Insert: {
           component_name: string
-          id?: string
           interaction_type: string
           timestamp?: string | null
-          user_session_id?: string | null
         }
         Update: {
           component_name?: string
-          id?: string
           interaction_type?: string
           timestamp?: string | null
-          user_session_id?: string | null
         }
         Relationships: []
       }
       page_views: {
         Row: {
           component_name: string | null
+          country: string | null
           id: string
           page_path: string
           timestamp: string | null
@@ -65,6 +60,7 @@ export type Database = {
         }
         Insert: {
           component_name?: string | null
+          country?: string | null
           id?: string
           page_path: string
           timestamp?: string | null
@@ -73,6 +69,7 @@ export type Database = {
         }
         Update: {
           component_name?: string | null
+          country?: string | null
           id?: string
           page_path?: string
           timestamp?: string | null

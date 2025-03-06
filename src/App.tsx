@@ -3,8 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/admin/Auth";
@@ -12,19 +11,6 @@ import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import UserInputs from "./pages/admin/UserInputs";
 import PageViews from "./pages/admin/PageViews";
-import { trackPageView } from "./services/analyticsService";
-
-// Route tracker component
-const RouteTracker = () => {
-  const location = useLocation();
-  
-  useEffect(() => {
-    // Track page view on route change
-    trackPageView(location.pathname);
-  }, [location.pathname]);
-  
-  return null;
-};
 
 const queryClient = new QueryClient();
 
@@ -48,7 +34,6 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <RouteTracker />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

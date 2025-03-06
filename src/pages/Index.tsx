@@ -4,20 +4,38 @@ import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import AdditionalResources from '@/components/AdditionalResources';
 import OfferSection from '@/components/OfferSection';
-import { trackPageView, trackComponentInteraction } from '@/services/analyticsService';
+import { 
+  trackPageView, 
+  trackComponentInteraction, 
+  trackUserInput,
+  getCurrentFunnelStep,
+  saveFunnelStep
+} from '@/services/analyticsService';
 import { usePageTracking } from '@/hooks/usePageTracking';
 
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  // Initialize currentStep from localStorage if available
+  const [currentStep, setCurrentStep] = useState(() => {
+    const savedStep = getCurrentFunnelStep();
+    return savedStep > 0 && savedStep <= 4 ? savedStep : 1;
+  });
+  
   usePageTracking(); // Track page views
   
-  // Track when user changes steps
+  // Track when user changes steps and save to localStorage
   useEffect(() => {
     trackComponentInteraction('Index', `MovedToStep${currentStep}`);
+    saveFunnelStep(currentStep);
+    
+    // Calculate funnel progress percentage
+    const funnelProgress = Math.round((currentStep / 4) * 100);
+    console.log(`Funnel progress: ${funnelProgress}%`);
+    
   }, [currentStep]);
   
   const handleContinue = () => {
     setCurrentStep(2);
+    trackComponentInteraction('ContinueButton', 'Clicked');
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
@@ -25,11 +43,20 @@ const Index = () => {
   };
   
   const handleGoToNextStep = () => {
-    setCurrentStep(prev => prev + 1);
+    const nextStep = currentStep + 1;
+    setCurrentStep(nextStep);
+    trackComponentInteraction('Index', `ProgressedToStep${nextStep}`);
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+  };
+  
+  // Record input message if user submits one
+  const handleUserMessage = (message: string) => {
+    if (message.trim()) {
+      trackUserInput(message, 'InitialUserMessage');
+    }
   };
   
   return <div className="min-h-screen bg-white flex flex-col items-center">
@@ -82,12 +109,19 @@ const Index = () => {
             </SalesCard>
           </div>
 
+          {/* Simple input for user message */}
+          <div className="w-full mb-8">
+            <input 
+              type="text" 
+              placeholder="Digite aqui o que você gostaria de melhorar nas suas finanças..."
+              className="w-full p-3 border rounded-md"
+              onBlur={(e) => handleUserMessage(e.target.value)}
+            />
+          </div>
+
           {/* Botão Continuar - with text color black */}
           <button 
-            onClick={() => {
-              trackComponentInteraction('ContinueButton', 'Clicked');
-              handleContinue();
-            }} 
+            onClick={handleContinue} 
             className="btn-continue animate-fade-in"
           >
             Continuar

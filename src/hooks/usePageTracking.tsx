@@ -18,8 +18,11 @@ export function usePageTracking() {
       const endTime = new Date();
       const duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
       
-      // We could also track duration here if needed
-      // console.log(`User spent ${duration} seconds on ${location.pathname}`);
+      // Update the page view with duration
+      if (duration > 0) {
+        console.log(`User spent ${duration} seconds on ${location.pathname}`);
+        // We could also update the duration in the database here if needed
+      }
     };
   }, [location.pathname]);
 }
