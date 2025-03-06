@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { SendHorizontal } from 'lucide-react';
+import { trackUserInput } from '@/services/analyticsService';
 
 interface ChatInputProps {
   inputValue: string;
@@ -10,8 +11,20 @@ interface ChatInputProps {
 }
 
 const ChatInput = ({ inputValue, onInputChange, onSubmit, isDisabled }: ChatInputProps) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Track user input if there's a value
+    if (inputValue.trim()) {
+      await trackUserInput(inputValue, 'ChatInput');
+    }
+    
+    // Call the original onSubmit handler
+    onSubmit(e);
+  };
+  
   return (
-    <form onSubmit={onSubmit} className="flex gap-4">
+    <form onSubmit={handleSubmit} className="flex gap-4">
       <input 
         type="text" 
         placeholder="Exemplo: ifood 44" 

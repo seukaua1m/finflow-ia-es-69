@@ -9,7 +9,102 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_super_admin: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          is_super_admin?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_super_admin?: boolean | null
+        }
+        Relationships: []
+      }
+      component_interactions: {
+        Row: {
+          component_name: string
+          id: string
+          interaction_type: string
+          timestamp: string | null
+          user_session_id: string | null
+        }
+        Insert: {
+          component_name: string
+          id?: string
+          interaction_type: string
+          timestamp?: string | null
+          user_session_id?: string | null
+        }
+        Update: {
+          component_name?: string
+          id?: string
+          interaction_type?: string
+          timestamp?: string | null
+          user_session_id?: string | null
+        }
+        Relationships: []
+      }
+      page_views: {
+        Row: {
+          component_name: string | null
+          id: string
+          page_path: string
+          timestamp: string | null
+          user_session_id: string | null
+          view_duration: number | null
+        }
+        Insert: {
+          component_name?: string | null
+          id?: string
+          page_path: string
+          timestamp?: string | null
+          user_session_id?: string | null
+          view_duration?: number | null
+        }
+        Update: {
+          component_name?: string | null
+          id?: string
+          page_path?: string
+          timestamp?: string | null
+          user_session_id?: string | null
+          view_duration?: number | null
+        }
+        Relationships: []
+      }
+      user_inputs: {
+        Row: {
+          component_name: string
+          id: string
+          input_value: string
+          timestamp: string | null
+          user_session_id: string | null
+        }
+        Insert: {
+          component_name: string
+          id?: string
+          input_value: string
+          timestamp?: string | null
+          user_session_id?: string | null
+        }
+        Update: {
+          component_name?: string
+          id?: string
+          input_value?: string
+          timestamp?: string | null
+          user_session_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
