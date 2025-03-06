@@ -53,7 +53,7 @@ const SpendingLimitsSection = () => {
 
         {/* Bot spending limits chart message */}
         <div className="mb-2 flex justify-start">
-          <div className="relative py-1.5 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
+          <div className="relative py-1.5 px-1 rounded-lg bg-[#202C33] text-white min-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
             <div className="flex flex-col">
               <div className="text-sm self-center w-full text-left">
                 <div className="rounded-lg bg-white text-black p-4 mb-1">
