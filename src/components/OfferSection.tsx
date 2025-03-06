@@ -1,11 +1,8 @@
-
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
-
 const OfferSection = ({
   onContinue
 }: OfferSectionProps) => {
@@ -62,7 +59,7 @@ const OfferSection = ({
       {/* Price comparison */}
       <div className="text-center mb-8 max-w-lg">
         <p className="text-lg text-[#254D39]">
-          Poder<span className="text-[#0FA0CE]">íamos</span> cobrar de você o justo, R$ 400 
+          Poder<span className="text-[#254d39]">íamos</span> cobrar de você o justo, R$ 400 
           reais por ANO, pela economia que vamos 
           te trazer.
         </p>
@@ -95,5 +92,4 @@ const OfferSection = ({
       </div>
     </div>;
 };
-
 export default OfferSection;
