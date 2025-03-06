@@ -76,6 +76,15 @@ const OfferSection = ({
     setCurrentTestimonial((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
   };
 
+  // Auto-rotate testimonials
+  useEffect(() => {
+    const autoRotateInterval = setInterval(() => {
+      nextTestimonial();
+    }, 5000); // Change testimonial every 5 seconds
+    
+    return () => clearInterval(autoRotateInterval);
+  }, []);
+
   // Effect for the countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
@@ -188,8 +197,8 @@ const OfferSection = ({
         <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: {formattedTime}
       </div>
 
-      {/* Testimonial Carousel */}
-      <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8 relative">
+      {/* Enhanced Testimonial Carousel with Auto-rotation */}
+      <div className="w-full max-w-lg border border-gray-200 rounded-lg p-4 mb-8 relative overflow-hidden">
         <div className="flex items-start">
           <img 
             src={testimonials[currentTestimonial].image} 
