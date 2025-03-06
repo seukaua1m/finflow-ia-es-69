@@ -7,19 +7,25 @@ interface OfferSectionProps {
 }
 
 const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  // Chart data representing financial growth over 6 months with proper curvature
-  // Ensuring January is included at the beginning
+  // Chart data with specific values to match grid line requirements:
+  // 1st point: 1px below line 2 (1900-1 = 1899)
+  // 2nd point: 2px above line 2 (1900+2 = 1902) 
+  // 3rd point: 4px above line 2 (1900+4 = 1904)
+  // 4th point: between line 3 and 4 (~4675)
+  // 5th point: between line 5 and 6 (~6525)
+  // 6th point: at line 6 (7450)
   const chartData = [
-    { name: 'Jan', value: 50 },
-    { name: 'Fev', value: 70 },
-    { name: 'Mar', value: 150 },
-    { name: 'Abr', value: 800 },
-    { name: 'Mai', value: 3000 },
-    { name: 'Jun', value: 7492 }
+    { name: 'Jan', value: 50 },    // Starting point
+    { name: 'Fev', value: 1899 },  // 1px below line 2
+    { name: 'Mar', value: 1902 },  // 2px above line 2
+    { name: 'Abr', value: 1904 },  // 4px above line 2
+    { name: 'Mai', value: 4675 },  // Between line 3 and 4
+    { name: 'Jun', value: 6525 },  // Between line 5 and 6
+    { name: 'Jul', value: 7450 }   // At line 6 (top)
   ];
 
-  // Custom grid line positions (calculated based on log scale approximation)
-  const customYTicks = [0, 50, 150, 800, 3000, 7492];
+  // Custom grid line positions
+  const customYTicks = [50, 1900, 3750, 5600, 7450];
 
   return (
     <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
