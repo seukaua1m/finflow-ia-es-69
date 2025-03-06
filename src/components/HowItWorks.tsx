@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -8,9 +9,11 @@ import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
+
 interface HowItWorksProps {
   onContinue: () => void;
 }
+
 const HowItWorks = ({
   onContinue
 }: HowItWorksProps) => {
@@ -21,33 +24,45 @@ const HowItWorks = ({
   const [showContinueButton, setShowContinueButton] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
+  const [showInput, setShowInput] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth'
     });
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, isTypingSecondMessage]);
+
   const handleAnimationEnd = () => {
     setAnimationComplete(true);
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
+    
+    // Hide the input after submitting
+    setShowInput(false);
     setAnimationComplete(false);
+    
     const userMessage: Message = {
       id: Date.now(),
       text: inputValue,
       sender: 'user',
       time: getCurrentTime()
     };
+    
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
+    
     setTimeout(() => {
       setIsTyping(true);
       setTimeout(() => {
@@ -58,6 +73,7 @@ const HowItWorks = ({
         const price = parts[1] || '0';
         const formattedDate = formatDate();
         const limit = calculateLimit(price);
+        
         const expenseMessage: Message = {
           id: Date.now() + 1,
           text: `<strong>Gasto adicionado</strong>\n\n📌 ${itemName} (Delivery)\n\n<strong>R$ ${price},00</strong>\n\n${formattedDate}`,
@@ -65,18 +81,23 @@ const HowItWorks = ({
           time: currentTime,
           isGroupMessage: true
         };
+        
         setMessages(prev => [...prev, expenseMessage]);
+        
         setTimeout(() => {
           setIsTypingSecondMessage(true);
           setTimeout(() => {
             setIsTypingSecondMessage(false);
+            
             const reminderMessage: Message = {
               id: Date.now() + 2,
               text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
               sender: 'bot',
               time: currentTime
             };
+            
             setMessages(prev => [...prev, reminderMessage]);
+            
             setTimeout(() => {
               setShowContinueButton(true);
               setAnimationComplete(true);
@@ -86,18 +107,23 @@ const HowItWorks = ({
       }, 2000);
     }, 800);
   };
+
   const handleContinue = () => {
     setCurrentStep(2);
   };
+
   const handleFinancialQuestionsContinue = () => {
     setCurrentStep(3);
   };
+
   const handleReminderDemoContinue = () => {
     setCurrentStep(4);
   };
+
   const handleGoalPlanningDemoContinue = () => {
     onContinue(); // Call the parent's onContinue function to move to the next major step
   };
+
   if (currentStep === 4) {
     return <GoalPlanningDemo onContinue={handleGoalPlanningDemoContinue} />;
   } else if (currentStep === 3) {
@@ -105,6 +131,7 @@ const HowItWorks = ({
   } else if (currentStep === 2) {
     return <FinancialQuestions onContinue={handleFinancialQuestionsContinue} />;
   }
+
   return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
@@ -151,8 +178,13 @@ const HowItWorks = ({
       </div>
 
       <div className="mt-4">
-        {!showContinueButton ? <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} /> : <ContinueButton onClick={handleContinue} />}
+        {showContinueButton ? (
+          <ContinueButton onClick={handleContinue} />
+        ) : (
+          showInput && <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} />
+        )}
       </div>
     </div>;
 };
+
 export default HowItWorks;
