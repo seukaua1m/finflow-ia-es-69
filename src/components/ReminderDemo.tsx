@@ -24,13 +24,17 @@ const ReminderDemo = ({ onContinue }: ReminderDemoProps) => {
   const [showChat, setShowChat] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [showSpendingLimits, setShowSpendingLimits] = useState(false);
+  const [allElementsLoaded, setAllElementsLoaded] = useState(false);
 
   useEffect(() => {
-    // Show elements sequentially with delays
-    setTimeout(() => setShowIntro(true), 100);
-    setTimeout(() => setShowChat(true), 800);
-    setTimeout(() => setShowNotification(true), 1500);
-    setTimeout(() => setShowSpendingLimits(true), 2200);
+    // Show elements sequentially with delays and smoother transitions
+    setTimeout(() => setShowIntro(true), 400);
+    setTimeout(() => setShowChat(true), 1200);
+    setTimeout(() => setShowNotification(true), 2000);
+    setTimeout(() => setShowSpendingLimits(true), 2800);
+    
+    // Set all elements loaded state after the last element appears
+    setTimeout(() => setAllElementsLoaded(true), 3600);
   }, []);
 
   // Scroll to top when component mounts
@@ -43,13 +47,13 @@ const ReminderDemo = ({ onContinue }: ReminderDemoProps) => {
       <DemoHeader />
       
       {showIntro && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out">
           <ReminderIntroSection />
         </div>
       )}
       
       {showChat && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out">
           <ChatMessages 
             messages={messages}
             isTyping={false}
@@ -63,19 +67,19 @@ const ReminderDemo = ({ onContinue }: ReminderDemoProps) => {
       )}
 
       {showNotification && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out">
           <ReminderNotificationSection />
         </div>
       )}
 
       {showSpendingLimits && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out">
           <SpendingLimitsSection />
         </div>
       )}
 
-      {showContinueButton && (
-        <div className="mt-6 animate-fade-in">
+      {showContinueButton && allElementsLoaded && (
+        <div className="mt-6 animate-fade-in transition-all duration-700 ease-in-out">
           <ContinueButton onClick={onContinue} />
         </div>
       )}

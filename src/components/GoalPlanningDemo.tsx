@@ -19,11 +19,15 @@ const GoalPlanningDemo = ({ onContinue }: GoalPlanningDemoProps) => {
 
   const [showIntro, setShowIntro] = useState(false);
   const [showPromotion, setShowPromotion] = useState(false);
+  const [allElementsLoaded, setAllElementsLoaded] = useState(false);
 
   useEffect(() => {
-    // Show elements sequentially with delays
-    setTimeout(() => setShowIntro(true), 100);
-    setTimeout(() => setShowPromotion(true), 800);
+    // Show elements sequentially with delays and smoother transitions
+    setTimeout(() => setShowIntro(true), 400);
+    setTimeout(() => setShowPromotion(true), 1200);
+    
+    // Set all elements loaded after the last element appears
+    setTimeout(() => setAllElementsLoaded(true), 2000);
   }, []);
 
   // Scroll to top when component mounts
@@ -36,19 +40,19 @@ const GoalPlanningDemo = ({ onContinue }: GoalPlanningDemoProps) => {
       <DemoHeader />
       
       {showIntro && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out transform translate-y-0">
           <GoalPlanningIntroSection />
         </div>
       )}
       
       {showPromotionSection && showPromotion && (
-        <div className="animate-fade-in">
+        <div className="animate-fade-in transition-all duration-500 ease-in-out transform translate-y-0">
           <PromotionAlertSection />
         </div>
       )}
       
-      {showContinueButton && (
-        <div className="mt-6 animate-fade-in">
+      {showContinueButton && allElementsLoaded && (
+        <div className="mt-6 animate-fade-in transition-all duration-700 ease-in-out">
           <ContinueButton onClick={onContinue} />
         </div>
       )}
