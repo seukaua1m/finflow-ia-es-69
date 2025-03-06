@@ -43,18 +43,13 @@ const FinancialGrowthChart: React.FC<FinancialGrowthChartProps> = ({
       <div className="h-full w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 30, right: 10, left: 10, bottom: 30 }}>
-            {/* Custom grid lines with increased opacity */}
-            {gridLines.map((line, index) => (
-              <CartesianGrid 
-                key={index}
-                horizontal={true} 
-                vertical={false}
-                horizontalPoints={[line.y]}
-                stroke="#8E9196"
-                strokeOpacity={0.3}
-                strokeWidth={1}
-              />
-            ))}
+            <CartesianGrid 
+              horizontal={true} 
+              vertical={false}
+              stroke="#8E9196"
+              strokeOpacity={0.3}
+              strokeWidth={1}
+            />
             <XAxis 
               dataKey="name" 
               axisLine={true}
