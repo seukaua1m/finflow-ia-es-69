@@ -20,7 +20,7 @@ const OfferSection = ({
       </p>
       
       {/* Image section replacing the chart */}
-      <div className="w-full mb-10 relative px-4 sm:px-12">
+      <div className=" w-full mb-10 relative px-0 sm:px-12 py-0 px-0 -mt-8 -mb-6">
         <img src="/lovable-uploads/175afab2-416c-46de-a47e-597f2079afe5.png" alt="Financial growth chart showing progress from R$50 to R$7492 over 6 months" className="w-full mt-0 mb-0" />
       </div>
       
