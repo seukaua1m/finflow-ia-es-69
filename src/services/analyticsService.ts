@@ -77,12 +77,12 @@ export const trackComponentInteraction = async (componentName: string, interacti
   try {
     const sessionId = getSessionId();
     
+    // Remove user_session_id field as it doesn't exist in the schema
     await supabase
       .from('component_interactions')
       .insert({
         component_name: componentName,
-        interaction_type: interactionType,
-        user_session_id: sessionId
+        interaction_type: interactionType
       });
       
     return true;
