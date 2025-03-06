@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import DateRangeFilter from '@/components/admin/DateRangeFilter';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -13,134 +14,213 @@ const Dashboard = () => {
   const [countriesData, setCountriesData] = useState<any[]>([]);
   const [userInputs, setUserInputs] = useState<any[]>([]);
   const [funnelCompletionRate, setFunnelCompletionRate] = useState(0);
+  const [dateRange, setDateRange] = useState<{from?: Date, to?: Date}>({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch total page views
-        const { count: viewsCount } = await supabase
-          .from('page_views')
-          .select('*', { count: 'exact', head: true });
-        
-        setTotalPageViews(viewsCount || 0);
-
-        // Fetch total user inputs
-        const { count: inputsCount } = await supabase
-          .from('user_inputs')
-          .select('*', { count: 'exact', head: true });
-        
-        setTotalUserInputs(inputsCount || 0);
-
-        // Count unique visitors (using session IDs)
-        const { data: sessions } = await supabase
-          .from('page_views')
-          .select('user_session_id')
-          .not('user_session_id', 'is', null);
-          
-        if (sessions) {
-          const uniqueIds = new Set(sessions.map(view => view.user_session_id));
-          setUniqueVisitors(uniqueIds.size);
-        }
-
-        // Fetch page views by path
-        const { data: pageViews } = await supabase
-          .from('page_views')
-          .select('page_path')
-          
-        // Count occurrences of each page path
-        const pageCounts: Record<string, number> = {};
-        
-        if (pageViews) {
-          pageViews.forEach(view => {
-            const path = view.page_path || 'unknown';
-            pageCounts[path] = (pageCounts[path] || 0) + 1;
-          });
-        }
-
-        // Convert to chart data format
-        const chartData = Object.entries(pageCounts).map(([path, count]) => ({
-          path: path === '/' ? 'Home' : path.replace('/', ''),
-          views: count
-        }));
-
-        setPageViewsData(chartData);
-
-        // Fetch step data from interactions to see funnel progression
-        const { data: stepInteractions } = await supabase
-          .from('component_interactions')
-          .select('*')
-          .like('interaction_type', 'MovedToStep%');
-          
-        const stepCounts: Record<string, number> = {};
-        
-        if (stepInteractions) {
-          stepInteractions.forEach(interaction => {
-            const step = interaction.interaction_type;
-            stepCounts[step] = (stepCounts[step] || 0) + 1;
-          });
-        }
-
-        const stepsChartData = Object.entries(stepCounts).map(([step, count]) => ({
-          name: step.replace('MovedToStep', 'Step '),
-          value: count
-        }));
-
-        setStepsData(stepsChartData);
-        
-        // Calculate funnel completion rate
-        if (stepsChartData.length > 0) {
-          const step1Count = stepsChartData.find(s => s.name === 'Step 1')?.value || 0;
-          const step4Count = stepsChartData.find(s => s.name === 'Step 4')?.value || 0;
-          
-          if (step1Count > 0) {
-            const completionRate = Math.round((step4Count / step1Count) * 100);
-            setFunnelCompletionRate(completionRate);
-          }
-        }
-
-        // Fetch country data
-        const { data: countryData } = await supabase
-          .from('page_views')
-          .select('country')
-          .not('country', 'is', null);
-          
-        const countryCounts: Record<string, number> = {};
-        
-        if (countryData) {
-          countryData.forEach(view => {
-            const country = view.country || 'Unknown';
-            countryCounts[country] = (countryCounts[country] || 0) + 1;
-          });
-        }
-
-        const countriesChartData = Object.entries(countryCounts)
-          .map(([country, count]) => ({
-            name: country,
-            value: count
-          }))
-          .sort((a, b) => b.value - a.value);
-
-        setCountriesData(countriesChartData);
-
-        // Fetch user inputs (initial messages)
-        const { data: inputs } = await supabase
-          .from('user_inputs')
-          .select('*')
-          .eq('component_name', 'InitialUserMessage')
-          .order('timestamp', { ascending: false })
-          .limit(10);
-          
-        setUserInputs(inputs || []);
-
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      // Build date filter conditions
+      const dateConditions = {};
+      if (dateRange.from) {
+        dateConditions['timestamp'] = dateRange.from ? 
+          dateRange.to ? 
+            { gte: dateRange.from.toISOString(), lte: dateRange.to.toISOString() } :
+            { gte: dateRange.from.toISOString() } :
+          undefined;
       }
-    };
+      
+      // Fetch total page views with date filter
+      const pageViewsQuery = supabase
+        .from('page_views')
+        .select('*', { count: 'exact', head: true });
+        
+      if (dateRange.from) {
+        pageViewsQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          pageViewsQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { count: viewsCount } = await pageViewsQuery;
+      setTotalPageViews(viewsCount || 0);
 
+      // Fetch total user inputs with date filter
+      const userInputsQuery = supabase
+        .from('user_inputs')
+        .select('*', { count: 'exact', head: true });
+        
+      if (dateRange.from) {
+        userInputsQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          userInputsQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { count: inputsCount } = await userInputsQuery;
+      setTotalUserInputs(inputsCount || 0);
+
+      // Count unique visitors (using session IDs) with date filter
+      const sessionsQuery = supabase
+        .from('page_views')
+        .select('user_session_id')
+        .not('user_session_id', 'is', null);
+        
+      if (dateRange.from) {
+        sessionsQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          sessionsQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { data: sessions } = await sessionsQuery;
+          
+      if (sessions) {
+        const uniqueIds = new Set(sessions.map(view => view.user_session_id));
+        setUniqueVisitors(uniqueIds.size);
+      }
+
+      // Fetch page views by path with date filter
+      const pageViewsByPathQuery = supabase
+        .from('page_views')
+        .select('page_path');
+        
+      if (dateRange.from) {
+        pageViewsByPathQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          pageViewsByPathQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { data: pageViews } = await pageViewsByPathQuery;
+          
+      // Count occurrences of each page path
+      const pageCounts: Record<string, number> = {};
+      
+      if (pageViews) {
+        pageViews.forEach(view => {
+          const path = view.page_path || 'unknown';
+          pageCounts[path] = (pageCounts[path] || 0) + 1;
+        });
+      }
+
+      // Convert to chart data format
+      const chartData = Object.entries(pageCounts).map(([path, count]) => ({
+        path: path === '/' ? 'Home' : path.replace('/', ''),
+        views: count
+      }));
+
+      setPageViewsData(chartData);
+
+      // Fetch step data from interactions to see funnel progression with date filter
+      const stepInteractionsQuery = supabase
+        .from('component_interactions')
+        .select('*')
+        .like('interaction_type', 'MovedToStep%');
+        
+      if (dateRange.from) {
+        stepInteractionsQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          stepInteractionsQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { data: stepInteractions } = await stepInteractionsQuery;
+          
+      const stepCounts: Record<string, number> = {};
+      
+      if (stepInteractions) {
+        stepInteractions.forEach(interaction => {
+          const step = interaction.interaction_type;
+          stepCounts[step] = (stepCounts[step] || 0) + 1;
+        });
+      }
+
+      const stepsChartData = Object.entries(stepCounts).map(([step, count]) => ({
+        name: step.replace('MovedToStep', 'Step '),
+        value: count
+      }));
+
+      setStepsData(stepsChartData);
+      
+      // Calculate funnel completion rate
+      if (stepsChartData.length > 0) {
+        const step1Count = stepsChartData.find(s => s.name === 'Step 1')?.value || 0;
+        const step4Count = stepsChartData.find(s => s.name === 'Step 4')?.value || 0;
+        
+        if (step1Count > 0) {
+          const completionRate = Math.round((step4Count / step1Count) * 100);
+          setFunnelCompletionRate(completionRate);
+        }
+      }
+
+      // Fetch country data with date filter
+      const countryDataQuery = supabase
+        .from('page_views')
+        .select('country')
+        .not('country', 'is', null);
+        
+      if (dateRange.from) {
+        countryDataQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          countryDataQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { data: countryData } = await countryDataQuery;
+          
+      const countryCounts: Record<string, number> = {};
+      
+      if (countryData) {
+        countryData.forEach(view => {
+          const country = view.country || 'Unknown';
+          countryCounts[country] = (countryCounts[country] || 0) + 1;
+        });
+      }
+
+      const countriesChartData = Object.entries(countryCounts)
+        .map(([country, count]) => ({
+          name: country,
+          value: count
+        }))
+        .sort((a, b) => b.value - a.value);
+
+      setCountriesData(countriesChartData);
+
+      // Fetch user inputs (initial messages) with date filter
+      const inputsQuery = supabase
+        .from('user_inputs')
+        .select('*')
+        .eq('component_name', 'InitialUserMessage')
+        .order('timestamp', { ascending: false })
+        .limit(10);
+        
+      if (dateRange.from) {
+        inputsQuery.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          inputsQuery.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+      
+      const { data: inputs } = await inputsQuery;
+          
+      setUserInputs(inputs || []);
+
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch data initially and when date range changes
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [dateRange]);
+
+  const handleDateRangeChange = (range: {from: Date | undefined, to: Date | undefined}) => {
+    setDateRange(range);
+  };
 
   if (loading) {
     return (
@@ -155,7 +235,10 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Visão Geral do Funil</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Visão Geral do Funil</h1>
+        <DateRangeFilter onFilterChange={handleDateRangeChange} />
+      </div>
       
       {/* Stats cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

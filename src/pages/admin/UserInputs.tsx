@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import DateRangeFilter from '@/components/admin/DateRangeFilter';
 
 interface UserInput {
   id: string;
@@ -14,26 +15,43 @@ interface UserInput {
 const UserInputs = () => {
   const [loading, setLoading] = useState(true);
   const [userInputs, setUserInputs] = useState<UserInput[]>([]);
+  const [dateRange, setDateRange] = useState<{from?: Date, to?: Date}>({});
+
+  const fetchUserInputs = async () => {
+    try {
+      setLoading(true);
+      
+      const query = supabase
+        .from('user_inputs')
+        .select('*')
+        .order('timestamp', { ascending: false });
+      
+      // Apply date filters if set
+      if (dateRange.from) {
+        query.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          query.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      setUserInputs(data || []);
+    } catch (error) {
+      console.error('Error fetching user inputs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserInputs = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('user_inputs')
-          .select('*')
-          .order('timestamp', { ascending: false });
-
-        if (error) throw error;
-        setUserInputs(data || []);
-      } catch (error) {
-        console.error('Error fetching user inputs:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUserInputs();
-  }, []);
+  }, [dateRange]);
+
+  const handleDateRangeChange = (range: {from: Date | undefined, to: Date | undefined}) => {
+    setDateRange(range);
+  };
 
   if (loading) {
     return (
@@ -53,7 +71,10 @@ const UserInputs = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Inputs dos Usuários</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Inputs dos Usuários</h1>
+        <DateRangeFilter onFilterChange={handleDateRangeChange} />
+      </div>
       
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">

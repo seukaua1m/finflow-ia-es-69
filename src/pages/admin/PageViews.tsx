@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import DateRangeFilter from '@/components/admin/DateRangeFilter';
 
 interface PageView {
   id: string;
@@ -15,26 +16,43 @@ interface PageView {
 const PageViews = () => {
   const [loading, setLoading] = useState(true);
   const [pageViews, setPageViews] = useState<PageView[]>([]);
+  const [dateRange, setDateRange] = useState<{from?: Date, to?: Date}>({});
+
+  const fetchPageViews = async () => {
+    try {
+      setLoading(true);
+      
+      const query = supabase
+        .from('page_views')
+        .select('*')
+        .order('timestamp', { ascending: false });
+      
+      // Apply date filters if set
+      if (dateRange.from) {
+        query.gte('timestamp', dateRange.from.toISOString());
+        if (dateRange.to) {
+          query.lte('timestamp', dateRange.to.toISOString());
+        }
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      setPageViews(data || []);
+    } catch (error) {
+      console.error('Error fetching page views:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPageViews = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('page_views')
-          .select('*')
-          .order('timestamp', { ascending: false });
-
-        if (error) throw error;
-        setPageViews(data || []);
-      } catch (error) {
-        console.error('Error fetching page views:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPageViews();
-  }, []);
+  }, [dateRange]);
+
+  const handleDateRangeChange = (range: {from: Date | undefined, to: Date | undefined}) => {
+    setDateRange(range);
+  };
 
   if (loading) {
     return (
@@ -54,7 +72,10 @@ const PageViews = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Visualizações de Página</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Visualizações de Página</h1>
+        <DateRangeFilter onFilterChange={handleDateRangeChange} />
+      </div>
       
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
