@@ -28,28 +28,28 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       </h2>
       
       {/* Subheadline */}
-      <p className="text-center mb-12 max-w-md">
+      <p className="text-center mb-16 max-w-lg text-lg">
         Essa é a sua chance de cumprir o que você tem prometido a tanto tempo.
       </p>
       
       {/* Chart section */}
-      <div className="w-full mb-4 relative">
+      <div className="w-full mb-10 relative px-4 sm:px-12">
         {/* Starting value label */}
-        <div className="absolute left-0 bottom-16 flex flex-col items-center">
-          <span className="text-sales-gray text-sm">Você hoje</span>
-          <span className="font-bold text-sales-green text-xl">R$ 50</span>
+        <div className="absolute left-4 sm:left-12 bottom-24 flex flex-col items-start">
+          <span className="text-sales-gray text-sm mb-1">Você hoje</span>
+          <span className="font-bold text-sales-green text-2xl">R$ 50</span>
         </div>
         
         {/* End value label */}
-        <div className="absolute right-0 bottom-16 flex flex-col items-center">
-          <span className="text-sales-gray text-sm">Daqui 6 meses</span>
-          <span className="font-bold text-sales-green text-xl">R$ 7492</span>
+        <div className="absolute right-4 sm:right-12 bottom-24 flex flex-col items-end">
+          <span className="text-sales-gray text-sm mb-1">Daqui 6 meses</span>
+          <span className="font-bold text-sales-green text-2xl">R$ 7492</span>
         </div>
         
         {/* Chart */}
-        <div className="h-40 w-full mb-2">
+        <div className="h-52 w-full mb-10 mt-20">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
+            <LineChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
               <XAxis 
                 dataKey="name" 
                 axisLine={false}
@@ -63,6 +63,7 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
                 strokeWidth={3} 
                 dot={{ fill: '#FFA35B', strokeWidth: 0, r: 5 }}
                 activeDot={{ r: 8 }}
+                isAnimationActive={true}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -70,9 +71,12 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       </div>
       
       {/* Bottom text section */}
-      <div className="text-center mt-8 mb-6 max-w-lg">
-        <p className="mb-4">
-          Imagine você daqui a 1 ano, <span className="font-bold text-sales-green">com dinheiro sobrando</span> para viajar ou para completar pra trocar de carro, <span className="font-bold text-sales-green">tudo por causa da decisão que você tomou hoje.</span>
+      <div className="text-center mt-6 mb-10 max-w-lg">
+        <p className="text-lg">
+          Imagine você daqui a 1 ano, <span className="font-bold text-sales-green">com dinheiro 
+          sobrando</span> para viajar ou para completar pra 
+          trocar de carro, <span className="font-bold text-sales-green">tudo por causa da decisão que 
+          você tomou hoje.</span>
         </p>
       </div>
     </div>
