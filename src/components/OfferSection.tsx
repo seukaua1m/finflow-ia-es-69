@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { ArrowDown, Lock } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { Button } from './ui/button';
 import TestimonialCarousel from './offer/TestimonialCarousel';
 import CountdownTimer from './offer/CountdownTimer';
 import PricingPlan from './offer/PricingPlan';
-import { testimonials } from './offer/testimonialData';
+import { testimonialImages } from './offer/testimonialData';
 
 interface OfferSectionProps {
   onContinue: () => void;
@@ -95,7 +95,7 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       <CountdownTimer initialMinutes={7} initialSeconds={0} />
 
       {/* Testimonial Carousel */}
-      <TestimonialCarousel testimonials={testimonials} />
+      <TestimonialCarousel testimonialImages={testimonialImages} />
 
       {/* Pricing plan */}
       <PricingPlan />
@@ -115,8 +115,8 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
 
       {/* Secure payment */}
       <div className="flex items-center justify-center text-[#254D39] mb-4">
-        <Lock size={18} className="mr-2" />
-        <span>Pagamento Seguro</span>
+        <span>🔓</span>
+        <span className="ml-2">Pagamento Seguro</span>
       </div>
     </div>
   );
