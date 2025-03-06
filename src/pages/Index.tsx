@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import AdditionalResources from '@/components/AdditionalResources';
 import OfferSection from '@/components/OfferSection';
+import { trackPageView, trackComponentInteraction } from '@/services/analyticsService';
+import { usePageTracking } from '@/hooks/usePageTracking';
+
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
+  usePageTracking(); // Track page views
+  
+  // Track when user changes steps
+  useEffect(() => {
+    trackComponentInteraction('Index', `MovedToStep${currentStep}`);
+  }, [currentStep]);
+  
   const handleContinue = () => {
     setCurrentStep(2);
     window.scrollTo({
@@ -12,6 +23,7 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
+  
   const handleGoToNextStep = () => {
     setCurrentStep(prev => prev + 1);
     window.scrollTo({
@@ -19,6 +31,7 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
+  
   return <div className="min-h-screen bg-white flex flex-col items-center">
       {currentStep === 1 && <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
@@ -70,14 +83,32 @@ const Index = () => {
           </div>
 
           {/* Botão Continuar - with text color black */}
-          <button onClick={handleContinue} className="btn-continue animate-fade-in">
+          <button 
+            onClick={() => {
+              trackComponentInteraction('ContinueButton', 'Clicked');
+              handleContinue();
+            }} 
+            className="btn-continue animate-fade-in"
+          >
             Continuar
           </button>
         </div>}
       
-      {currentStep === 2 && <HowItWorks onContinue={handleGoToNextStep} />}
-      {currentStep === 3 && <AdditionalResources onContinue={handleGoToNextStep} />}
-      {currentStep === 4 && <OfferSection onContinue={handleGoToNextStep} />}
+      {currentStep === 2 && <HowItWorks onContinue={() => {
+        trackComponentInteraction('HowItWorks', 'Continued');
+        handleGoToNextStep();
+      }} />}
+      
+      {currentStep === 3 && <AdditionalResources onContinue={() => {
+        trackComponentInteraction('AdditionalResources', 'Continued');
+        handleGoToNextStep();
+      }} />}
+      
+      {currentStep === 4 && <OfferSection onContinue={() => {
+        trackComponentInteraction('OfferSection', 'Continued');
+        handleGoToNextStep();
+      }} />}
     </div>;
 };
+
 export default Index;
