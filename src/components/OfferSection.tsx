@@ -1,13 +1,11 @@
-
 import React from 'react';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
-
-const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  return (
-    <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
+const OfferSection = ({
+  onContinue
+}: OfferSectionProps) => {
+  return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
         Oferta Por
@@ -23,11 +21,7 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       
       {/* Image section replacing the chart */}
       <div className="w-full mb-10 relative px-4 sm:px-12">
-        <img 
-          src="/lovable-uploads/175afab2-416c-46de-a47e-597f2079afe5.png"
-          alt="Financial growth chart showing progress from R$50 to R$7492 over 6 months"
-          className="w-full"
-        />
+        <img src="/lovable-uploads/175afab2-416c-46de-a47e-597f2079afe5.png" alt="Financial growth chart showing progress from R$50 to R$7492 over 6 months" className="w-full mt-0 mb-0" />
       </div>
       
       {/* Bottom text section */}
@@ -39,8 +33,6 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
           você tomou hoje.</span>
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default OfferSection;
