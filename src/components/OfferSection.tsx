@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 interface OfferSectionProps {
   onContinue: () => void;
@@ -16,6 +16,9 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
     { name: 'Mai', value: 3000 },
     { name: 'Jun', value: 7492 }
   ];
+
+  // Custom grid line positions (calculated based on log scale approximation)
+  const customYTicks = [0, 50, 150, 800, 3000, 7492];
 
   return (
     <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
@@ -52,6 +55,14 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
           <div className="h-full w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ top: 30, right: 10, left: 10, bottom: 30 }}>
+                <CartesianGrid 
+                  horizontal={true} 
+                  vertical={false} 
+                  horizontalCoordinatesGenerator={(props) => customYTicks}
+                  stroke="#8E9196"
+                  strokeOpacity={0.15}
+                  strokeWidth={1}
+                />
                 <XAxis 
                   dataKey="name" 
                   axisLine={true}
