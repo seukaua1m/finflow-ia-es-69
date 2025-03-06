@@ -60,7 +60,7 @@ const FinancialQuestions = ({ onContinue }: FinancialQuestionsProps) => {
         isTypingThirdMessage={isTypingThirdMessage}
         isTypingFourthMessage={isTypingFourthMessage}
         isTypingFifthMessage={isTypingFifthMessage}
-        handleAnimationEnd={handleAnimationEnd}
+        onAnimationEnd={handleAnimationEnd}
       />
 
       <div ref={messagesEndRef}></div>
