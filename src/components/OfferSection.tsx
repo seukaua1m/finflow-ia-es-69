@@ -34,39 +34,43 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
       
       {/* Chart section */}
       <div className="w-full mb-10 relative px-4 sm:px-12">
-        {/* Starting value label */}
-        <div className="absolute left-4 sm:left-12 bottom-24 flex flex-col items-start">
-          <span className="text-sales-gray text-sm mb-1">Você hoje</span>
-          <span className="font-bold text-sales-green text-2xl">R$ 50</span>
-        </div>
-        
-        {/* End value label */}
-        <div className="absolute right-4 sm:right-12 bottom-24 flex flex-col items-end">
-          <span className="text-sales-gray text-sm mb-1">Daqui 6 meses</span>
-          <span className="font-bold text-sales-green text-2xl">R$ 7492</span>
-        </div>
-        
-        {/* Chart */}
-        <div className="h-52 w-full mb-10 mt-20">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-              <XAxis 
-                dataKey="name" 
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: '#727272', fontSize: 12 }}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="value" 
-                stroke="#FFA35B" 
-                strokeWidth={3} 
-                dot={{ fill: '#FFA35B', strokeWidth: 0, r: 5 }}
-                activeDot={{ r: 8 }}
-                isAnimationActive={true}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        {/* Chart container with relative positioning for labels */}
+        <div className="relative h-80 w-full mb-4">
+          {/* Starting value label - positioned at the bottom left */}
+          <div className="absolute left-0 bottom-16 flex flex-col items-start">
+            <span className="text-sales-green text-base mb-1 font-medium">Você hoje</span>
+            <span className="font-bold text-sales-green text-3xl">R$ 50</span>
+          </div>
+          
+          {/* End value label - positioned at the top right */}
+          <div className="absolute right-0 top-0 flex flex-col items-end">
+            <span className="text-sales-green text-base mb-1 font-medium">Daqui 6 meses</span>
+            <span className="font-bold text-sales-green text-3xl">R$ 7492</span>
+          </div>
+          
+          {/* Chart */}
+          <div className="h-full w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 30, right: 10, left: 10, bottom: 30 }}>
+                <XAxis 
+                  dataKey="name" 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: '#727272', fontSize: 14 }}
+                  dy={10}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#FFA35B" 
+                  strokeWidth={3} 
+                  dot={{ fill: '#FFA35B', strokeWidth: 0, r: 6 }}
+                  activeDot={{ r: 8 }}
+                  isAnimationActive={true}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
       
