@@ -28,28 +28,22 @@ const TestimonialCarousel = ({ testimonialImages }: TestimonialCarouselProps) =>
   }, []);
 
   return (
-    <div className="w-full max-w-md mx-auto my-6 relative">
-      <div className="overflow-hidden rounded-lg shadow-md h-64">
-        <div 
-          className="flex transition-transform duration-1000 ease-in-out h-full"
-          style={{ 
-            transform: `translateX(-${currentImage * 100}%)`,
-            width: `${testimonialImages.length * 100}%` 
-          }}
-        >
-          {testimonialImages.map((testimonial) => (
-            <div 
-              key={testimonial.id}
-              className="w-full flex-shrink-0 h-full flex items-center justify-center"
-            >
-              <img 
-                src={testimonial.image} 
-                alt={`Depoimento ${testimonial.id}`} 
-                className="max-w-full max-h-full object-contain" 
-              />
-            </div>
-          ))}
-        </div>
+    <div className="w-full max-w-lg mx-auto my-8 relative">
+      <div className="overflow-hidden rounded-lg shadow-md">
+        {testimonialImages.map((testimonial, index) => (
+          <div 
+            key={testimonial.id}
+            className={`absolute w-full transition-opacity duration-1000 ease-in-out ${
+              currentImage === index ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            <img 
+              src={testimonial.image} 
+              alt={`Depoimento ${index + 1}`} 
+              className="w-full h-auto object-contain" 
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
