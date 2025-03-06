@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -72,6 +73,7 @@ export default {
 				"sales-orange": "#FFA35B",
 				"sales-mint": "#D3E9DE",
 				"sales-highlight": "#e0f0e8",
+				"sales-blue": "#0FA0CE",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
