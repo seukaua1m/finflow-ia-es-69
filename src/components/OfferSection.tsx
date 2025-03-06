@@ -1,25 +1,11 @@
 
 import React from 'react';
-import FinancialGrowthChart from './chart/FinancialGrowthChart';
 
 interface OfferSectionProps {
   onContinue: () => void;
 }
 
 const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  // Chart data points adjusted to match the image:
-  const chartData = [
-    { name: 'Jan', value: 50 },    // Starting point (bottom)
-    { name: 'Fev', value: 1900 },  // At the second line from bottom
-    { name: 'Mar', value: 2200 },  // Slightly above the second line
-    { name: 'Abr', value: 4200 },  // Between lines 3 and 4
-    { name: 'Mai', value: 6000 },  // At the line 4
-    { name: 'Jun', value: 7492 }   // At the top line (5)
-  ];
-
-  // Custom grid line positions (5 lines)
-  const customYTicks = [50, 1900, 3750, 5600, 7450];
-
   return (
     <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
@@ -35,11 +21,12 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
         Essa é a sua chance de cumprir o que você tem prometido a tanto tempo.
       </p>
       
-      {/* Chart section */}
+      {/* Image section replacing the chart */}
       <div className="w-full mb-10 relative px-4 sm:px-12">
-        <FinancialGrowthChart 
-          chartData={chartData}
-          customYTicks={customYTicks}
+        <img 
+          src="/lovable-uploads/175afab2-416c-46de-a47e-597f2079afe5.png"
+          alt="Financial growth chart showing progress from R$50 to R$7492 over 6 months"
+          className="w-full"
         />
       </div>
       
