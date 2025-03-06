@@ -12,16 +12,16 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
   // 2nd point: 2px above line 2 (1900+2 = 1902) 
   // 3rd point: 4px above line 2 (1900+4 = 1904)
   // 4th point: between line 3 and 4 (~4675)
-  // 5th point: between line 5 and 6 (~6525)
-  // 6th point: at line 6 (7450)
+  // 5th point: at middle of line 4 and 5 (~4675)
+  // 6th point: exactly at line 5 (7450)
   const chartData = [
     { name: 'Jan', value: 50 },    // Starting point
     { name: 'Fev', value: 1899 },  // 1px below line 2
     { name: 'Mar', value: 1902 },  // 2px above line 2
     { name: 'Abr', value: 1904 },  // 4px above line 2
     { name: 'Mai', value: 4675 },  // Between line 3 and 4
-    { name: 'Jun', value: 6525 },  // Between line 5 and 6
-    { name: 'Jul', value: 7450 }   // At line 6 (top)
+    { name: 'Jun', value: 5600 },  // Middle of line 4 and 5
+    { name: 'Jul', value: 7450 }   // Exactly at line 5 (top)
   ];
 
   // Custom grid line positions
