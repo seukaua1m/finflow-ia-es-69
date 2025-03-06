@@ -1,11 +1,44 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { ArrowDown } from 'lucide-react';
+
 interface OfferSectionProps {
   onContinue: () => void;
 }
+
 const OfferSection = ({
   onContinue
 }: OfferSectionProps) => {
+  // State for countdown timer
+  const [timeLeft, setTimeLeft] = useState({
+    minutes: 3,
+    seconds: 0
+  });
+
+  // Effect for the countdown timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prevTime => {
+        if (prevTime.minutes === 0 && prevTime.seconds === 0) {
+          clearInterval(timer);
+          return prevTime;
+        }
+        
+        if (prevTime.seconds === 0) {
+          return { minutes: prevTime.minutes - 1, seconds: 59 };
+        } else {
+          return { ...prevTime, seconds: prevTime.seconds - 1 };
+        }
+      });
+    }, 1000);
+
+    // Cleanup timer on component unmount
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format time with leading zeros
+  const formattedTime = `${timeLeft.minutes}:${timeLeft.seconds.toString().padStart(2, '0')}`;
+
   return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
@@ -84,12 +117,11 @@ const OfferSection = ({
         </p>
       </div>
 
-      {/* Timer button */}
-      <div className="mt-2 mb-4">
-        <button className="bg-[#FFA35B] text-[#254D39] px-8 py-3 rounded-full font-semibold flex items-center">
-          <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: 0:0
-        </button>
+      {/* Timer container (replacing the button) */}
+      <div className="bg-[#FFA35B] text-[#254D39] px-8 py-3 rounded-full font-semibold flex items-center mt-2 mb-4">
+        <span className="inline-block mr-2">⏱</span> Oferta por tempo limitado: {formattedTime}
       </div>
     </div>;
 };
+
 export default OfferSection;
