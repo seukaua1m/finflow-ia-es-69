@@ -5,12 +5,11 @@ import AdditionalResources from '@/components/AdditionalResources';
 import OfferSection from '@/components/OfferSection';
 import { trackPageView, trackComponentInteraction, trackUserInput, getCurrentFunnelStep, saveFunnelStep } from '@/services/analyticsService';
 import { usePageTracking } from '@/hooks/usePageTracking';
+
 const Index = () => {
-  // Initialize currentStep from localStorage if available
-  const [currentStep, setCurrentStep] = useState(() => {
-    const savedStep = getCurrentFunnelStep();
-    return savedStep > 0 && savedStep <= 4 ? savedStep : 1;
-  });
+  // Always start at step 1 when the page is loaded/refreshed
+  const [currentStep, setCurrentStep] = useState(1);
+  
   usePageTracking(); // Track page views
 
   // Track when user changes steps and save to localStorage
@@ -22,6 +21,7 @@ const Index = () => {
     const funnelProgress = Math.round(currentStep / 4 * 100);
     console.log(`Funnel progress: ${funnelProgress}%`);
   }, [currentStep]);
+
   const handleContinue = () => {
     setCurrentStep(2);
     trackComponentInteraction('ContinueButton', 'Clicked');
@@ -30,6 +30,7 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
+
   const handleGoToNextStep = () => {
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
@@ -46,6 +47,7 @@ const Index = () => {
       trackUserInput(message, 'InitialUserMessage');
     }
   };
+
   return <div className="min-h-screen bg-white flex flex-col items-center">
       {currentStep === 1 && <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
@@ -123,4 +125,5 @@ const Index = () => {
     }} />}
     </div>;
 };
+
 export default Index;
