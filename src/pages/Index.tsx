@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import AdditionalResources from '@/components/AdditionalResources';
+import OfferSection from '@/components/OfferSection';
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -84,6 +85,7 @@ const Index = () => {
       
       {currentStep === 2 && <HowItWorks onContinue={handleGoToNextStep} />}
       {currentStep === 3 && <AdditionalResources onContinue={handleGoToNextStep} />}
+      {currentStep === 4 && <OfferSection onContinue={handleGoToNextStep} />}
     </div>
   );
 };
