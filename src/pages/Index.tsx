@@ -1,13 +1,10 @@
-
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import AdditionalResources from '@/components/AdditionalResources';
 import OfferSection from '@/components/OfferSection';
-
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  
   const handleContinue = () => {
     setCurrentStep(2);
     window.scrollTo({
@@ -15,7 +12,6 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
-  
   const handleGoToNextStep = () => {
     setCurrentStep(prev => prev + 1);
     window.scrollTo({
@@ -23,11 +19,8 @@ const Index = () => {
       behavior: 'smooth'
     });
   };
-
-  return (
-    <div className="min-h-screen bg-white flex flex-col items-center">
-      {currentStep === 1 && (
-        <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
+  return <div className="min-h-screen bg-white flex flex-col items-center">
+      {currentStep === 1 && <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
           <h2 className="text-sales-gray text-center text-lg mb-8 italic animate-fade-in font-medium">
             A mesma tecnologia usada por<br />gerentes de investimentos.
@@ -80,14 +73,11 @@ const Index = () => {
           <button onClick={handleContinue} className="btn-continue animate-fade-in">
             Continuar
           </button>
-        </div>
-      )}
+        </div>}
       
       {currentStep === 2 && <HowItWorks onContinue={handleGoToNextStep} />}
       {currentStep === 3 && <AdditionalResources onContinue={handleGoToNextStep} />}
       {currentStep === 4 && <OfferSection onContinue={handleGoToNextStep} />}
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
