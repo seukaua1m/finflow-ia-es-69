@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -6,6 +5,7 @@ import ChatInput from './chat/ChatInput';
 import ContinueButton from './common/ContinueButton';
 import FinancialQuestions from './FinancialQuestions';
 import ReminderDemo from './ReminderDemo';
+import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
 
@@ -19,7 +19,6 @@ const HowItWorks = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom of messages
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth'
@@ -29,25 +28,20 @@ const HowItWorks = () => {
     scrollToBottom();
   }, [messages, isTyping, isTypingSecondMessage]);
 
-  // Handle animation end
   const handleAnimationEnd = () => {
     setAnimationComplete(true);
   };
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
 
-    // Disable animations while processing
     setAnimationComplete(false);
 
-    // Add user message
     const userMessage: Message = {
       id: Date.now(),
       text: inputValue,
@@ -57,26 +51,20 @@ const HowItWorks = () => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
 
-    // Wait for user message animation to complete (0.8s)
     setTimeout(() => {
-      // Show typing indicator
       setIsTyping(true);
 
-      // Simulate bot response after delay
       setTimeout(() => {
         setIsTyping(false);
 
-        // Create the grouped expense message
         const currentTime = getCurrentTime();
 
-        // Extract first word as item name and second word as price
         const parts = inputValue.split(' ');
         const itemName = parts[0].toUpperCase();
         const price = parts[1] || '0';
         const formattedDate = formatDate();
         const limit = calculateLimit(price);
 
-        // Add expense info message with proper formatting
         const expenseMessage: Message = {
           id: Date.now() + 1,
           text: `<strong>Gasto adicionado</strong>\n\n📌 ${itemName} (Delivery)\n\n<strong>R$ ${price},00</strong>\n\n${formattedDate}`,
@@ -86,15 +74,12 @@ const HowItWorks = () => {
         };
         setMessages(prev => [...prev, expenseMessage]);
 
-        // Show typing indicator again after first message
         setTimeout(() => {
           setIsTypingSecondMessage(true);
 
-          // Wait for a moment before showing second bot message
           setTimeout(() => {
             setIsTypingSecondMessage(false);
 
-            // Add reminder message with bold text for the limit
             const reminderMessage: Message = {
               id: Date.now() + 2,
               text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
@@ -103,7 +88,6 @@ const HowItWorks = () => {
             };
             setMessages(prev => [...prev, reminderMessage]);
 
-            // Show continue button after all messages are displayed
             setTimeout(() => {
               setShowContinueButton(true);
               setAnimationComplete(true);
@@ -114,24 +98,25 @@ const HowItWorks = () => {
     }, 800);
   };
 
-  // Handle continue button click
   const handleContinue = () => {
     setCurrentStep(2);
   };
 
-  // Handle next step from Financial Questions
   const handleFinancialQuestionsContinue = () => {
     setCurrentStep(3);
   };
 
-  // Handle next step from Reminder Demo
   const handleReminderDemoContinue = () => {
-    // This will be implemented when we add more steps
-    console.log("Moving to the next step after Reminder Demo");
+    setCurrentStep(4);
   };
 
-  // Render different steps based on currentStep
-  if (currentStep === 3) {
+  const handleGoalPlanningDemoContinue = () => {
+    console.log("Moving to the next step after Goal Planning Demo");
+  };
+
+  if (currentStep === 4) {
+    return <GoalPlanningDemo onContinue={handleGoalPlanningDemoContinue} />;
+  } else if (currentStep === 3) {
     return <ReminderDemo onContinue={handleReminderDemoContinue} />;
   } else if (currentStep === 2) {
     return <FinancialQuestions onContinue={handleFinancialQuestionsContinue} />;
@@ -172,20 +157,16 @@ const HowItWorks = () => {
         </div>
       </div>
 
-      {/* Chat area */}
       <div className="min-h-[50px]">
         {messages.map(message => <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />)}
         
-        {/* Typing indicator */}
         {isTyping && <TypingIndicator />}
         
-        {/* Second typing indicator between bot messages */}
         {isTypingSecondMessage && <TypingIndicator />}
         
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Message input form or continue button */}
       <div className="mt-4">
         {!showContinueButton ? <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} /> : <ContinueButton onClick={handleContinue} />}
       </div>
