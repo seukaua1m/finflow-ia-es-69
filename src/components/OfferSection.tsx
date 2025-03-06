@@ -1,19 +1,19 @@
 
 import React from 'react';
-import { LineChart, Line, XAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 interface OfferSectionProps {
   onContinue: () => void;
 }
 
 const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  // Chart data representing financial growth over 6 months
+  // Chart data representing financial growth over 6 months with proper curvature
   const chartData = [
     { name: 'Jan', value: 50 },
-    { name: 'Fev', value: 100 },
-    { name: 'Mar', value: 300 },
-    { name: 'Abr', value: 1500 },
-    { name: 'Mai', value: 4000 },
+    { name: 'Fev', value: 70 },
+    { name: 'Mar', value: 150 },
+    { name: 'Abr', value: 800 },
+    { name: 'Mai', value: 3000 },
     { name: 'Jun', value: 7492 }
   ];
 
@@ -54,11 +54,12 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
               <LineChart data={chartData} margin={{ top: 30, right: 10, left: 10, bottom: 30 }}>
                 <XAxis 
                   dataKey="name" 
-                  axisLine={false}
+                  axisLine={true}
                   tickLine={false}
                   tick={{ fill: '#727272', fontSize: 14 }}
                   dy={10}
                 />
+                <YAxis hide={true} />
                 <Line 
                   type="monotone" 
                   dataKey="value" 
