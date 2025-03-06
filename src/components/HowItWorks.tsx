@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -9,12 +8,12 @@ import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
-
 interface HowItWorksProps {
   onContinue: () => void;
 }
-
-const HowItWorks = ({ onContinue }: HowItWorksProps) => {
+const HowItWorks = ({
+  onContinue
+}: HowItWorksProps) => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -23,7 +22,6 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
   const [animationComplete, setAnimationComplete] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth'
@@ -32,21 +30,16 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, isTypingSecondMessage]);
-
   const handleAnimationEnd = () => {
     setAnimationComplete(true);
   };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
-
     setAnimationComplete(false);
-
     const userMessage: Message = {
       id: Date.now(),
       text: inputValue,
@@ -55,21 +48,16 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
     };
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-
     setTimeout(() => {
       setIsTyping(true);
-
       setTimeout(() => {
         setIsTyping(false);
-
         const currentTime = getCurrentTime();
-
         const parts = inputValue.split(' ');
         const itemName = parts[0].toUpperCase();
         const price = parts[1] || '0';
         const formattedDate = formatDate();
         const limit = calculateLimit(price);
-
         const expenseMessage: Message = {
           id: Date.now() + 1,
           text: `<strong>Gasto adicionado</strong>\n\n📌 ${itemName} (Delivery)\n\n<strong>R$ ${price},00</strong>\n\n${formattedDate}`,
@@ -78,13 +66,10 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
           isGroupMessage: true
         };
         setMessages(prev => [...prev, expenseMessage]);
-
         setTimeout(() => {
           setIsTypingSecondMessage(true);
-
           setTimeout(() => {
             setIsTypingSecondMessage(false);
-
             const reminderMessage: Message = {
               id: Date.now() + 2,
               text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
@@ -92,7 +77,6 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
               time: currentTime
             };
             setMessages(prev => [...prev, reminderMessage]);
-
             setTimeout(() => {
               setShowContinueButton(true);
               setAnimationComplete(true);
@@ -102,23 +86,18 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
       }, 2000);
     }, 800);
   };
-
   const handleContinue = () => {
     setCurrentStep(2);
   };
-
   const handleFinancialQuestionsContinue = () => {
     setCurrentStep(3);
   };
-
   const handleReminderDemoContinue = () => {
     setCurrentStep(4);
   };
-
   const handleGoalPlanningDemoContinue = () => {
     onContinue(); // Call the parent's onContinue function to move to the next major step
   };
-
   if (currentStep === 4) {
     return <GoalPlanningDemo onContinue={handleGoalPlanningDemoContinue} />;
   } else if (currentStep === 3) {
@@ -126,19 +105,18 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
   } else if (currentStep === 2) {
     return <FinancialQuestions onContinue={handleFinancialQuestionsContinue} />;
   }
-
   return <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
 
       <p className="text-center mb-8 text-lg">
-        Um assistente financeiro <span className="font-bold text-[#FFA35B] py-0 px-0 mx-0 my-0 width-8">no seu WhatsApp</span>,{' '}
+        Um assistente financeiro <span className="font-bold py-0 px-0 mx-0 my-0 width-8 text-[#254d39]">no seu WhatsApp</span>,{' '}
         disponível 24h para ser seu <span className="font-bold text-[#254d39]">controle financeiro interativo</span>.
       </p>
 
       <div className="flex justify-center mb-10">
-        <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 mx-0 py-0 px-[14px] my-[2px]">
+        <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 mx-0 px-[14px] my-0 py-[4px]">
           Demonstração
         </button>
       </div>
@@ -177,5 +155,4 @@ const HowItWorks = ({ onContinue }: HowItWorksProps) => {
       </div>
     </div>;
 };
-
 export default HowItWorks;
