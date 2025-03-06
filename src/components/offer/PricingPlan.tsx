@@ -1,7 +1,7 @@
 import React from 'react';
 const PricingPlan = () => {
   return <>
-      <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-3 relative mx-0 py-[54px] my-0">
+      <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-2 relative py-[28px] mx-[27px] -my-[32px]">
         {/* Promotion tag */}
         <div className="absolute top-4 right-4">
           <div className="bg-[#FFA35B] text-black px-3 py-1 rounded-md font-semibold text-sm">
