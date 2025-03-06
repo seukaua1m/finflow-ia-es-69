@@ -7,24 +7,17 @@ interface OfferSectionProps {
 }
 
 const OfferSection = ({ onContinue }: OfferSectionProps) => {
-  // Chart data with specific values to match grid line requirements:
-  // 1st point: 1px below line 2 (1900-1 = 1899)
-  // 2nd point: 2px above line 2 (1900+2 = 1902) 
-  // 3rd point: 4px above line 2 (1900+4 = 1904)
-  // 4th point: between line 3 and 4 (~4675)
-  // 5th point: at middle of line 4 and 5 (~4675)
-  // 6th point: exactly at line 5 (7450)
+  // Chart data points adjusted to match the image:
   const chartData = [
-    { name: 'Jan', value: 50 },    // Starting point
-    { name: 'Fev', value: 1899 },  // 1px below line 2
-    { name: 'Mar', value: 1902 },  // 2px above line 2
-    { name: 'Abr', value: 1904 },  // 4px above line 2
-    { name: 'Mai', value: 4675 },  // Between line 3 and 4
-    { name: 'Jun', value: 5600 },  // Middle of line 4 and 5
-    { name: 'Jul', value: 7450 }   // Exactly at line 5 (top)
+    { name: 'Jan', value: 50 },    // Starting point (bottom)
+    { name: 'Fev', value: 1900 },  // At the second line from bottom
+    { name: 'Mar', value: 2200 },  // Slightly above the second line
+    { name: 'Abr', value: 4200 },  // Between lines 3 and 4
+    { name: 'Mai', value: 6000 },  // At the line 4
+    { name: 'Jun', value: 7492 }   // At the top line (5)
   ];
 
-  // Custom grid line positions
+  // Custom grid line positions (5 lines)
   const customYTicks = [50, 1900, 3750, 5600, 7450];
 
   return (
