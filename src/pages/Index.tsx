@@ -1,17 +1,32 @@
+
 import React, { useState } from 'react';
 import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
+import AdditionalResources from '@/components/AdditionalResources';
+
 const Index = () => {
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  
   const handleContinue = () => {
-    setShowHowItWorks(true);
+    setCurrentStep(2);
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   };
-  return <div className="min-h-screen bg-white flex flex-col items-center">
-      {!showHowItWorks ? <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
+  
+  const handleGoToNextStep = () => {
+    setCurrentStep(prev => prev + 1);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      {currentStep === 1 && (
+        <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
           <h2 className="text-sales-gray text-center text-lg mb-8 italic animate-fade-in font-medium">
             A mesma tecnologia usada por<br />gerentes de investimentos.
@@ -64,7 +79,13 @@ const Index = () => {
           <button onClick={handleContinue} className="btn-continue animate-fade-in">
             Continuar
           </button>
-        </div> : <HowItWorks />}
-    </div>;
+        </div>
+      )}
+      
+      {currentStep === 2 && <HowItWorks onContinue={handleGoToNextStep} />}
+      {currentStep === 3 && <AdditionalResources onContinue={handleGoToNextStep} />}
+    </div>
+  );
 };
+
 export default Index;

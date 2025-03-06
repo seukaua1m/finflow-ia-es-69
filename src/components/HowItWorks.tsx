@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -9,7 +10,11 @@ import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
 
-const HowItWorks = () => {
+interface HowItWorksProps {
+  onContinue: () => void;
+}
+
+const HowItWorks = ({ onContinue }: HowItWorksProps) => {
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
@@ -111,7 +116,7 @@ const HowItWorks = () => {
   };
 
   const handleGoalPlanningDemoContinue = () => {
-    console.log("Moving to the next step after Goal Planning Demo");
+    onContinue(); // Call the parent's onContinue function to move to the next major step
   };
 
   if (currentStep === 4) {
