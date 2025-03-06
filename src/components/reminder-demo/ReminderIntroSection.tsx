@@ -8,7 +8,7 @@ const ReminderIntroSection = () => {
         <div>
           <p className="text-lg mb-2">
             Defina lembretes para pagar contas e não esqueça de nada{' '}
-            <span className="text-sales-green italic font-semibold">(para uma conta única, ou frequente).</span>
+            <span className="text-sales-green italic text-base font-bold">(para uma conta única, ou frequente).</span>
           </p>
         </div>
       </div>
