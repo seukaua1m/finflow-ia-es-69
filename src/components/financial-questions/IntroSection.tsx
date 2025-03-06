@@ -24,10 +24,11 @@ const IntroSection = ({ buttonClicked, handleActionClick }: IntroSectionProps) =
         
         {/* Only show button if it hasn't been clicked yet */}
         {!buttonClicked && (
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-start mb-8">
             <ActionButton 
               onClick={handleActionClick} 
               text="quanto eu gastei nos últimos dias?" 
+              className="animate-jump text-left justify-start"
             />
           </div>
         )}
