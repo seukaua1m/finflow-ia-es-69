@@ -64,7 +64,7 @@ const GoalPlanningIntroSection = () => {
 
         {/* Bot goal card - now inside a message container */}
         <div className="flex justify-start animate-fade-in" style={{animationDelay: "0.4s"}}>
-          <div className="relative py-2 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%]">
+          <div className="relative py-2 px-3 rounded-lg bg-[#202C33] text-white max-w-[90%] md:max-w-[80%]">
             {/* Goal Card */}
             <div className="relative rounded-lg bg-white text-black border border-gray-200 shadow-sm overflow-hidden">
               <div className="p-4">
