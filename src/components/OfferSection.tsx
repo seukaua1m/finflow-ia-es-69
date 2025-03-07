@@ -1,30 +1,17 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ArrowDown } from 'lucide-react';
 import { Button } from './ui/button';
 import TestimonialCarousel from './offer/TestimonialCarousel';
 import CountdownTimer from './offer/CountdownTimer';
 import PricingPlan from './offer/PricingPlan';
 import { testimonialImages } from './offer/testimonialData';
-import { getCurrencySymbol, getCurrencyCodeFromCountry } from '@/utils/messageUtils';
-
 interface OfferSectionProps {
   onContinue: () => void;
 }
-
 const OfferSection = ({
   onContinue
 }: OfferSectionProps) => {
-  const [currencySymbol, setCurrencySymbol] = useState<string>('$');
-  const [currencyCode, setCurrencyCode] = useState<string>('USD');
-
-  useEffect(() => {
-    // Obtener el símbolo de moneda del país del usuario
-    const storedCountry = localStorage.getItem('visitor_country') || '';
-    setCurrencySymbol(getCurrencySymbol(storedCountry));
-    setCurrencyCode(getCurrencyCodeFromCountry(storedCountry));
-  }, []);
-
   return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
@@ -78,8 +65,8 @@ const OfferSection = ({
       {/* Price comparison */}
       <div className="text-center mb-8 max-w-lg">
         <p className="text-lg text-[#254D39]">
-          Podríamos cobrarte lo justo, {currencySymbol} 400 
-          por AÑO, por el ahorro que vamos 
+          Podríamos cobrarte lo justo, R$ 400 
+          reales por AÑO, por el ahorro que vamos 
           a generarte.
         </p>
       </div>
@@ -110,7 +97,7 @@ const OfferSection = ({
       <TestimonialCarousel testimonialImages={testimonialImages} />
 
       {/* Pricing plan */}
-      <PricingPlan currencySymbol={currencySymbol} currencyCode={currencyCode} />
+      <PricingPlan />
 
       {/* Sign up button */}
       <Button
@@ -135,5 +122,4 @@ const OfferSection = ({
       </div>
     </div>;
 };
-
 export default OfferSection;
