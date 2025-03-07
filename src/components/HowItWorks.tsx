@@ -108,7 +108,7 @@ const HowItWorks = ({
         // Verificar si la respuesta sigue el formato de un gasto
         if (typeof apiResponse === 'object' && apiResponse.response) {
           const parts = apiResponse.response.split('\n');
-          if (parts.length >= 3 && parts[0].toLowerCase().includes("gasto adicionado")) {
+          if (parts.length >= 3 && parts[0].toLowerCase().includes("gasto agregado")) {
             const [title, description, value] = parts;
             const [item, rawCategory] = description.split(' (');
   
