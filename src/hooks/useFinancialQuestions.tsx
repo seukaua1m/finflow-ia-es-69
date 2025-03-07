@@ -8,7 +8,7 @@ import {
   createPieChartMessage, 
   createPieChartFollowUpMessage 
 } from '@/services/chatService';
-import { getCurrencySymbol } from '@/utils/messageUtils';
+import { getCurrencySymbol, getCurrencyCodeFromCountry } from '@/utils/messageUtils';
 
 export const useFinancialQuestions = (onContinue: () => void) => {
   const [showNextStep, setShowNextStep] = useState(false);
@@ -23,11 +23,13 @@ export const useFinancialQuestions = (onContinue: () => void) => {
   const [suggestionButtonClicked, setSuggestionButtonClicked] = useState(false);
   const [showComparisonText, setShowComparisonText] = useState(false);
   const [currencySymbol, setCurrencySymbol] = useState<string>('$');
+  const [currencyCode, setCurrencyCode] = useState<string>('USD');
 
   // Obtener el símbolo de moneda según el país del usuario
   useEffect(() => {
     const storedCountry = localStorage.getItem('visitor_country') || '';
     setCurrencySymbol(getCurrencySymbol(storedCountry));
+    setCurrencyCode(getCurrencyCodeFromCountry(storedCountry));
   }, []);
 
   // Handle animation end
@@ -58,7 +60,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
         setIsTyping(false);
 
         // First bot message with chart
-        const chartMessage = createChartMessage();
+        const chartMessage = createChartMessage(currencyCode);
         setMessages(prev => [...prev, chartMessage]);
 
         // Show typing indicator for second message
@@ -92,7 +94,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
                   setIsTypingThirdMessage(false);
 
                   // Third bot message with pie chart
-                  const pieChartMessage = createPieChartMessage();
+                  const pieChartMessage = createPieChartMessage(currencyCode);
                   setMessages(prev => [...prev, pieChartMessage]);
 
                   // Show typing indicator for the final follow-up message

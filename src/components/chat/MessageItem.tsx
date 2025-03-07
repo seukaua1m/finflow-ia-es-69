@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '@/types/chat';
+import { getCurrencySymbol } from '@/utils/messageUtils';
 
 interface MessageItemProps {
   message: Message;
@@ -12,6 +13,14 @@ const MessageItem = ({
   message,
   onAnimationEnd
 }: MessageItemProps) => {
+  const [currencySymbol, setCurrencySymbol] = useState<string>('$');
+
+  useEffect(() => {
+    // Obtener el símbolo de moneda del país del usuario
+    const storedCountry = localStorage.getItem('visitor_country') || '';
+    setCurrencySymbol(getCurrencySymbol(storedCountry));
+  }, []);
+
   // Format message text with HTML
   const formatMessageText = (text: string) => {
     if (message.isGroupMessage) {
@@ -22,7 +31,10 @@ const MessageItem = ({
       if (itemDetails.length < 2) return text;
   
       const descripcion = itemDetails[0].trim();
-      const valor = itemDetails[1].trim();
+      let valor = itemDetails[1].trim();
+      
+      // Reemplazar R$ o cualquier otro símbolo de moneda por el símbolo actual
+      valor = valor.replace(/[\$\€\£\¥\₹\₽\₿\R\$\S\/\₲\Bs\$U\MX\$\AR\$\CL\$\CO\$][\s]*/g, `${currencySymbol} `);
       
       const today = new Date().toLocaleDateString('es-ES');
   
@@ -37,10 +49,17 @@ const MessageItem = ({
       );
     }
   
-    // Solo devuelve el texto normal para mensajes comunes
-    return <span dangerouslySetInnerHTML={{ __html: text }} />;
-};
+    // Reemplazar ocurrencias de símbolos de moneda en mensajes regulares
+    let formattedText = text;
+    if (typeof formattedText === 'string') {
+      // Reemplazar R$ u otros símbolos seguidos de un número
+      formattedText = formattedText.replace(/[\$\€\£\¥\₹\₽\₿\R\$\S\/\₲\Bs\$U\MX\$\AR\$\CL\$\CO\$][\s]*(\d+)/g, 
+        (match, number) => `${currencySymbol} ${number}`);
+    }
   
+    // Solo devuelve el texto normal para mensajes comunes
+    return <span dangerouslySetInnerHTML={{ __html: formattedText }} />;
+  };
 
   return (
     <div className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={onAnimationEnd}>

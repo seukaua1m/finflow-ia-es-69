@@ -1,6 +1,7 @@
 
 import { Message } from '@/types/chat';
-import { getCurrentTime, formatDate } from '@/utils/messageUtils';
+import { getCurrentTime, formatDate, getCurrencySymbol, getCurrencyCodeFromCountry } from '@/utils/messageUtils';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 // Function to get the last 7 days as array of weekday abbreviations
 const getLast7DaysLabels = () => {
@@ -61,15 +62,16 @@ export const createUserMessage = (text: string): Message => ({
   time: getCurrentTime()
 });
 
-export const createChartMessage = (): Message => {
+export const createChartMessage = (currencyCode: string = 'USD'): Message => {
   const chartData = getExpenseChartData();
   const dateRange = getLast7DaysDateRange();
+  const currencySymbol = getSymbolFromCurrency(currencyCode) || '$';
   
   return {
     id: Date.now() + 1,
     text: `<chart>
       <title>Últimos 7 dias</title>
-      <subtitle>R$ 632,00 - ${dateRange}</subtitle>
+      <subtitle>${currencySymbol} 632,00 - ${dateRange}</subtitle>
       <data>${JSON.stringify(chartData)}</data>
       <footer>↗ Seus gastos aumentaram em 20% essa semana</footer>
     </chart>`,
@@ -79,7 +81,7 @@ export const createChartMessage = (): Message => {
   };
 };
 
-export const createPieChartMessage = (): Message => {
+export const createPieChartMessage = (currencyCode: string = 'USD'): Message => {
   const pieChartData = getExpenseCategoryData();
   const dateRange = getLast7DaysDateRange();
   

@@ -8,7 +8,7 @@ import FinancialQuestions from './FinancialQuestions';
 import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
-import { getCurrentTime, formatDate, calculateLimit, getCurrencySymbol } from '@/utils/messageUtils';
+import { getCurrentTime, formatDate, calculateLimit, getCurrencySymbol, getCurrencyCodeFromCountry } from '@/utils/messageUtils';
 import axios from 'axios';
 import { trackUserInput } from '@/services/analyticsService';
 
@@ -59,6 +59,7 @@ const HowItWorks = ({
   const [showInput, setShowInput] = useState(true);
   const [userCountry, setUserCountry] = useState<string>('');
   const [currencySymbol, setCurrencySymbol] = useState<string>('$');
+  const [currencyCode, setCurrencyCode] = useState<string>('USD');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Detectar el país del usuario al cargar el componente
@@ -71,6 +72,7 @@ const HowItWorks = ({
         if (storedCountry) {
           setUserCountry(storedCountry);
           setCurrencySymbol(getCurrencySymbol(storedCountry));
+          setCurrencyCode(getCurrencyCodeFromCountry(storedCountry));
           return;
         }
         
@@ -86,16 +88,19 @@ const HowItWorks = ({
           // Establecer el símbolo de moneda según el país
           const symbol = getCurrencySymbol(countryName);
           setCurrencySymbol(symbol);
+          setCurrencyCode(getCurrencyCodeFromCountry(countryName));
         } else {
           // Si no se puede obtener el país, usar el símbolo por defecto "$"
           setUserCountry('');
           setCurrencySymbol('$');
+          setCurrencyCode('USD');
         }
       } catch (error) {
         console.error('Error al detectar el país del usuario:', error);
         // Usar valores predeterminados en caso de error
         setUserCountry('');
         setCurrencySymbol('$');
+        setCurrencyCode('USD');
       }
     };
     
@@ -163,7 +168,7 @@ const HowItWorks = ({
             category = rawCategory ? rawCategory.replace(")", "").trim() : category;
   
             // Usar el símbolo de moneda del país del usuario
-            const formattedValue = value.replace(/R\$/, currencySymbol);
+            const formattedValue = value.replace(/[\$\€\£\¥\₹\₽\₿\R\$\S\/\₲\Bs\$U\MX\$\AR\$\CL\$\CO\$][\s]*/g, `${currencySymbol} `);
             
             formattedResponse = `${title}\n📌 ${item} (${category})\n💰 ${formattedValue}`;
             isValidExpense = true;

@@ -1,6 +1,12 @@
 
 import React from 'react';
-const PricingPlan = () => {
+
+interface PricingPlanProps {
+  currencySymbol?: string;
+  currencyCode?: string;
+}
+
+const PricingPlan = ({ currencySymbol = '$', currencyCode = 'USD' }: PricingPlanProps) => {
   return <>
       <div className="w-full max-w-lg bg-[#1A1A1A] text-white rounded-lg p-6 mb-2 relative py-[28px] mx-[27px] -my-[32px]">
         {/* Promotion tag */}
@@ -26,7 +32,7 @@ const PricingPlan = () => {
           <div className="text-right">
             <div className="text-lg">12x de</div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-bold mr-1">R$ 5</span>
+              <span className="text-3xl font-bold mr-1">{currencySymbol} 5</span>
               <span className="text-lg">,70</span>
             </div>
             <div className="text-sm">o 57 al contado</div>
@@ -36,8 +42,9 @@ const PricingPlan = () => {
 
       {/* Daily price equivalent */}
       <div className="text-center text-[#254D39] mb-8">
-        <p className="px-0 mt-6 ml-9 mr-9">(equivalente a menos de R$ 0,16 por día)</p>
+        <p className="px-0 mt-6 ml-9 mr-9">(equivalente a menos de {currencySymbol} 0,16 por día)</p>
       </div>
     </>;
 };
+
 export default PricingPlan;
