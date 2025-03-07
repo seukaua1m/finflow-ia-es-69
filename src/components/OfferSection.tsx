@@ -100,7 +100,7 @@ const OfferSection = ({
 
       {/* Sign up button */}
       <Button
-          onClick={() => window.location.href = "https://checkout.com"}
+          onClick={() => window.location.href = "https://pay.kiwify.com.br/afzxczS"}
           className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]"
       >
           Quero assinar
