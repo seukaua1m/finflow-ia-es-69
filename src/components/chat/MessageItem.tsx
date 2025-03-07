@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '@/types/chat';
@@ -14,58 +13,33 @@ const MessageItem = ({
 }: MessageItemProps) => {
   // Format message text with HTML
   const formatMessageText = (text: string) => {
-    // Check if it's an expense message with specific formatting
     if (message.isGroupMessage) {
-      // Parse the expense message with specific layout
-      const parts = text.split('\n\n');
+      const parts = text.split('📌');
+      if (parts.length < 2) return text; // Se não houver estrutura esperada, retorna o texto normal
+      
+      const itemDetails = parts[1].split('💰');
+      if (itemDetails.length < 2) return text;
+  
+      const descricao = itemDetails[0].trim();
+      const valor = itemDetails[1].trim();
+      
+      const today = new Date().toLocaleDateString('pt-BR');
+  
       return (
         <>
-          {/* Title - "Gasto adicionado" */}
-          <div className="font-bold">{parts[0].replace(/<strong>|<\/strong>/g, '')}</div>
-          
-          {/* Item name - no line space */}
-          <div>{parts[1]}</div>
-          
-          {/* Price - no line space */}
-          <div className="font-bold">{parts[2].replace(/<strong>|<\/strong>/g, '')}</div>
-          
-          {/* Date - with line space above */}
-          <div className="mt-4 py-px my-0">{parts[3]}</div>
+          <div className="font-bold">Gasto adicionado</div>
+          <div>📌 {descricao}</div>
+          <div className="font-bold">💰 <strong>{valor}</strong></div>
+          <br />
+          <div>{today}</div> 
         </>
       );
     }
-
-    // For regular messages, split by new lines first
-    const lines = text.split('\n');
-    return lines.map((line, lineIndex) => {
-      // Check if line contains HTML
-      const hasHTML = line.includes('<strong>');
-      if (hasHTML) {
-        // Parse simple HTML tags in the line
-        const parts = line.split(/<strong>|<\/strong>/);
-        return (
-          <React.Fragment key={lineIndex}>
-            {parts.map((part, partIndex) => (
-              partIndex % 2 === 1 ?
-                // Odd indexes are between <strong> tags
-                <strong key={partIndex}>{part}</strong> :
-                // Even indexes are outside <strong> tags
-                <span key={partIndex}>{part}</span>
-            ))}
-            {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>
-        );
-      } else {
-        // Regular line without HTML
-        return (
-          <React.Fragment key={lineIndex}>
-            {line}
-            {lineIndex < lines.length - 1 && <br />}
-          </React.Fragment>
-        );
-      }
-    });
-  };
+  
+    // Apenas retorna o texto normal para mensagens comuns
+    return <span dangerouslySetInnerHTML={{ __html: text }} />;
+};
+  
 
   return (
     <div className={`mb-2 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} onAnimationEnd={onAnimationEnd}>

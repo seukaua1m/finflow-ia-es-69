@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -9,10 +8,26 @@ import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
+import axios from 'axios';
 
 interface HowItWorksProps {
   onContinue: () => void;
 }
+
+const fetchOpenAIResponse = async (message: string) => {
+  try {
+    const response = await axios.post('https://api.finflow.shop/api/chat/send', { 
+      message,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching OpenAI response:', error);
+    return null;
+  }
+};
 
 const HowItWorks = ({
   onContinue
@@ -45,68 +60,109 @@ const HowItWorks = ({
     setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
-    
-    // Hide the input after submitting
+  
+    // Esconder o input temporariamente
     setShowInput(false);
     setAnimationComplete(false);
-    
+  
     const userMessage: Message = {
       id: Date.now(),
       text: inputValue,
       sender: 'user',
-      time: getCurrentTime()
+      time: getCurrentTime(),
     };
-    
+  
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
-    
-    setTimeout(() => {
+  
+    try {
       setIsTyping(true);
-      setTimeout(() => {
-        setIsTyping(false);
+      const apiResponse = await fetchOpenAIResponse(inputValue);
+      setIsTyping(false);
+  
+      if (apiResponse) {
         const currentTime = getCurrentTime();
-        const parts = inputValue.split(' ');
-        const itemName = parts[0].toUpperCase();
-        const price = parts[1] || '0';
-        const formattedDate = formatDate();
-        const limit = calculateLimit(price);
-        
-        const expenseMessage: Message = {
+        let formattedResponse = apiResponse.response; // Mantemos a resposta original
+        let isValidExpense = false;
+        let category = "seus gastos"; // Categoria padrão caso não seja detectada
+  
+        // Verifica se a resposta segue o formato de um gasto
+        if (typeof apiResponse === 'object' && apiResponse.response) {
+          const parts = apiResponse.response.split('\n');
+          if (parts.length >= 3 && parts[0].toLowerCase().includes("gasto adicionado")) {
+            const [title, description, value] = parts;
+            const [item, rawCategory] = description.split(' (');
+  
+            // Garante que a categoria está corretamente formatada sem parênteses extras
+            category = rawCategory ? rawCategory.replace(")", "").trim() : category;
+  
+            formattedResponse = `${title}\n📌 ${item} (${category})\n💰 ${value}`;
+            isValidExpense = true;
+          }
+        }
+  
+        // Mensagem do bot
+        const botMessage: Message = {
           id: Date.now() + 1,
-          text: `<strong>Gasto adicionado</strong>\n\n📌 ${itemName} (Delivery)\n\n<strong>R$ ${price},00</strong>\n\n${formattedDate}`,
+          text: formattedResponse,
           sender: 'bot',
           time: currentTime,
-          isGroupMessage: true
+          isGroupMessage: isValidExpense,
         };
-        
-        setMessages(prev => [...prev, expenseMessage]);
-        
-        setTimeout(() => {
-          setIsTypingSecondMessage(true);
+  
+        setMessages(prev => [...prev, botMessage]);
+  
+        if (isValidExpense) {
+          // Se for um gasto, envia a mensagem do lembrete de limite com a categoria correta
           setTimeout(() => {
-            setIsTypingSecondMessage(false);
-            
-            const reminderMessage: Message = {
-              id: Date.now() + 2,
-              text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${limit}</strong> por mês com <strong>Delivery</strong>.`,
-              sender: 'bot',
-              time: currentTime
-            };
-            
-            setMessages(prev => [...prev, reminderMessage]);
-            
+            setIsTypingSecondMessage(true);
             setTimeout(() => {
-              setShowContinueButton(true);
-              setAnimationComplete(true);
-            }, 800);
-          }, 2000);
-        }, 800);
-      }, 2000);
-    }, 800);
+              setIsTypingSecondMessage(false);
+  
+              const reminderMessage: Message = {
+                id: Date.now() + 2,
+                text: `Lembrete: Você está quase chegando no seu <strong>limite definido de R$ ${calculateLimit(
+                  inputValue.split(' ')[1] || '0'
+                )}</strong> por mês com <strong>${category}</strong>.`,
+                sender: 'bot',
+                time: getCurrentTime(),
+              };
+  
+              setMessages(prev => [...prev, reminderMessage]);
+  
+              setTimeout(() => {
+                setShowContinueButton(true);
+                setAnimationComplete(true);
+              }, 800);
+            }, 2000);
+          }, 800);
+        } else {
+          // Se não for um gasto, envia a mensagem da API e logo após "Por favor, tente novamente"
+          setTimeout(() => {
+            const errorMessage: Message = {
+              id: Date.now() + 2,
+              text: "Por favor, tente novamente.",
+              sender: 'bot',
+              time: getCurrentTime(),
+            };
+  
+            setMessages(prev => [...prev, errorMessage]);
+            setShowInput(true); // Reexibir input para nova tentativa
+            setAnimationComplete(true);
+          }, 1000);
+        }
+      }
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
+      setIsTyping(false);
+      setShowInput(true);
+      setAnimationComplete(true);
+    }
   };
+  
 
   const handleContinue = () => {
     setCurrentStep(2);
@@ -121,7 +177,7 @@ const HowItWorks = ({
   };
 
   const handleGoalPlanningDemoContinue = () => {
-    onContinue(); // Call the parent's onContinue function to move to the next major step
+    onContinue();
   };
 
   if (currentStep === 4) {
@@ -132,7 +188,8 @@ const HowItWorks = ({
     return <FinancialQuestions onContinue={handleFinancialQuestionsContinue} />;
   }
 
-  return <div className="w-full max-w-3xl bg-white px-4 py-12">
+  return (
+    <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
         Como Funciona?
       </h2>
@@ -168,12 +225,15 @@ const HowItWorks = ({
       </div>
 
       <div className="min-h-[50px]">
-        {messages.map(message => <MessageItem key={message.id} message={message} onAnimationEnd={handleAnimationEnd} />)}
-        
+        {messages.map(message => (
+          <MessageItem 
+            key={message.id} 
+            message={message} 
+            onAnimationEnd={handleAnimationEnd} 
+          />
+        ))}
         {isTyping && <TypingIndicator />}
-        
         {isTypingSecondMessage && <TypingIndicator />}
-        
         <div ref={messagesEndRef} />
       </div>
 
@@ -181,10 +241,18 @@ const HowItWorks = ({
         {showContinueButton ? (
           <ContinueButton onClick={handleContinue} />
         ) : (
-          showInput && <ChatInput inputValue={inputValue} onInputChange={handleInputChange} onSubmit={handleSubmit} isDisabled={!animationComplete} />
+          showInput && (
+            <ChatInput 
+              inputValue={inputValue} 
+              onInputChange={handleInputChange} 
+              onSubmit={handleSubmit} 
+              isDisabled={!animationComplete} 
+            />
+          )
         )}
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default HowItWorks;

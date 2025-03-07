@@ -99,8 +99,11 @@ const OfferSection = ({
       <PricingPlan />
 
       {/* Sign up button */}
-      <Button onClick={onContinue} className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]">
-        Quero assinar
+      <Button
+          onClick={() => window.location.href = "https://checkout.com"}
+          className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]"
+      >
+          Quero assinar
       </Button>
 
       {/* After signing up text */}
