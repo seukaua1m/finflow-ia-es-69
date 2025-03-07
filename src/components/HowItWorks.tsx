@@ -14,8 +14,23 @@ interface HowItWorksProps {
   onContinue: () => void;
 }
 
+// List of allowed domains for API requests
+const ALLOWED_DOMAINS = ['br.finflow.shop', 'en.finflow.shop', 'es.finflow.shop'];
+
 const fetchOpenAIResponse = async (message: string) => {
   try {
+    // Check if the current domain is allowed
+    const currentDomain = window.location.hostname;
+    const isDomainAllowed = ALLOWED_DOMAINS.includes(currentDomain);
+    
+    // Allow local development
+    const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
+    
+    if (!isDomainAllowed && !isLocalhost) {
+      console.error('Domain not allowed for API requests:', currentDomain);
+      return null;
+    }
+    
     const response = await axios.post('https://api.finflow.shop/api/chat/send', { 
       message,
       headers: {

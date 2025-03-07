@@ -137,7 +137,7 @@
   animation: messageSlideIn 0.4s ease-out;
 }
 
-/* Typing indicator animation with decreased duration */
+/* Typing indicator animation with decreased duration to 0.5s */
 @keyframes typingBounce {
   0%, 80%, 100% { 
     transform: scale(1);
@@ -150,5 +150,5 @@
 }
 
 .typing-dot {
-  animation: typingBounce 0.8s infinite ease-in-out;
+  animation: typingBounce 0.5s infinite ease-in-out;
 }
