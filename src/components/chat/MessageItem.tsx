@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCheck } from 'lucide-react';
 import { Message } from '@/types/chat';
@@ -15,20 +16,20 @@ const MessageItem = ({
   const formatMessageText = (text: string) => {
     if (message.isGroupMessage) {
       const parts = text.split('📌');
-      if (parts.length < 2) return text; // Se não houver estrutura esperada, retorna o texto normal
+      if (parts.length < 2) return text; // Si no hay estructura esperada, devuelve el texto normal
       
       const itemDetails = parts[1].split('💰');
       if (itemDetails.length < 2) return text;
   
-      const descricao = itemDetails[0].trim();
+      const descripcion = itemDetails[0].trim();
       const valor = itemDetails[1].trim();
       
-      const today = new Date().toLocaleDateString('pt-BR');
+      const today = new Date().toLocaleDateString('es-ES');
   
       return (
         <>
-          <div className="font-bold">Gasto adicionado</div>
-          <div>📌 {descricao}</div>
+          <div className="font-bold">Gasto añadido</div>
+          <div>📌 {descripcion}</div>
           <div className="font-bold">💰 <strong>{valor}</strong></div>
           <br />
           <div>{today}</div> 
@@ -36,7 +37,7 @@ const MessageItem = ({
       );
     }
   
-    // Apenas retorna o texto normal para mensagens comuns
+    // Solo devuelve el texto normal para mensajes comunes
     return <span dangerouslySetInnerHTML={{ __html: text }} />;
 };
   

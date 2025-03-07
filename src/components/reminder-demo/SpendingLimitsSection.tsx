@@ -1,8 +1,9 @@
+
 import React from 'react';
 const SpendingLimitsSection = () => {
-  // Data for the spending limits chart
+  // Datos para el gráfico de límites de gastos
   const spendingLimitsData = [{
-    name: 'Lazer',
+    name: 'Ocio',
     value: 60,
     color: '#2FA179',
     amount: 'R$ 240,00 de R$ 400,00'
@@ -29,7 +30,7 @@ const SpendingLimitsSection = () => {
         </div>
         <div>
           <p className="text-lg mb-2">
-            Defina <span className="text-[#254d39] font-bold">limites de gastos</span> por categoria. <span className="text-[#10372B] font-bold">Controle quanto quer gastar.</span>
+            Define <span className="text-[#254d39] font-bold">límites de gastos</span> por categoría. <span className="text-[#10372B] font-bold">Controla cuánto quieres gastar.</span>
           </p>
         </div>
       </div>
@@ -40,7 +41,7 @@ const SpendingLimitsSection = () => {
         <div className="mb-2 flex justify-end">
           <div className="relative py-1.5 px-3 rounded-lg bg-[#005C4B] text-white max-w-[85%]">
             <div className="flex flex-col">
-              <div className="text-sm text-left">como estão meus limites de gastos?</div>
+              <div className="text-sm text-left">¿cómo están mis límites de gastos?</div>
               <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                 <span>02:19</span>
                 <svg className="ml-1 w-3 h-3 text-gray-300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,8 +59,8 @@ const SpendingLimitsSection = () => {
               <div className="text-sm self-center w-full text-left">
                 <div className="rounded-lg bg-white text-black p-4 mb-1">
                   <div className="text-center mb-2">
-                    <div className="font-medium">Limite definido:</div>
-                    <div className="text-sm text-gray-600">Relatório dia 21/01</div>
+                    <div className="font-medium">Límite definido:</div>
+                    <div className="text-sm text-gray-600">Informe del día 21/01</div>
                   </div>
                   
                   <div className="space-y-4">
@@ -89,7 +90,7 @@ const SpendingLimitsSection = () => {
         <div className="mb-2 flex justify-start">
           <div className="relative py-1.5 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
             <div className="flex flex-col">
-              <div className="text-sm text-left">Segue relatório dos seus limites de gastos 👆</div>
+              <div className="text-sm text-left">Aquí tienes el informe de tus límites de gastos 👆</div>
               <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                 <span>02:23</span>
               </div>

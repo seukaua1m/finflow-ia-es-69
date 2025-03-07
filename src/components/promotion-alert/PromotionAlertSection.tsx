@@ -10,14 +10,14 @@ const PromotionAlertSection = () => {
         </div>
         <div>
           <h2 className="text-[#10372B] text-xl font-medium mb-2">
-            Alerta de Promoções
+            Alerta de Promociones
           </h2>
           <p className="text-lg mb-2">
-            Economize também nas compras, 
+            Ahorra también en compras,
           </p>
           <p className="text-lg mb-2">
-            nossa IA te envia as melhores 
-            promoções que ela encontra.
+            nuestra IA te envía las mejores
+            promociones que encuentra.
           </p>
         </div>
       </div>
@@ -28,7 +28,7 @@ const PromotionAlertSection = () => {
         <div className="flex justify-start animate-fade-in" style={{animationDelay: "0.1s"}}>
           <div className="relative py-2 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%]">
             <div className="text-sm">
-              <span role="img" aria-label="gift">🎁</span> Você demonstrou interesse em um Iphone 16 alguns dias atrás. <strong>Encontrei uma promoção:</strong>
+              <span role="img" aria-label="gift">🎁</span> Mostraste interés en un iPhone 16 hace unos días. <strong>Encontré una promoción:</strong>
             </div>
             <div className="text-[10px] text-gray-300 mt-1 text-right">
               23:52
@@ -44,16 +44,16 @@ const PromotionAlertSection = () => {
                 <span className="text-yellow-400">✨</span> Apple iPhone 16 (128 GB) – Ultramarino
               </p>
               <p>
-                por R$ 5.599 no pix 🔥 🔥
+                por R$ 5.599 al pago 🔥 🔥
               </p>
               <p>
-                💳 ou 10x de R$ 626,55
+                💳 o 10x de R$ 626,55
               </p>
               <p>
-                🎟️ Use o cupom: APPLE400
+                🎟️ Usa el cupón: APPLE400
               </p>
               <p>
-                🛍️ Compre aqui:
+                🛍️ Compra aquí:
               </p>
               <p className="text-green-400 blur-[3px] select-none">
                 www.amazonshopping.com.br

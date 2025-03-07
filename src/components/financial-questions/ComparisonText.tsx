@@ -10,7 +10,7 @@ const ComparisonText = ({ onContinue }: ComparisonTextProps) => {
   return (
     <div className="mt-6 text-center">
       <p className="text-lg mb-8">
-        Você nunca mais vai se fazer a pergunta <strong>"onde que eu gastei tanto esse mês"</strong>, sem ter a resposta.
+        Nunca más te harás la pregunta <strong>"¿dónde gasté tanto este mes?"</strong>, sin tener la respuesta.
       </p>
       <ContinueButton onClick={onContinue} />
     </div>

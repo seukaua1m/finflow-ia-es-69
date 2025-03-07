@@ -7,14 +7,14 @@ export const useReminderDemo = (onContinue: () => void) => {
     // User message asking to set up a reminder
     {
       id: 1,
-      text: "Boleto do carro todo dia 12, R$ 2400",
+      text: "Factura del coche todos los días 12, R$ 2400",
       sender: 'user',
       time: '02:57'
     },
     // Bot confirmation message
     {
       id: 2,
-      text: "Lembrete adicionado\n📌 Boleto do carro\nData: 12\nFrequência: Mensal",
+      text: "Recordatorio añadido\n📌 Factura del coche\nFecha: 12\nFrecuencia: Mensual",
       sender: 'bot',
       time: '02:58'
     }

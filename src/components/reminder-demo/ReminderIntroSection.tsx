@@ -1,3 +1,4 @@
+
 import React from 'react';
 const ReminderIntroSection = () => {
   return <div className="mb-8 space-y-8">
@@ -7,8 +8,8 @@ const ReminderIntroSection = () => {
         </div>
         <div>
           <p className="text-lg mb-2">
-            Defina lembretes para pagar contas e não esqueça de nada{' '}
-            <span className="text-sales-green italic text-base font-bold">(para uma conta única, ou frequente).</span>
+            Define recordatorios para pagar facturas y no olvides nada{' '}
+            <span className="text-sales-green italic text-base font-bold">(para una cuenta única o frecuente).</span>
           </p>
         </div>
       </div>

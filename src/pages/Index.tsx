@@ -20,7 +20,7 @@ const Index = () => {
 
     // Calculate funnel progress percentage
     const funnelProgress = Math.round(currentStep / 4 * 100);
-    console.log(`Funnel progress: ${funnelProgress}%`);
+    console.log(`Progreso del embudo: ${funnelProgress}%`);
   }, [currentStep]);
 
   const handleContinue = () => {
@@ -46,53 +46,53 @@ const Index = () => {
       {currentStep === 1 && <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center">
           {/* Subtítulo superior */}
           <h2 className="text-sales-gray text-center text-lg mb-8 italic animate-fade-in font-medium">
-            A mesma tecnologia usada por<br />gerentes de investimentos.
+            La misma tecnología usada por<br />gerentes de inversiones.
           </h2>
 
           {/* Headline principal */}
           <h1 className="text-sales-green sm:text-4xl font-bold mb-6 leading-tight animate-fade-in text-center px-[21px] text-2xl">
-            Economize <span className="highlight-text font-bold">+ de 300 Reais Em 30 Dias</span> Sem Cortar Os "Luxos"<br />
-            E Apenas Com O Whatsapp.
+            Ahorra <span className="highlight-text font-bold">+ de 300 Reales En 30 Días</span> Sin Cortar Los "Lujos"<br />
+            Y Solo Con WhatsApp.
           </h1>
 
           {/* Subheadline */}
           <p className="text-center text-lg mb-12 animate-fade-in">
-            Não é app, nem planilha, nem Notion,<br />
-            <span className="text-sales-green font-bold">é inteligência artificial de ponta.</span>
+            No es app, ni hoja de cálculo, ni Notion,<br />
+            <span className="text-sales-green font-bold">es inteligencia artificial de vanguardia.</span>
           </p>
 
           {/* Cards - Updated to 2x2 grid */}
           <div className="grid grid-cols-2 gap-5 w-full mb-12">
-            <SalesCard title="Para onde vai seu dinheiro?">
+            <SalesCard title="¿A dónde va tu dinero?">
               <p>
-                Você trabalha o mês inteiro, mas no final{' '}
-                <span className="font-bold text-[#254d39]">nunca sabe onde foi parar tudo que ganhou.</span>
+                Trabajas todo el mes, pero al final{' '}
+                <span className="font-bold text-[#254d39]">nunca sabes dónde fue a parar todo lo que ganaste.</span>
               </p>
             </SalesCard>
 
-            <SalesCard title="Sem planilhas ou apps">
+            <SalesCard title="Sin hojas de cálculo ni apps">
               <p>
-                São soluções complicadas que dão preguiça de usar.{' '}
-                <span className="font-bold text-[#254d39]">Aqui você resolve tudo no Whatsapp.</span>
+                Son soluciones complicadas que dan pereza usar.{' '}
+                <span className="font-bold text-[#254d39]">Aquí resuelves todo en WhatsApp.</span>
               </p>
             </SalesCard>
 
-            <SalesCard title="Perdido nas dívidas">
+            <SalesCard title="Perdido en las deudas">
               <p>
-                Não sabe quanto paga de parcela, quanto tempo falta, quem deve,{' '}
-                <span className="font-bold text-[#254d39]">e não tem um plano para pagar.</span>
+                No sabes cuánto pagas de cuota, cuánto tiempo falta, a quién debes,{' '}
+                <span className="font-bold text-[#254d39]">y no tienes un plan para pagar.</span>
               </p>
             </SalesCard>
 
-            <SalesCard title="Pagando mais caro sempre">
+            <SalesCard title="Pagando más caro siempre">
               <p>
-                Você compra por impulso ou não pesquisa antes,{' '}
-                <span className="font-bold">gastando mais e deixando de economizar.</span>
+                Compras por impulso o no investigas antes,{' '}
+                <span className="font-bold">gastando más y dejando de ahorrar.</span>
               </p>
             </SalesCard>
           </div>
 
-          {/* Botão Continuar - with text color black */}
+          {/* Botón Continuar - with text color black */}
           <button onClick={handleContinue} className="btn-continue animate-fade-in">
             Continuar
           </button>

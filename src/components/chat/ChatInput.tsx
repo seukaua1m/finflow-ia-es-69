@@ -16,32 +16,32 @@ const ChatInput = ({
   onInputChange, 
   onSubmit, 
   isDisabled,
-  placeholder = "Exemplo: ifood 44" 
+  placeholder = "Ejemplo: ifood 44" 
 }: ChatInputProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Don't submit if already submitting or if disabled
+    // No enviar si ya está enviando o está deshabilitado
     if (isSubmitting || isDisabled || !inputValue.trim()) {
       return;
     }
     
-    // Set submitting state
+    // Establecer estado de envío
     setIsSubmitting(true);
     
-    // Track user input if there's a value - non-blocking
+    // Rastrear entrada del usuario si hay un valor - no bloqueante
     if (inputValue.trim()) {
-      // We make this non-blocking to speed up response time
+      // Hacemos esto no bloqueante para acelerar el tiempo de respuesta
       trackUserInput(inputValue, 'ChatInput').catch(console.error);
     }
     
     try {
-      // Call the original onSubmit handler
+      // Llamar al manejador onSubmit original
       onSubmit(e);
     } catch (error) {
-      console.error('Error submitting message:', error);
+      console.error('Error al enviar mensaje:', error);
     } finally {
       setIsSubmitting(false);
     }

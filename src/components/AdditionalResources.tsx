@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import ActionButton from './common/ActionButton';
@@ -9,11 +10,11 @@ const AdditionalResources = ({
 }: AdditionalResourcesProps) => {
   return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-6">
-        E Mais Recursos:
+        Y Más Recursos:
       </h2>
       
       <p className="text-center mb-8">
-        Além do que já mostramos <span className="font-bold text-sales-green">também contamos com:</span>
+        Además de lo que ya mostramos <span className="font-bold text-sales-green">también contamos con:</span>
       </p>
       
       {/* Resource Cards Grid */}
@@ -22,10 +23,10 @@ const AdditionalResources = ({
         <div className="bg-sales-mint rounded-lg p-4 flex flex-col">
           <div className="flex items-center mb-2">
             <CheckCircle className="text-sales-green mr-2" size={20} />
-            <h3 className="font-bold text-sales-green">Categorias Automáticas</h3>
+            <h3 className="font-bold text-sales-green">Categorías Automáticas</h3>
           </div>
           <p className="text-sm">
-            Você não precisa criar nada. A IA <span className="font-bold text-sales-green">identifica e organiza</span> todos os seus gastos sozinha.
+            No necesitas crear nada. La IA <span className="font-bold text-sales-green">identifica y organiza</span> todos tus gastos sola.
           </p>
         </div>
         
@@ -33,10 +34,10 @@ const AdditionalResources = ({
         <div className="bg-sales-mint rounded-lg p-4 flex flex-col">
           <div className="flex items-center mb-2">
             <CheckCircle className="text-sales-green mr-2" size={20} />
-            <h3 className="font-bold text-sales-green">Sugestões Inteligentes</h3>
+            <h3 className="font-bold text-sales-green">Sugerencias Inteligentes</h3>
           </div>
           <p className="text-sm">
-            Acompanhe dicas como: <span className="font-bold text-sales-green">"Você está gastando mais em lazer este mês. Fique de olho."</span>
+            Recibe consejos como: <span className="font-bold text-sales-green">"Estás gastando más en ocio este mes. Ten cuidado."</span>
           </p>
         </div>
         
@@ -44,10 +45,10 @@ const AdditionalResources = ({
         <div className="bg-sales-mint rounded-lg p-4 flex flex-col">
           <div className="flex items-center mb-2">
             <CheckCircle className="text-sales-green mr-2" size={20} />
-            <h3 className="font-bold text-sales-green">Análise De Compras</h3>
+            <h3 className="font-bold text-sales-green">Análisis De Compras</h3>
           </div>
           <p className="text-sm">
-            <span className="font-bold">Diga o que quer comprar</span> e a IA analisa seu perfil e te diz: <span className="font-bold text-sales-green">parcelar, esperar ou pagar à vista.</span>
+            <span className="font-bold">Di qué quieres comprar</span> y la IA analiza tu perfil y te dice: <span className="font-bold text-sales-green">pagar en cuotas, esperar o pagar al contado.</span>
           </p>
         </div>
         
@@ -55,22 +56,22 @@ const AdditionalResources = ({
         <div className="bg-sales-mint rounded-lg p-4 flex flex-col">
           <div className="flex items-center mb-2">
             <CheckCircle className="text-sales-green mr-2" size={20} />
-            <h3 className="font-bold text-sales-green">Pare De Só Economizar</h3>
+            <h3 className="font-bold text-sales-green">Deja De Solo Ahorrar</h3>
           </div>
           <p className="text-sm">
-            Participe dos nossos desafios com recompensas <span className="font-bold text-sales-green">onde você pode ganhar até R$ 3.000 / mês.</span>
+            Participa en nuestros desafíos con recompensas <span className="font-bold text-sales-green">donde puedes ganar hasta R$ 3.000 / mes.</span>
           </p>
         </div>
       </div>
       
-      <p className="text-center text-sales-green italic mb-6 font-semibold">e outros recursos...</p>
+      <p className="text-center text-sales-green italic mb-6 font-semibold">y otros recursos...</p>
       
       <p className="text-center mb-4 max-w-md">
-        Nosso diferencial é justamente não ser SÓ uma ferramenta que você vai usar uma vez e esquecer.
+        Nuestro diferencial es justamente no ser SOLO una herramienta que usarás una vez y olvidarás.
       </p>
       
       <p className="text-center mb-8">
-        Não só registrar gastos, mas sim <span className="font-bold text-sales-green">te dar o PASSO A PASSO para você realizar seus objetivos.</span>
+        No solo registrar gastos, sino <span className="font-bold text-sales-green">darte el PASO A PASO para que logres tus objetivos.</span>
       </p>
       
       <div className="w-full max-w-sm">

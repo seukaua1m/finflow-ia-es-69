@@ -11,7 +11,7 @@ const ReminderNotificationSection = () => {
         </div>
         <div>
           <p className="text-lg mb-2">
-            E seja lembrado com antecedência.
+            Y recibe recordatorios con anticipación.
           </p>
         </div>
       </div>
@@ -24,7 +24,7 @@ const ReminderNotificationSection = () => {
             <div className="flex flex-col">
               <div className="text-sm text-left flex items-center">
                 <Lightbulb size={18} className="mr-2 text-yellow-400" />
-                Lembrete: Boleto Carro
+                Recordatorio: Factura Coche
               </div>
               <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                 <span>02:04</span>
@@ -37,7 +37,7 @@ const ReminderNotificationSection = () => {
         <div className="mb-2 flex justify-end">
           <div className="relative py-1.5 px-3 rounded-lg bg-[#005C4B] text-white max-w-[85%]">
             <div className="flex flex-col">
-              <div className="text-sm text-left">paguei já</div>
+              <div className="text-sm text-left">ya pagué</div>
               <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                 <span>02:04</span>
                 <svg 
@@ -63,7 +63,7 @@ const ReminderNotificationSection = () => {
         <div className="mb-2 flex justify-start">
           <div className="relative py-1.5 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%] lg:max-w-[65%]">
             <div className="flex flex-col">
-              <div className="text-sm text-left">Te lembro de novo mês que vem ✅</div>
+              <div className="text-sm text-left">Te recordaré nuevamente el próximo mes ✅</div>
               <div className="text-[10px] text-gray-300 mt-1 flex justify-end items-center">
                 <span>02:04</span>
               </div>

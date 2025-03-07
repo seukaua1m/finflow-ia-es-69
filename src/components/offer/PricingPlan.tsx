@@ -1,3 +1,4 @@
+
 import React from 'react';
 const PricingPlan = () => {
   return <>
@@ -5,7 +6,7 @@ const PricingPlan = () => {
         {/* Promotion tag */}
         <div className="absolute top-4 right-4">
           <div className="bg-[#FFA35B] text-black px-3 py-1 rounded-md font-semibold text-sm">
-            PROMOÇÃO 50% OFF
+            PROMOCIÓN 50% OFF
           </div>
         </div>
         
@@ -19,7 +20,7 @@ const PricingPlan = () => {
         {/* Plan name and price */}
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h3 className="text-2xl font-bold">Plano</h3>
+            <h3 className="text-2xl font-bold">Plan</h3>
             <h2 className="text-3xl font-extrabold">ANUAL</h2>
           </div>
           <div className="text-right">
@@ -28,14 +29,14 @@ const PricingPlan = () => {
               <span className="text-3xl font-bold mr-1">R$ 5</span>
               <span className="text-lg">,70</span>
             </div>
-            <div className="text-sm">ou 57 à vista</div>
+            <div className="text-sm">o 57 al contado</div>
           </div>
         </div>
       </div>
 
       {/* Daily price equivalent */}
       <div className="text-center text-[#254D39] mb-8">
-        <p className="px-0 mt-6 ml-9 mr-9">(equivalente à menos de R$ 0,16 por dia)</p>
+        <p className="px-0 mt-6 ml-9 mr-9">(equivalente a menos de R$ 0,16 por día)</p>
       </div>
     </>;
 };

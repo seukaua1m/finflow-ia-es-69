@@ -15,11 +15,11 @@ const IntroSection = ({ buttonClicked, handleActionClick }: IntroSectionProps) =
       </div>
       <div>
         <p className="text-xl mb-4">
-          Você pode perguntar <span className="text-sales-green font-bold">TUDO SOBRE SUAS FINANÇAS.</span>
+          Puedes preguntar <span className="text-sales-green font-bold">TODO SOBRE TUS FINANZAS.</span>
         </p>
         
         <p className="text-lg mb-8 text-[#254d39] font-semibold">
-          Exemplo: Digamos que você quer ver quanto gastou nos últimos dias:
+          Ejemplo: Digamos que quieres ver cuánto gastaste en los últimos días:
         </p>
         
         {/* Only show button if it hasn't been clicked yet */}
@@ -27,7 +27,7 @@ const IntroSection = ({ buttonClicked, handleActionClick }: IntroSectionProps) =
           <div className="flex justify-center mb-8">
             <ActionButton 
               onClick={handleActionClick} 
-              text="quanto eu gastei nos últimos dias?" 
+              text="¿cuánto gasté en los últimos días?" 
             />
           </div>
         )}

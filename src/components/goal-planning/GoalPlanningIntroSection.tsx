@@ -11,13 +11,13 @@ const GoalPlanningIntroSection = () => {
         </div>
         <div>
           <h2 className="text-[#10372B] text-xl font-medium mb-2">
-            Planejamento de Metas
+            Planificación de Metas
           </h2>
           <p className="text-lg mb-2">
-            Defina uma meta e te levamos até lá.
+            Define una meta y te llevamos hasta ella.
           </p>
           <p className="text-lg mb-2 text-[#10372B] font-medium">
-            Ele planeja, calcula e avisa o que você precisa fazer.
+            Te planifica, calcula y avisa qué necesitas hacer.
           </p>
         </div>
       </div>
@@ -28,7 +28,7 @@ const GoalPlanningIntroSection = () => {
         <div className="flex justify-end animate-fade-in" style={{animationDelay: "0.1s"}}>
           <div className="relative py-2 px-3 rounded-lg bg-[#005C4B] text-white max-w-[85%] md:max-w-[75%]">
             <div className="text-sm">
-              Cria uma meta para viagem em setembro pro Chile, preciso de 10 mil
+              Crea una meta para viaje en septiembre a Chile, necesito 10 mil
             </div>
             <div className="text-[10px] text-gray-300 mt-1 text-right flex items-center justify-end">
               <span>23:52</span>
@@ -41,7 +41,7 @@ const GoalPlanningIntroSection = () => {
         <div className="flex justify-end animate-fade-in" style={{animationDelay: "0.2s"}}>
           <div className="relative py-2 px-3 rounded-lg bg-[#005C4B] text-white max-w-[85%] md:max-w-[75%]">
             <div className="text-sm">
-              Já guardei 2k hoje
+              Ya guardé 2k hoy
             </div>
             <div className="text-[10px] text-gray-300 mt-1 text-right flex items-center justify-end">
               <span>23:52</span>
@@ -54,7 +54,7 @@ const GoalPlanningIntroSection = () => {
         <div className="flex justify-start animate-fade-in" style={{animationDelay: "0.3s"}}>
           <div className="relative py-2 px-3 rounded-lg bg-[#202C33] text-white max-w-[85%] md:max-w-[75%]">
             <div className="text-sm">
-              Criei a meta e já registrei o valor que você guardou hoje.
+              Creé la meta y ya registré el valor que guardaste hoy.
             </div>
             <div className="text-[10px] text-gray-300 mt-1 text-right">
               23:52
@@ -73,7 +73,7 @@ const GoalPlanningIntroSection = () => {
                   <div className="bg-gray-100 p-1 rounded-full mr-2">
                     <Target className="text-red-500" size={20} />
                   </div>
-                  <span className="font-medium text-lg">Nova Meta</span>
+                  <span className="font-medium text-lg">Nueva Meta</span>
                 </div>
                 
                 {/* Improved progress circle */}
@@ -105,7 +105,7 @@ const GoalPlanningIntroSection = () => {
                     {/* Percentage display */}
                     <div className="text-center z-10">
                       <div className="text-4xl font-bold">20%</div>
-                      <div className="text-xs text-gray-500">Da meta</div>
+                      <div className="text-xs text-gray-500">De la meta</div>
                     </div>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ const GoalPlanningIntroSection = () => {
                 {/* Goal details */}
                 <div className="mt-2">
                   <div className="flex items-center mb-1">
-                    <span className="text-md">Viagem Chile Setembro</span>
+                    <span className="text-md">Viaje Chile Septiembre</span>
                     <svg 
                       className="ml-1 w-4 h-4 text-[#10372B]" 
                       viewBox="0 0 24 24" 
