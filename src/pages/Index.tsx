@@ -4,17 +4,12 @@ import SalesCard from '@/components/SalesCard';
 import HowItWorks from '@/components/HowItWorks';
 import AdditionalResources from '@/components/AdditionalResources';
 import OfferSection from '@/components/OfferSection';
-import ChatInput from '@/components/chat/ChatInput';
-import { trackPageView, trackComponentInteraction, trackUserInput, getCurrentFunnelStep, saveFunnelStep } from '@/services/analyticsService';
+import { trackPageView, trackComponentInteraction, getCurrentFunnelStep, saveFunnelStep } from '@/services/analyticsService';
 import { usePageTracking } from '@/hooks/usePageTracking';
-import axios from 'axios';
 
 const Index = () => {
   // Always start at step 1 when the page is loaded/refreshed
   const [currentStep, setCurrentStep] = useState(1);
-  const [inputValue, setInputValue] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [responseMessage, setResponseMessage] = useState('');
   
   usePageTracking(); // Track page views
 
@@ -27,45 +22,6 @@ const Index = () => {
     const funnelProgress = Math.round(currentStep / 4 * 100);
     console.log(`Funnel progress: ${funnelProgress}%`);
   }, [currentStep]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isSubmitting) return;
-
-    setIsSubmitting(true);
-    
-    try {
-      // Send the user input to the OpenAI API
-      const response = await axios.post('https://api.finflow.shop/api/chat/send', { 
-        message: inputValue,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      // Set the response from OpenAI
-      if (response.data && response.data.response) {
-        setResponseMessage(response.data.response);
-      } else {
-        setResponseMessage('Desculpe, não consegui processar sua mensagem.');
-      }
-      
-      // Track the user input
-      trackUserInput(inputValue, 'InitialUserMessage');
-      
-      // Clear the input
-      setInputValue('');
-    } catch (error) {
-      console.error('Error submitting message to OpenAI:', error);
-      setResponseMessage('Ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleContinue = () => {
     setCurrentStep(2);
@@ -134,24 +90,6 @@ const Index = () => {
                 <span className="font-bold">gastando mais e deixando de economizar.</span>
               </p>
             </SalesCard>
-          </div>
-
-          {/* Simple input for user message */}
-          <div className="w-full mb-8">
-            <ChatInput 
-              inputValue={inputValue}
-              onInputChange={handleInputChange}
-              onSubmit={handleSubmit}
-              isDisabled={isSubmitting}
-              placeholder="Digite um gasto, por exemplo: 'cinema 50'"
-            />
-            
-            {/* Display response from OpenAI if available */}
-            {responseMessage && (
-              <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                <p className="text-gray-800">{responseMessage}</p>
-              </div>
-            )}
           </div>
 
           {/* Botão Continuar - with text color black */}

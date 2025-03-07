@@ -11,11 +11,11 @@ const TypingIndicator = () => {
         ></div>
         <div 
           className="typing-dot w-2 h-2 bg-gray-300 rounded-full" 
-          style={{ animationDelay: '300ms' }}
+          style={{ animationDelay: '150ms' }}
         ></div>
         <div 
           className="typing-dot w-2 h-2 bg-gray-300 rounded-full" 
-          style={{ animationDelay: '600ms' }}
+          style={{ animationDelay: '300ms' }}
         ></div>
       </div>
     </div>

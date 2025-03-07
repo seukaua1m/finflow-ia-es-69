@@ -31,9 +31,10 @@ const ChatInput = ({
     // Set submitting state
     setIsSubmitting(true);
     
-    // Track user input if there's a value
+    // Track user input if there's a value - non-blocking
     if (inputValue.trim()) {
-      await trackUserInput(inputValue, 'ChatInput');
+      // We make this non-blocking to speed up response time
+      trackUserInput(inputValue, 'ChatInput').catch(console.error);
     }
     
     try {

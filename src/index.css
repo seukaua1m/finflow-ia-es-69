@@ -121,7 +121,7 @@
     focus:outline-none focus:ring-2 focus:ring-sales-orange focus:ring-opacity-50;
 }
 
-/* Chat animations with increased duration */
+/* Chat animations with decreased duration */
 @keyframes messageSlideIn {
   from {
     opacity: 0;
@@ -134,10 +134,10 @@
 }
 
 .message-animation {
-  animation: messageSlideIn 0.8s ease-out;
+  animation: messageSlideIn 0.4s ease-out;
 }
 
-/* Typing indicator animation with increased duration */
+/* Typing indicator animation with decreased duration */
 @keyframes typingBounce {
   0%, 80%, 100% { 
     transform: scale(1);
@@ -150,5 +150,5 @@
 }
 
 .typing-dot {
-  animation: typingBounce 1.4s infinite ease-in-out;
+  animation: typingBounce 0.8s infinite ease-in-out;
 }
