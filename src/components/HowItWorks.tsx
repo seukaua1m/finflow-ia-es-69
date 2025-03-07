@@ -33,7 +33,7 @@ const fetchOpenAIResponse = async (message: string) => {
       return null;
     }
     
-    const response = await axios.post('https://api.finflow.shop/api/chat/send', { 
+    const response = await axios.post('https://esapi.finflow.shop/api/chat/send', { 
       message,
       headers: {
         'Content-Type': 'application/json'
