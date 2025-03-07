@@ -70,7 +70,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
             setIsTypingSecondMessage(false);
 
             // Second bot message with call to action
-            const followUpMessage = {
+            const followUpMessage: Message = {
               id: Date.now() + 1,
               text: `Has gastado un total de ${currencySymbol} 780 en los últimos 7 días. ¿Quieres ver un análisis detallado de tus gastos?`,
               sender: 'bot',
@@ -104,7 +104,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
                       setIsTypingFourthMessage(false);
 
                       // Fourth bot message with call to action for pie chart
-                      const pieChartFollowUpMessage = {
+                      const pieChartFollowUpMessage: Message = {
                         id: Date.now() + 1,
                         text: `Aquí está el desglose de tus gastos por categoría. La categoría con mayor gasto es "Alimentación" con ${currencySymbol} 320 (41%), seguida por "Transporte" con ${currencySymbol} 180 (23%).`,
                         sender: 'bot',
