@@ -22,11 +22,11 @@ export const useFinancialQuestions = (onContinue: () => void) => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [suggestionButtonClicked, setSuggestionButtonClicked] = useState(false);
   const [showComparisonText, setShowComparisonText] = useState(false);
-  const [currencySymbol, setCurrencySymbol] = useState<string>('R$');
+  const [currencySymbol, setCurrencySymbol] = useState<string>('$');
 
   // Obtener el símbolo de moneda según el país del usuario
   useEffect(() => {
-    const storedCountry = localStorage.getItem('visitor_country') || 'Brasil';
+    const storedCountry = localStorage.getItem('visitor_country') || '';
     setCurrencySymbol(getCurrencySymbol(storedCountry));
   }, []);
 

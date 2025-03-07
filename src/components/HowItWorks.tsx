@@ -57,8 +57,8 @@ const HowItWorks = ({
   const [animationComplete, setAnimationComplete] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [showInput, setShowInput] = useState(true);
-  const [userCountry, setUserCountry] = useState<string>('Brasil');
-  const [currencySymbol, setCurrencySymbol] = useState<string>('R$');
+  const [userCountry, setUserCountry] = useState<string>('');
+  const [currencySymbol, setCurrencySymbol] = useState<string>('$');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Detectar el país del usuario al cargar el componente
@@ -86,12 +86,16 @@ const HowItWorks = ({
           // Establecer el símbolo de moneda según el país
           const symbol = getCurrencySymbol(countryName);
           setCurrencySymbol(symbol);
+        } else {
+          // Si no se puede obtener el país, usar el símbolo por defecto "$"
+          setUserCountry('');
+          setCurrencySymbol('$');
         }
       } catch (error) {
         console.error('Error al detectar el país del usuario:', error);
         // Usar valores predeterminados en caso de error
-        setUserCountry('Brasil');
-        setCurrencySymbol('R$');
+        setUserCountry('');
+        setCurrencySymbol('$');
       }
     };
     

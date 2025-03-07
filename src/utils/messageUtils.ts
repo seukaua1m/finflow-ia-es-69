@@ -12,7 +12,7 @@ export const formatDate = (date = new Date()) => {
 
 // Obtener el símbolo de la moneda según el país
 export const getCurrencySymbol = (country?: string): string => {
-  const defaultCurrency = 'R$'; // Moneda por defecto (Brasil)
+  const defaultCurrency = '$'; // Moneda por defecto (dólar)
   
   if (!country) {
     // Si no tenemos información del país, usamos la moneda por defecto
