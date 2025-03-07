@@ -10,9 +10,9 @@ export const formatDate = (date = new Date()) => {
   return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 };
 
-// Calculate limit as 1.5x the entered value
+// Calculate limit as 1.7x the entered value (changed from 1.5x)
 export const calculateLimit = (price: string | number): number => {
-  return Math.round(Number(price) * 1.5);
+  return Math.round(Number(price) * 1.7);
 };
 
 // Format a date range for the last 7 days
