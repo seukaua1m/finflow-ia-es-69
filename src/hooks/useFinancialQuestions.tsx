@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Message } from '@/types/chat';
 import { 
   createUserMessage, 
@@ -8,6 +8,7 @@ import {
   createPieChartMessage, 
   createPieChartFollowUpMessage 
 } from '@/services/chatService';
+import { getCurrencySymbol } from '@/utils/messageUtils';
 
 export const useFinancialQuestions = (onContinue: () => void) => {
   const [showNextStep, setShowNextStep] = useState(false);
@@ -21,6 +22,13 @@ export const useFinancialQuestions = (onContinue: () => void) => {
   const [buttonClicked, setButtonClicked] = useState(false);
   const [suggestionButtonClicked, setSuggestionButtonClicked] = useState(false);
   const [showComparisonText, setShowComparisonText] = useState(false);
+  const [currencySymbol, setCurrencySymbol] = useState<string>('R$');
+
+  // Obtener el símbolo de moneda según el país del usuario
+  useEffect(() => {
+    const storedCountry = localStorage.getItem('visitor_country') || 'Brasil';
+    setCurrencySymbol(getCurrencySymbol(storedCountry));
+  }, []);
 
   // Handle animation end
   const handleAnimationEnd = () => {
@@ -35,7 +43,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
     setAnimationComplete(false);
 
     // Create user message with button text
-    const buttonText = "quanto eu gastei nos últimos dias?";
+    const buttonText = "¿cuánto he gastado en los últimos días?";
     const userMessage = createUserMessage(buttonText);
 
     // Add user message to chat
@@ -62,12 +70,17 @@ export const useFinancialQuestions = (onContinue: () => void) => {
             setIsTypingSecondMessage(false);
 
             // Second bot message with call to action
-            const followUpMessage = createFollowUpMessage();
+            const followUpMessage = {
+              id: Date.now() + 1,
+              text: `Has gastado un total de ${currencySymbol} 780 en los últimos 7 días. ¿Quieres ver un análisis detallado de tus gastos?`,
+              sender: 'bot',
+              time: '18:15'
+            };
             setMessages(prev => [...prev, followUpMessage]);
 
             // Add user message asking for expense breakdown
             setTimeout(() => {
-              const categoryQuestionMessage = createUserMessage("me mostre a divisão dos meus gastos por categoria");
+              const categoryQuestionMessage = createUserMessage("muéstrame la división de mis gastos por categoría");
               setMessages(prev => [...prev, categoryQuestionMessage]);
 
               // Show typing indicator for the pie chart response
@@ -91,7 +104,12 @@ export const useFinancialQuestions = (onContinue: () => void) => {
                       setIsTypingFourthMessage(false);
 
                       // Fourth bot message with call to action for pie chart
-                      const pieChartFollowUpMessage = createPieChartFollowUpMessage();
+                      const pieChartFollowUpMessage = {
+                        id: Date.now() + 1,
+                        text: `Aquí está el desglose de tus gastos por categoría. La categoría con mayor gasto es "Alimentación" con ${currencySymbol} 320 (41%), seguida por "Transporte" con ${currencySymbol} 180 (23%).`,
+                        sender: 'bot',
+                        time: '18:17'
+                      };
                       setMessages(prev => [...prev, pieChartFollowUpMessage]);
                       setAnimationComplete(true);
 
@@ -113,7 +131,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
     setSuggestionButtonClicked(true);
 
     // Create user message with suggestion text
-    const suggestionText = "O que eu gastei a mais essa semana?";
+    const suggestionText = "¿Qué gasté de más esta semana?";
     const userMessage = createUserMessage(suggestionText);
 
     // Add user message to chat
@@ -130,7 +148,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
         // Bot message with expense comparison
         const comparisonMessage: Message = {
           id: Date.now() + 1,
-          text: `Os gastos aumentaram nesta semana em comparação com a semana passada, totalizando R$100 a mais.\n\nO principal motivo foi a compra de <strong>gás de cozinha, realizada na segunda-feira (20/01), no valor de R$100</strong>, o que não ocorreu na semana anterior.`,
+          text: `Los gastos aumentaron esta semana en comparación con la semana pasada, con un total de ${currencySymbol} 100 adicionales.\n\nLa razón principal fue la compra de <strong>gas para cocina, realizada el lunes (20/01), por valor de ${currencySymbol} 100</strong>, lo que no ocurrió la semana anterior.`,
           sender: 'bot',
           time: '18:19'
         };

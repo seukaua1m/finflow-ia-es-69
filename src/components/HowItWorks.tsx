@@ -8,8 +8,9 @@ import FinancialQuestions from './FinancialQuestions';
 import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
-import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
+import { getCurrentTime, formatDate, calculateLimit, getCurrencySymbol } from '@/utils/messageUtils';
 import axios from 'axios';
+import { trackUserInput } from '@/services/analyticsService';
 
 interface HowItWorksProps {
   onContinue: () => void;
@@ -56,7 +57,46 @@ const HowItWorks = ({
   const [animationComplete, setAnimationComplete] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [showInput, setShowInput] = useState(true);
+  const [userCountry, setUserCountry] = useState<string>('Brasil');
+  const [currencySymbol, setCurrencySymbol] = useState<string>('R$');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Detectar el país del usuario al cargar el componente
+  useEffect(() => {
+    const detectUserCountry = async () => {
+      try {
+        // Intentar obtener el país desde localStorage primero
+        const storedCountry = localStorage.getItem('visitor_country');
+        
+        if (storedCountry) {
+          setUserCountry(storedCountry);
+          setCurrencySymbol(getCurrencySymbol(storedCountry));
+          return;
+        }
+        
+        // Si no está en localStorage, obtenerlo mediante API
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        
+        if (data.country_name) {
+          const countryName = data.country_name;
+          setUserCountry(countryName);
+          localStorage.setItem('visitor_country', countryName);
+          
+          // Establecer el símbolo de moneda según el país
+          const symbol = getCurrencySymbol(countryName);
+          setCurrencySymbol(symbol);
+        }
+      } catch (error) {
+        console.error('Error al detectar el país del usuario:', error);
+        // Usar valores predeterminados en caso de error
+        setUserCountry('Brasil');
+        setCurrencySymbol('R$');
+      }
+    };
+    
+    detectUserCountry();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
@@ -80,6 +120,9 @@ const HowItWorks = ({
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
   
+    // Rastrear la entrada del usuario
+    trackUserInput(inputValue, 'HowItWorks');
+    
     // Ocultar el input temporalmente
     setShowInput(false);
     setAnimationComplete(false);
@@ -115,7 +158,10 @@ const HowItWorks = ({
             // Asegurar que la categoría esté correctamente formateada sin paréntesis extra
             category = rawCategory ? rawCategory.replace(")", "").trim() : category;
   
-            formattedResponse = `${title}\n📌 ${item} (${category})\n💰 ${value}`;
+            // Usar el símbolo de moneda del país del usuario
+            const formattedValue = value.replace(/R\$/, currencySymbol);
+            
+            formattedResponse = `${title}\n📌 ${item} (${category})\n💰 ${formattedValue}`;
             isValidExpense = true;
           }
         }
@@ -140,7 +186,7 @@ const HowItWorks = ({
   
               const reminderMessage: Message = {
                 id: Date.now() + 2,
-                text: `Recordatorio: Estás casi llegando a tu <strong>límite definido de R$ ${calculateLimit(
+                text: `Recordatorio: Estás casi llegando a tu <strong>límite definido de ${currencySymbol} ${calculateLimit(
                   inputValue.split(' ')[1] || '0'
                 )}</strong> por mes con <strong>${category}</strong>.`,
                 sender: 'bot',
@@ -234,7 +280,7 @@ const HowItWorks = ({
               Registra un gasto (real o falso) para probar.
             </p>
             <p className="text-sm text-sales-green italic">
-              No te preocupes por comas, ni por poner "R$", escribe a tu manera.
+              No te preocupes por comas, ni por poner "{currencySymbol}", escribe a tu manera.
             </p>
           </div>
         </div>

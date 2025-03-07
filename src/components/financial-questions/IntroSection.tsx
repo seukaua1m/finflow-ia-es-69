@@ -27,7 +27,7 @@ const IntroSection = ({ buttonClicked, handleActionClick }: IntroSectionProps) =
           <div className="flex justify-center mb-8">
             <ActionButton 
               onClick={handleActionClick} 
-              text="¿cuánto gasté en los últimos días?" 
+              text="¿cuánto he gastado en los últimos días?" 
             />
           </div>
         )}
