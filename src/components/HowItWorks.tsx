@@ -61,85 +61,112 @@ const HowItWorks = ({
     };
   
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
   
     try {
       setIsTyping(true);
       
-      // Simular resposta estática en lugar de API
+      // Call OpenAI API for personalized response
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            {
+              role: 'system',
+              content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110"). Debes responder EXACTAMENTE en este formato:
+
+Gasto añadido
+📌 [ITEM] ([categoría])
+💰 R$ [PRECIO]
+
+Categorías disponibles: alimentación, transporte, ropa, entretenimiento, salud, hogar, otros.
+
+Responde solo con el formato especificado, nada más.`
+            },
+            {
+              role: 'user',
+              content: currentInput
+            }
+          ],
+          temperature: 0.3,
+          max_tokens: 100
+        }),
+      });
+
+      const data = await response.json();
+      const aiResponse = data.choices[0].message.content;
+      
       setTimeout(() => {
         setIsTyping(false);
         
         const currentTime = getCurrentTime();
-        let formattedResponse = '';
-        let isValidExpense = false;
-        let category = "seus gastos";
         
-        // Verificar si la entrada parece un gasto (contiene números)
-        const hasNumbers = /\d/.test(inputValue);
-        const parts = inputValue.split(' ');
-        
-        if (hasNumbers && parts.length >= 2) {
-          const item = parts[0];
-          const price = parts[parts.length - 1].replace(/[^\d]/g, '');
-          
-          if (price && item) {
-            category = "alimentação"; // Categoria padrão
-            formattedResponse = `Gasto adicionado\n📌 ${item} (${category})\n💰 R$ ${price}`;
-            isValidExpense = true;
-          }
-        }
-        
-        if (!isValidExpense) {
-          formattedResponse = "Por favor, informe o item e o valor. Exemplo: 'camisa 110'";
-        }
-        
-        // Mensaje del bot
+        // Bot message with AI response
         const botMessage: Message = {
           id: Date.now() + 1,
-          text: formattedResponse,
+          text: aiResponse,
           sender: 'bot',
           time: currentTime,
-          isGroupMessage: isValidExpense,
+          isGroupMessage: true,
         };
         
         setMessages(prev => [...prev, botMessage]);
         
-        if (isValidExpense) {
-          // Si es un gasto, envía el mensaje del recordatorio de límite
+        // Send second message about the limit
+        setTimeout(() => {
+          setIsTypingSecondMessage(true);
           setTimeout(() => {
-            setIsTypingSecondMessage(true);
+            setIsTypingSecondMessage(false);
+            
+            // Extract price for limit calculation
+            const priceMatch = currentInput.match(/\d+/);
+            const price = priceMatch ? priceMatch[0] : '100';
+            
+            const reminderMessage: Message = {
+              id: Date.now() + 2,
+              text: `Recordatorio: Estás casi alcanzando tu <strong>límite definido de R$ ${calculateLimit(price)}</strong> por mes con <strong>alimentación</strong>.`,
+              sender: 'bot',
+              time: getCurrentTime(),
+            };
+            
+            setMessages(prev => [...prev, reminderMessage]);
+            
             setTimeout(() => {
-              setIsTypingSecondMessage(false);
-              
-              const price = inputValue.split(' ')[1] || '0';
-              const reminderMessage: Message = {
-                id: Date.now() + 2,
-                text: `Lembrete: Você está quase atingindo seu <strong>limite definido de R$ ${calculateLimit(price)}</strong> por mês com <strong>${category}</strong>.`,
-                sender: 'bot',
-                time: getCurrentTime(),
-              };
-              
-              setMessages(prev => [...prev, reminderMessage]);
-              
-              setTimeout(() => {
-                setShowContinueButton(true);
-                setAnimationComplete(true);
-              }, 800);
-            }, 2000);
-          }, 800);
-        } else {
-          setTimeout(() => {
-            setShowInput(true);
-            setAnimationComplete(true);
-          }, 1000);
-        }
+              setShowContinueButton(true);
+              setAnimationComplete(true);
+            }, 800);
+          }, 2000);
+        }, 800);
       }, 2000);
     } catch (error) {
-      console.error('Erro em handleSubmit:', error);
+      console.error('Error en handleSubmit:', error);
       setIsTyping(false);
-      setShowInput(true);
-      setAnimationComplete(true);
+      
+      // Fallback response if API fails
+      setTimeout(() => {
+        const fallbackResponse = `Gasto añadido\n📌 ${currentInput.split(' ')[0]} (otros)\n💰 R$ ${currentInput.split(' ')[1] || '0'}`;
+        
+        const botMessage: Message = {
+          id: Date.now() + 1,
+          text: fallbackResponse,
+          sender: 'bot',
+          time: getCurrentTime(),
+          isGroupMessage: true,
+        };
+        
+        setMessages(prev => [...prev, botMessage]);
+        
+        setTimeout(() => {
+          setShowContinueButton(true);
+          setAnimationComplete(true);
+        }, 1000);
+      }, 2000);
     }
   };
 
@@ -170,17 +197,17 @@ const HowItWorks = ({
   return (
     <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
-        Como Funciona?
+        ¿Cómo Funciona?
       </h2>
 
       <p className="text-center mb-8 text-lg">
-        Um assistente financeiro <span className="font-bold py-0 px-0 mx-0 my-0 width-8 text-[#254d39]">no seu WhatsApp</span>,{' '}
-        disponível 24h para ser seu <span className="font-bold text-[#254d39]">controle financeiro interativo</span>.
+        Un asistente financiero <span className="font-bold py-0 px-0 mx-0 my-0 width-8 text-[#254d39]">en tu WhatsApp</span>,{' '}
+        disponible 24h para ser tu <span className="font-bold text-[#254d39]">control financiero interactivo</span>.
       </p>
 
       <div className="flex justify-center mb-10">
         <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 mx-0 px-[14px] my-0 py-[4px]">
-          Demonstração
+          Demostración
         </button>
       </div>
 
@@ -191,13 +218,13 @@ const HowItWorks = ({
           </div>
           <div>
             <p className="text-lg mb-2">
-              Escreva o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
+              Escribe lo que compraste y cuánto costó, por ejemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
             </p>
             <p className="text-lg mb-4 text-sales-green">
-              Registre um gasto (real ou falso) para testar.
+              Registra un gasto (real o falso) para probar.
             </p>
             <p className="text-sm text-sales-green italic">
-              Não se preocupe com vírgulas, nem em colocar "R$", escreva do seu jeito.
+              No te preocupes por comas, ni por poner "R$", escribe a tu manera.
             </p>
           </div>
         </div>
@@ -225,7 +252,8 @@ const HowItWorks = ({
               inputValue={inputValue} 
               onInputChange={handleInputChange} 
               onSubmit={handleSubmit} 
-              isDisabled={!animationComplete} 
+              isDisabled={!animationComplete}
+              placeholder="Ejemplo: camisa 110"
             />
           )
         )}
