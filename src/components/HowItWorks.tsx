@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -79,16 +78,26 @@ const HowItWorks = ({
           messages: [
             {
               role: 'system',
-              content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110"). Debes responder EXACTAMENTE en este formato:
+              content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110").
+
+Analiza cuidadosamente el item y categorízalo correctamente según estas categorías:
+- alimentación: comida, restaurantes, delivery, supermercado, bebidas, snacks
+- transporte: uber, taxi, gasolina, bus, metro, estacionamiento, peajes
+- ropa: camisas, pantalones, zapatos, ropa interior, accesorios de vestir
+- entretenimiento: cine, conciertos, juegos, streaming, salidas nocturnas
+- salud: medicinas, consultas médicas, gimnasio, productos de cuidado personal
+- hogar: productos de limpieza, decoración, muebles, electrodomésticos
+- educación: cursos, libros, materiales de estudio
+- viajes: hoteles, vuelos, tours, equipaje
+- otros: gastos que no encajan en las categorías anteriores
+
+Debes responder EXACTAMENTE en este formato:
 
 Gasto añadido
 📌 [ITEM] ([categoría])
 💰 $ [PRECIO]
 
-Categorías disponibles: alimentación, transporte, ropa, entretenimiento, salud, hogar, otros.
-Define libremente la categoría más apropiada para el item.
 Usa SIEMPRE el símbolo $ (dólar) para el precio.
-
 Responde solo con el formato especificado, nada más.`
             },
             {
@@ -101,8 +110,12 @@ Responde solo con el formato especificado, nada más.`
         }),
       });
 
+      if (!response.ok) {
+        throw new Error('Error en la respuesta de la API');
+      }
+
       const data = await response.json();
-      const aiResponse = data.choices[0].message.content;
+      const aiResponse = data.choices?.[0]?.message?.content || '';
       
       setTimeout(() => {
         setIsTyping(false);
@@ -137,7 +150,7 @@ Responde solo con el formato especificado, nada más.`
             
             const reminderMessage: Message = {
               id: Date.now() + 2,
-              text: `Você está quase chegando no seu <strong>limite definido de $ ${limitValue}</strong> por mês com <strong>${category}</strong>.`,
+              text: `Estás cerca de alcanzar tu <strong>límite definido de $ ${limitValue}</strong> por mes en <strong>${category}</strong>.`,
               sender: 'bot',
               time: getCurrentTime(),
             };
@@ -176,7 +189,7 @@ Responde solo con el formato especificado, nada más.`
           
           const reminderMessage: Message = {
             id: Date.now() + 2,
-            text: `Você está quase chegando no seu <strong>limite definido de $ ${limitValue}</strong> por mês com <strong>outros</strong>.`,
+            text: `Estás cerca de alcanzar tu <strong>límite definido de $ ${limitValue}</strong> por mes en <strong>otros</strong>.`,
             sender: 'bot',
             time: getCurrentTime(),
           };
