@@ -35,7 +35,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
     setAnimationComplete(false);
 
     // Create user message with button text
-    const buttonText = "¿cuánto gasté en los últimos días?";
+    const buttonText = "quanto eu gastei nos últimos dias?";
     const userMessage = createUserMessage(buttonText);
 
     // Add user message to chat
@@ -67,7 +67,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
 
             // Add user message asking for expense breakdown
             setTimeout(() => {
-              const categoryQuestionMessage = createUserMessage("muéstrame la división de mis gastos por categoría");
+              const categoryQuestionMessage = createUserMessage("me mostre a divisão dos meus gastos por categoria");
               setMessages(prev => [...prev, categoryQuestionMessage]);
 
               // Show typing indicator for the pie chart response
@@ -113,7 +113,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
     setSuggestionButtonClicked(true);
 
     // Create user message with suggestion text
-    const suggestionText = "¿Qué gasté de más esta semana?";
+    const suggestionText = "O que eu gastei a mais essa semana?";
     const userMessage = createUserMessage(suggestionText);
 
     // Add user message to chat
@@ -130,7 +130,7 @@ export const useFinancialQuestions = (onContinue: () => void) => {
         // Bot message with expense comparison
         const comparisonMessage: Message = {
           id: Date.now() + 1,
-          text: `Los gastos aumentaron esta semana en comparación con la semana pasada, totalizando $ 100 más.\n\nEl principal motivo fue la compra de <strong>gas de cocina, realizada el lunes (20/01), por valor de $ 100</strong>, que no ocurrió la semana anterior.`,
+          text: `Os gastos aumentaram nesta semana em comparação com a semana passada, totalizando R$100 a mais.\n\nO principal motivo foi a compra de <strong>gás de cozinha, realizada na segunda-feira (20/01), no valor de R$100</strong>, o que não ocorreu na semana anterior.`,
           sender: 'bot',
           time: '18:19'
         };
