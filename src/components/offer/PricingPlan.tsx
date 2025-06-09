@@ -24,19 +24,19 @@ const PricingPlan = () => {
             <h2 className="text-3xl font-extrabold">ANUAL</h2>
           </div>
           <div className="text-right">
-            <div className="text-lg">12x de</div>
+            <div className="text-lg">Solo</div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-bold mr-1">R$ 5</span>
-              <span className="text-lg">,70</span>
+              <span className="text-3xl font-bold mr-1">$9</span>
+              <span className="text-lg">,00</span>
             </div>
-            <div className="text-sm">o 57 al contado</div>
+            <div className="text-sm">al contado</div>
           </div>
         </div>
       </div>
 
       {/* Daily price equivalent */}
       <div className="text-center text-[#254D39] mb-8">
-        <p className="px-0 mt-6 ml-9 mr-9">(equivalente a menos de R$ 0,16 por día)</p>
+        <p className="px-0 mt-6 ml-9 mr-9">(equivalente a menos de $0,30 por día)</p>
       </div>
     </>;
 };
