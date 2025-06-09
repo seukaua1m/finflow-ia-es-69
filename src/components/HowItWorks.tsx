@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -80,16 +81,23 @@ const HowItWorks = ({
               role: 'system',
               content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110").
 
-Analiza cuidadosamente el item y categorízalo correctamente según estas categorías:
-- alimentación: comida, restaurantes, delivery, supermercado, bebidas, snacks
-- transporte: uber, taxi, gasolina, bus, metro, estacionamiento, peajes
-- ropa: camisas, pantalones, zapatos, ropa interior, accesorios de vestir
-- entretenimiento: cine, conciertos, juegos, streaming, salidas nocturnas
-- salud: medicinas, consultas médicas, gimnasio, productos de cuidado personal
-- hogar: productos de limpieza, decoración, muebles, electrodomésticos
-- educación: cursos, libros, materiales de estudio
-- viajes: hoteles, vuelos, tours, equipaje
-- otros: gastos que no encajan en las categorías anteriores
+Analiza cuidadosamente el item y categorízalo correctamente según estas categorías específicas:
+
+- alimentación: comida, restaurantes, delivery, supermercado, bebidas, snacks, café, pan, frutas, verduras, carne, pescado, lácteos, dulces
+- transporte: uber, taxi, bus, metro, gasolina, combustible, estacionamiento, peajes, viajes en auto, boleto de ómnibus
+- ropa: camisa, pantalón, zapatos, vestido, jean, remera, ropa interior, medias, abrigo, chaqueta, accesorios de vestir
+- entretenimiento: cine, conciertos, juegos, streaming, netflix, spotify, salidas nocturnas, bar, discoteca, teatro
+- salud: medicinas, farmacia, consulta médica, dentista, gimnasio, productos de cuidado personal, shampoo, jabón
+- hogar: productos de limpieza, decoración, muebles, electrodomésticos, utensilios de cocina, reparaciones
+- educación: cursos, libros, materiales de estudio, universidad, colegio, capacitación
+- viajes: hoteles, vuelos, tours, equipaje, turismo, hospedaje
+- otros: gastos que no encajan claramente en las categorías anteriores
+
+IMPORTANTE: Analiza cada palabra del item para determinar la categoría correcta. Por ejemplo:
+- "camisa" = ropa
+- "uber" = transporte  
+- "pizza" = alimentación
+- "cine" = entretenimiento
 
 Debes responder EXACTAMENTE en este formato:
 
@@ -105,7 +113,7 @@ Responde solo con el formato especificado, nada más.`
               content: currentInput
             }
           ],
-          temperature: 0.3,
+          temperature: 0.1,
           max_tokens: 100
         }),
       });
