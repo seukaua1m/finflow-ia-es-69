@@ -282,22 +282,6 @@ Responde solo con el formato especificado, nada más.`
       </div>
     </div>
   );
-
-  const handleContinue = () => {
-    setCurrentStep(2);
-  };
-
-  const handleFinancialQuestionsContinue = () => {
-    setCurrentStep(3);
-  };
-
-  const handleReminderDemoContinue = () => {
-    setCurrentStep(4);
-  };
-
-  const handleGoalPlanningDemoContinue = () => {
-    onContinue();
-  };
 };
 
 export default HowItWorks;
