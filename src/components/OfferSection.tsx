@@ -6,13 +6,14 @@ import TestimonialCarousel from './offer/TestimonialCarousel';
 import CountdownTimer from './offer/CountdownTimer';
 import PricingPlan from './offer/PricingPlan';
 import { testimonialImages } from './offer/testimonialData';
+
 interface OfferSectionProps {
   onContinue: () => void;
 }
-const OfferSection = ({
-  onContinue
-}: OfferSectionProps) => {
-  return <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
+
+const OfferSection = ({ onContinue }: OfferSectionProps) => {
+  return (
+    <div className="w-full max-w-3xl px-4 py-12 sm:py-16 flex flex-col items-center bg-white">
       {/* Main Headline */}
       <h2 className="text-sales-green text-3xl font-bold text-center mb-2">
         Oferta Por
@@ -101,10 +102,10 @@ const OfferSection = ({
 
       {/* Sign up button */}
       <Button
-          onClick={() => window.location.href = "https://pay.kiwify.com.br/afzxczS"}
-          className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]"
+        onClick={() => window.open("https://pay.kiwify.com/afzxczS", "_blank")}
+        className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]"
       >
-          Quiero suscribirme
+        Quiero suscribirme
       </Button>
 
       {/* After signing up text */}
@@ -120,6 +121,8 @@ const OfferSection = ({
         <span>🔒</span>
         <span className="ml-2">Pago Seguro</span>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default OfferSection;
