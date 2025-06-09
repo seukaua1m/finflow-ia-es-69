@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -9,6 +8,7 @@ import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
 import { getCurrentTime, calculateLimit } from '@/utils/messageUtils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface HowItWorksProps {
   onContinue: () => void;
@@ -49,7 +49,6 @@ const HowItWorks = ({
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
   
-    // Ocultar o input temporalmente
     setShowInput(false);
     setAnimationComplete(false);
   
@@ -67,78 +66,22 @@ const HowItWorks = ({
     try {
       setIsTyping(true);
       
-      // Call OpenAI API for personalized response
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110").
-
-Analiza cuidadosamente el item y categorízalo según estas categorías específicas:
-
-ALIMENTACIÓN: comida, pizza, hamburguesa, sandwich, café, bebidas, gaseosa, agua, jugo, cerveza, vino, restaurant, delivery, supermercado, snacks, dulces, pan, leche, huevos, carne, pollo, pescado, verduras, frutas
-
-TRANSPORTE: uber, taxi, gasolina, combustible, bus, metro, tren, estacionamiento, peajes, pasaje, boleto, viaje en auto
-
-ROPA: camisa, pantalón, zapatos, zapatillas, vestido, falda, chaqueta, abrigo, ropa interior, calcetines, medias, sombrero, gorra, bolso, cartera, accesorios
-
-ENTRETENIMIENTO: cine, película, concierto, juego, videojuego, streaming, netflix, spotify, salida nocturna, bar, discoteca, teatro, museo
-
-SALUD: medicina, medicamento, consulta médica, doctor, dentista, gimnasio, productos de cuidado personal, shampoo, jabón, crema
-
-HOGAR: productos de limpieza, detergente, decoración, muebles, electrodomésticos, cocina, baño, dormitorio
-
-EDUCACIÓN: curso, libro, materiales de estudio, universidad, colegio, clases
-
-VIAJES: hotel, vuelo, avión, tour, equipaje, hospedaje, turismo
-
-OTROS: solo para gastos que realmente no encajan en ninguna categoría anterior
-
-EJEMPLOS:
-- "camisa 50" → ropa
-- "pizza 25" → alimentación  
-- "uber 15" → transporte
-- "netflix 12" → entretenimiento
-
-Debes responder EXACTAMENTE en este formato:
-
-Gasto añadido
-📌 [ITEM] ([categoría])
-💰 $ [PRECIO]
-
-Usa SIEMPRE el símbolo $ (dólar) para el precio.
-Responde solo con el formato especificado, nada más.`
-            },
-            {
-              role: 'user',
-              content: currentInput
-            }
-          ],
-          temperature: 0.1,
-          max_tokens: 100
-        }),
+      // Call our edge function instead of OpenAI directly
+      const { data, error } = await supabase.functions.invoke('categorize-expense', {
+        body: { input: currentInput }
       });
 
-      if (!response.ok) {
-        throw new Error('Error en la respuesta de la API');
+      if (error) {
+        throw new Error('Error en la función de categorización');
       }
 
-      const data = await response.json();
-      const aiResponse = data.choices?.[0]?.message?.content || '';
+      const aiResponse = data?.result || '';
       
       setTimeout(() => {
         setIsTyping(false);
         
         const currentTime = getCurrentTime();
         
-        // Bot message with AI response
         const botMessage: Message = {
           id: Date.now() + 1,
           text: aiResponse,
@@ -149,18 +92,15 @@ Responde solo con el formato especificado, nada más.`
         
         setMessages(prev => [...prev, botMessage]);
         
-        // Send second message about the limit
         setTimeout(() => {
           setIsTypingSecondMessage(true);
           setTimeout(() => {
             setIsTypingSecondMessage(false);
             
-            // Extract price and category for limit calculation
             const priceMatch = currentInput.match(/\d+/);
             const price = priceMatch ? priceMatch[0] : '100';
             const limitValue = Math.round(Number(price) * 1.5);
             
-            // Extract category from AI response
             const categoryMatch = aiResponse.match(/\(([^)]+)\)/);
             const category = categoryMatch ? categoryMatch[1] : 'alimentación';
             
@@ -189,15 +129,14 @@ Responde solo con el formato especificado, nada más.`
         const item = currentInput.split(' ')[0] || 'item';
         const price = currentInput.split(' ')[1] || '0';
         
-        // Simple categorization for fallback
         let category = 'otros';
         const itemLower = item.toLowerCase();
         
-        if (['pizza', 'hamburguesa', 'comida', 'café', 'bebida'].some(word => itemLower.includes(word))) {
+        if (['pizza', 'hamburguesa', 'comida', 'café', 'bebida', 'ifood', 'rappi'].some(word => itemLower.includes(word))) {
           category = 'alimentación';
         } else if (['camisa', 'pantalón', 'zapatos', 'ropa'].some(word => itemLower.includes(word))) {
           category = 'ropa';
-        } else if (['uber', 'taxi', 'gasolina', 'bus'].some(word => itemLower.includes(word))) {
+        } else if (['uber', 'taxi', 'gasolina', 'bus', '99'].some(word => itemLower.includes(word))) {
           category = 'transporte';
         }
         
