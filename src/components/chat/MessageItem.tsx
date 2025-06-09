@@ -24,7 +24,12 @@ const MessageItem = ({
       const descripcion = itemDetails[0].trim();
       const valor = itemDetails[1].trim();
       
-      const today = new Date().toLocaleDateString('es-ES');
+      // Format date as DD/MM/YYYY with leading zeros
+      const today = new Date();
+      const day = today.getDate().toString().padStart(2, '0');
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');
+      const year = today.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
   
       return (
         <>
@@ -32,7 +37,7 @@ const MessageItem = ({
           <div>📌 {descripcion}</div>
           <div className="font-bold">💰 <strong>{valor}</strong></div>
           <br />
-          <div>{today}</div> 
+          <div>{formattedDate}</div> 
         </>
       );
     }

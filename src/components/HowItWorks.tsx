@@ -83,9 +83,11 @@ const HowItWorks = ({
 
 Gasto añadido
 📌 [ITEM] ([categoría])
-💰 R$ [PRECIO]
+💰 $ [PRECIO]
 
 Categorías disponibles: alimentación, transporte, ropa, entretenimiento, salud, hogar, otros.
+Define libremente la categoría más apropiada para el item.
+Usa SIEMPRE el símbolo $ (dólar) para el precio.
 
 Responde solo con el formato especificado, nada más.`
             },
@@ -124,13 +126,18 @@ Responde solo con el formato especificado, nada más.`
           setTimeout(() => {
             setIsTypingSecondMessage(false);
             
-            // Extract price for limit calculation
+            // Extract price and category for limit calculation
             const priceMatch = currentInput.match(/\d+/);
             const price = priceMatch ? priceMatch[0] : '100';
+            const limitValue = Math.round(Number(price) * 1.5);
+            
+            // Extract category from AI response
+            const categoryMatch = aiResponse.match(/\(([^)]+)\)/);
+            const category = categoryMatch ? categoryMatch[1] : 'alimentación';
             
             const reminderMessage: Message = {
               id: Date.now() + 2,
-              text: `Recordatorio: Estás casi alcanzando tu <strong>límite definido de R$ ${calculateLimit(price)}</strong> por mes con <strong>alimentación</strong>.`,
+              text: `Você está quase chegando no seu <strong>limite definido de $ ${limitValue}</strong> por mês com <strong>${category}</strong>.`,
               sender: 'bot',
               time: getCurrentTime(),
             };
@@ -150,7 +157,7 @@ Responde solo con el formato especificado, nada más.`
       
       // Fallback response if API fails
       setTimeout(() => {
-        const fallbackResponse = `Gasto añadido\n📌 ${currentInput.split(' ')[0]} (otros)\n💰 R$ ${currentInput.split(' ')[1] || '0'}`;
+        const fallbackResponse = `Gasto añadido\n📌 ${currentInput.split(' ')[0]} (otros)\n💰 $ ${currentInput.split(' ')[1] || '0'}`;
         
         const botMessage: Message = {
           id: Date.now() + 1,
@@ -163,8 +170,23 @@ Responde solo con el formato especificado, nada más.`
         setMessages(prev => [...prev, botMessage]);
         
         setTimeout(() => {
-          setShowContinueButton(true);
-          setAnimationComplete(true);
+          const priceMatch = currentInput.match(/\d+/);
+          const price = priceMatch ? priceMatch[0] : '100';
+          const limitValue = Math.round(Number(price) * 1.5);
+          
+          const reminderMessage: Message = {
+            id: Date.now() + 2,
+            text: `Você está quase chegando no seu <strong>limite definido de $ ${limitValue}</strong> por mês com <strong>outros</strong>.`,
+            sender: 'bot',
+            time: getCurrentTime(),
+          };
+          
+          setMessages(prev => [...prev, reminderMessage]);
+          
+          setTimeout(() => {
+            setShowContinueButton(true);
+            setAnimationComplete(true);
+          }, 1000);
         }, 1000);
       }, 2000);
     }
@@ -224,7 +246,7 @@ Responde solo con el formato especificado, nada más.`
               Registra un gasto (real o falso) para probar.
             </p>
             <p className="text-sm text-sales-green italic">
-              No te preocupes por comas, ni por poner "R$", escribe a tu manera.
+              No te preocupes por comas, ni por poner "$", escribe a tu manera.
             </p>
           </div>
         </div>
@@ -260,6 +282,22 @@ Responde solo con el formato especificado, nada más.`
       </div>
     </div>
   );
+
+  const handleContinue = () => {
+    setCurrentStep(2);
+  };
+
+  const handleFinancialQuestionsContinue = () => {
+    setCurrentStep(3);
+  };
+
+  const handleReminderDemoContinue = () => {
+    setCurrentStep(4);
+  };
+
+  const handleGoalPlanningDemoContinue = () => {
+    onContinue();
+  };
 };
 
 export default HowItWorks;
