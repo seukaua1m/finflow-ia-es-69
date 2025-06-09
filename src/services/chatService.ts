@@ -4,7 +4,7 @@ import { getCurrentTime, formatDate } from '@/utils/messageUtils';
 
 // Function to get the last 7 days as array of weekday abbreviations
 const getLast7DaysLabels = () => {
-  const days = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  const days = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'];
   const result = [];
   
   for (let i = 6; i >= 0; i--) {
@@ -26,7 +26,7 @@ const getLast7DaysDateRange = () => {
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
   };
   
-  return `${formatDay(startDate)} à ${formatDay(endDate)}`;
+  return `${formatDay(startDate)} a ${formatDay(endDate)}`;
 };
 
 // Chart data for the last 7 days
@@ -47,11 +47,11 @@ export const getExpenseChartData = () => {
 
 // Pie chart data for expense categories
 export const getExpenseCategoryData = () => [
-  { name: 'Contas Fixas', value: 229, percentage: '36%', color: '#FFA959' },
-  { name: 'Jantar fora', value: 146, percentage: '23%', color: '#FFD059' },
+  { name: 'Gastos Fijos', value: 229, percentage: '36%', color: '#FFA959' },
+  { name: 'Cenas Fuera', value: 146, percentage: '23%', color: '#FFD059' },
   { name: 'Transporte', value: 103, percentage: '16%', color: '#5B8DEF' },
-  { name: 'Alimentação', value: 87, percentage: '14%', color: '#2FA179' },
-  { name: 'Lazer', value: 67, percentage: '11%', color: '#7E69AB' }
+  { name: 'Alimentación', value: 87, percentage: '14%', color: '#2FA179' },
+  { name: 'Ocio', value: 67, percentage: '11%', color: '#7E69AB' }
 ];
 
 export const createUserMessage = (text: string): Message => ({
@@ -68,10 +68,10 @@ export const createChartMessage = (): Message => {
   return {
     id: Date.now() + 1,
     text: `<chart>
-      <title>Últimos 7 dias</title>
-      <subtitle>R$ 632,00 - ${dateRange}</subtitle>
+      <title>Últimos 7 días</title>
+      <subtitle>$ 632,00 - ${dateRange}</subtitle>
       <data>${JSON.stringify(chartData)}</data>
-      <footer>↗ Seus gastos aumentaram em 20% essa semana</footer>
+      <footer>↗ Tus gastos aumentaron en 20% esta semana</footer>
     </chart>`,
     sender: 'bot',
     time: getCurrentTime(),
@@ -86,10 +86,10 @@ export const createPieChartMessage = (): Message => {
   return {
     id: Date.now() + 1,
     text: `<chart>
-      <title>Divisão de gastos</title>
+      <title>División de gastos</title>
       <subtitle>${dateRange}</subtitle>
       <data>${JSON.stringify(pieChartData)}</data>
-      <footer>Contas Fixas é sua maior categoria de gastos</footer>
+      <footer>Gastos Fijos es tu mayor categoría de gastos</footer>
     </chart>`,
     sender: 'bot',
     time: getCurrentTime(),
@@ -100,14 +100,14 @@ export const createPieChartMessage = (): Message => {
 
 export const createFollowUpMessage = (): Message => ({
   id: Date.now() + 2,
-  text: 'Segue gráfico dos seus gastos dos últimos 7 dias 👆',
+  text: 'Aquí tienes el gráfico de tus gastos de los últimos 7 días 👆',
   sender: 'bot',
   time: getCurrentTime()
 });
 
 export const createPieChartFollowUpMessage = (): Message => ({
   id: Date.now() + 2,
-  text: 'Segue o gráfico da divisão dos seus gastos por categoria 👆',
+  text: 'Aquí tienes el gráfico de la división de tus gastos por categoría 👆',
   sender: 'bot',
   time: getCurrentTime()
 });
