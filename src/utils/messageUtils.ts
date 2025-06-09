@@ -1,5 +1,5 @@
 
-// Función para obtener la hora actual en formato HH:MM
+// Função para obter a hora atual em formato HH:MM
 export const getCurrentTime = () => {
   const now = new Date();
   return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;

@@ -8,42 +8,11 @@ import FinancialQuestions from './FinancialQuestions';
 import ReminderDemo from './ReminderDemo';
 import GoalPlanningDemo from './GoalPlanningDemo';
 import { Message } from '@/types/chat';
-import { getCurrentTime, formatDate, calculateLimit } from '@/utils/messageUtils';
-import axios from 'axios';
+import { getCurrentTime, calculateLimit } from '@/utils/messageUtils';
 
 interface HowItWorksProps {
   onContinue: () => void;
 }
-
-// Lista de dominios permitidos para solicitudes API
-const ALLOWED_DOMAINS = ['br.finflow.shop', 'en.finflow.shop', 'es.finflow.shop'];
-
-const fetchOpenAIResponse = async (message: string) => {
-  try {
-    // Verificar si el dominio actual está permitido
-    const currentDomain = window.location.hostname;
-    const isDomainAllowed = ALLOWED_DOMAINS.includes(currentDomain);
-    
-    // Permitir desarrollo local
-    const isLocalhost = currentDomain === 'localhost' || currentDomain === '127.0.0.1';
-    
-    if (!isDomainAllowed && !isLocalhost) {
-      console.error('Dominio no permitido para solicitudes API:', currentDomain);
-      return null;
-    }
-    
-    const response = await axios.post('https://esapi.finflow.shop/api/chat/send', { 
-      message,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener respuesta de OpenAI:', error);
-    return null;
-  }
-};
 
 const HowItWorks = ({
   onContinue
@@ -80,7 +49,7 @@ const HowItWorks = ({
     e.preventDefault();
     if (!inputValue.trim() || !animationComplete) return;
   
-    // Ocultar el input temporalmente
+    // Ocultar o input temporalmente
     setShowInput(false);
     setAnimationComplete(false);
   
@@ -96,30 +65,35 @@ const HowItWorks = ({
   
     try {
       setIsTyping(true);
-      const apiResponse = await fetchOpenAIResponse(inputValue);
-      setIsTyping(false);
-  
-      if (apiResponse) {
+      
+      // Simular resposta estática en lugar de API
+      setTimeout(() => {
+        setIsTyping(false);
+        
         const currentTime = getCurrentTime();
-        let formattedResponse = apiResponse.response; // Mantener la respuesta original
+        let formattedResponse = '';
         let isValidExpense = false;
-        let category = "sus gastos"; // Categoría predeterminada si no se detecta
-  
-        // Verificar si la respuesta sigue el formato de un gasto
-        if (typeof apiResponse === 'object' && apiResponse.response) {
-          const parts = apiResponse.response.split('\n');
-          if (parts.length >= 3 && parts[0].toLowerCase().includes("gasto agregado")) {
-            const [title, description, value] = parts;
-            const [item, rawCategory] = description.split(' (');
-  
-            // Asegurar que la categoría esté correctamente formateada sin paréntesis extra
-            category = rawCategory ? rawCategory.replace(")", "").trim() : category;
-  
-            formattedResponse = `${title}\n📌 ${item} (${category})\n💰 ${value}`;
+        let category = "seus gastos";
+        
+        // Verificar si la entrada parece un gasto (contiene números)
+        const hasNumbers = /\d/.test(inputValue);
+        const parts = inputValue.split(' ');
+        
+        if (hasNumbers && parts.length >= 2) {
+          const item = parts[0];
+          const price = parts[parts.length - 1].replace(/[^\d]/g, '');
+          
+          if (price && item) {
+            category = "alimentação"; // Categoria padrão
+            formattedResponse = `Gasto adicionado\n📌 ${item} (${category})\n💰 R$ ${price}`;
             isValidExpense = true;
           }
         }
-  
+        
+        if (!isValidExpense) {
+          formattedResponse = "Por favor, informe o item e o valor. Exemplo: 'camisa 110'";
+        }
+        
         // Mensaje del bot
         const botMessage: Message = {
           id: Date.now() + 1,
@@ -128,27 +102,26 @@ const HowItWorks = ({
           time: currentTime,
           isGroupMessage: isValidExpense,
         };
-  
+        
         setMessages(prev => [...prev, botMessage]);
-  
+        
         if (isValidExpense) {
-          // Si es un gasto, envía el mensaje del recordatorio de límite con la categoría correcta
+          // Si es un gasto, envía el mensaje del recordatorio de límite
           setTimeout(() => {
             setIsTypingSecondMessage(true);
             setTimeout(() => {
               setIsTypingSecondMessage(false);
-  
+              
+              const price = inputValue.split(' ')[1] || '0';
               const reminderMessage: Message = {
                 id: Date.now() + 2,
-                text: `Recordatorio: Estás casi llegando a tu <strong>límite definido de R$ ${calculateLimit(
-                  inputValue.split(' ')[1] || '0'
-                )}</strong> por mes con <strong>${category}</strong>.`,
+                text: `Lembrete: Você está quase atingindo seu <strong>limite definido de R$ ${calculateLimit(price)}</strong> por mês com <strong>${category}</strong>.`,
                 sender: 'bot',
                 time: getCurrentTime(),
               };
-  
+              
               setMessages(prev => [...prev, reminderMessage]);
-  
+              
               setTimeout(() => {
                 setShowContinueButton(true);
                 setAnimationComplete(true);
@@ -156,29 +129,19 @@ const HowItWorks = ({
             }, 2000);
           }, 800);
         } else {
-          // Si no es un gasto, envía el mensaje de la API y luego "Por favor, inténtalo de nuevo"
           setTimeout(() => {
-            const errorMessage: Message = {
-              id: Date.now() + 2,
-              text: "Por favor, inténtalo de nuevo.",
-              sender: 'bot',
-              time: getCurrentTime(),
-            };
-  
-            setMessages(prev => [...prev, errorMessage]);
-            setShowInput(true); // Mostrar input para nuevo intento
+            setShowInput(true);
             setAnimationComplete(true);
           }, 1000);
         }
-      }
+      }, 2000);
     } catch (error) {
-      console.error('Error en handleSubmit:', error);
+      console.error('Erro em handleSubmit:', error);
       setIsTyping(false);
       setShowInput(true);
       setAnimationComplete(true);
     }
   };
-  
 
   const handleContinue = () => {
     setCurrentStep(2);
@@ -207,17 +170,17 @@ const HowItWorks = ({
   return (
     <div className="w-full max-w-3xl bg-white px-4 py-12">
       <h2 className="text-sales-green text-3xl font-bold text-center mb-8">
-        ¿Cómo Funciona?
+        Como Funciona?
       </h2>
 
       <p className="text-center mb-8 text-lg">
-        Un asistente financiero <span className="font-bold py-0 px-0 mx-0 my-0 width-8 text-[#254d39]">en tu WhatsApp</span>,{' '}
-        disponible 24h para ser tu <span className="font-bold text-[#254d39]">control financiero interactivo</span>.
+        Um assistente financeiro <span className="font-bold py-0 px-0 mx-0 my-0 width-8 text-[#254d39]">no seu WhatsApp</span>,{' '}
+        disponível 24h para ser seu <span className="font-bold text-[#254d39]">controle financeiro interativo</span>.
       </p>
 
       <div className="flex justify-center mb-10">
         <button className="bg-sales-orange font-medium rounded-full transition-all duration-300 hover:bg-opacity-90 text-slate-950 mx-0 px-[14px] my-0 py-[4px]">
-          Demostración
+          Demonstração
         </button>
       </div>
 
@@ -228,13 +191,13 @@ const HowItWorks = ({
           </div>
           <div>
             <p className="text-lg mb-2">
-              Escribe lo que compraste y cuánto costó, por ejemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
+              Escreva o que comprou e quanto custou, por exemplo: <span className="font-bold text-sales-green">&quot;camisa 110&quot;</span>.
             </p>
             <p className="text-lg mb-4 text-sales-green">
-              Registra un gasto (real o falso) para probar.
+              Registre um gasto (real ou falso) para testar.
             </p>
             <p className="text-sm text-sales-green italic">
-              No te preocupes por comas, ni por poner "R$", escribe a tu manera.
+              Não se preocupe com vírgulas, nem em colocar "R$", escreva do seu jeito.
             </p>
           </div>
         </div>

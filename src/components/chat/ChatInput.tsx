@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { SendHorizontal } from 'lucide-react';
-import { trackUserInput } from '@/services/analyticsService';
 
 interface ChatInputProps {
   inputValue: string;
@@ -16,26 +15,20 @@ const ChatInput = ({
   onInputChange, 
   onSubmit, 
   isDisabled,
-  placeholder = "Ejemplo: ifood 44" 
+  placeholder = "Exemplo: ifood 44" 
 }: ChatInputProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // No enviar si ya está enviando o está deshabilitado
+    // No enviar se já está enviando ou está desabilitado
     if (isSubmitting || isDisabled || !inputValue.trim()) {
       return;
     }
     
-    // Establecer estado de envío
+    // Estabeler estado de envío
     setIsSubmitting(true);
-    
-    // Rastrear entrada del usuario si hay un valor - no bloqueante
-    if (inputValue.trim()) {
-      // Hacemos esto no bloqueante para acelerar el tiempo de respuesta
-      trackUserInput(inputValue, 'ChatInput').catch(console.error);
-    }
     
     try {
       // Llamar al manejador onSubmit original
