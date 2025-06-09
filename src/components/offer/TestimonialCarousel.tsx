@@ -12,11 +12,23 @@ interface TestimonialCarouselProps {
 
 const TestimonialCarousel = ({ testimonialImages }: TestimonialCarouselProps) => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
 
   // Function to navigate to the next image
   const nextImage = () => {
     setCurrentImage((prev) => (prev + 1) % testimonialImages.length);
   };
+
+  // Preload images for faster loading
+  useEffect(() => {
+    testimonialImages.forEach((testimonial, index) => {
+      const img = new Image();
+      img.onload = () => {
+        setLoadedImages(prev => new Set([...prev, testimonial.id]));
+      };
+      img.src = testimonial.image;
+    });
+  }, [testimonialImages]);
 
   // Auto-rotate testimonials with updated interval time
   useEffect(() => {
@@ -36,11 +48,19 @@ const TestimonialCarousel = ({ testimonialImages }: TestimonialCarouselProps) =>
             key={testimonial.id}
             className="w-full flex-shrink-0"
           >
-            <img 
-              src={testimonial.image} 
-              alt={`Depoimento ${testimonial.id}`} 
-              className="w-full h-[270px] object-contain" 
-            />
+            {loadedImages.has(testimonial.id) ? (
+              <img 
+                src={testimonial.image} 
+                alt={`Depoimento ${testimonial.id}`} 
+                className="w-full h-[270px] object-contain" 
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <div className="w-full h-[270px] bg-gray-200 animate-pulse flex items-center justify-center">
+                <span className="text-gray-400">Cargando...</span>
+              </div>
+            )}
           </div>
         ))}
       </div>

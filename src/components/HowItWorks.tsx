@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import MessageItem from './chat/MessageItem';
 import TypingIndicator from './chat/TypingIndicator';
@@ -80,16 +81,31 @@ const HowItWorks = ({
               role: 'system',
               content: `Eres un asistente financiero. El usuario te enviará un gasto en formato "item precio" (ejemplo: "camisa 110").
 
-Analiza cuidadosamente el item y categorízalo correctamente según estas categorías:
-- alimentación: comida, restaurantes, delivery, supermercado, bebidas, snacks
-- transporte: uber, taxi, gasolina, bus, metro, estacionamiento, peajes
-- ropa: camisas, pantalones, zapatos, ropa interior, accesorios de vestir
-- entretenimiento: cine, conciertos, juegos, streaming, salidas nocturnas
-- salud: medicinas, consultas médicas, gimnasio, productos de cuidado personal
-- hogar: productos de limpieza, decoración, muebles, electrodomésticos
-- educación: cursos, libros, materiales de estudio
-- viajes: hoteles, vuelos, tours, equipaje
-- otros: gastos que no encajan en las categorías anteriores
+Analiza cuidadosamente el item y categorízalo según estas categorías específicas:
+
+ALIMENTACIÓN: comida, pizza, hamburguesa, sandwich, café, bebidas, gaseosa, agua, jugo, cerveza, vino, restaurant, delivery, supermercado, snacks, dulces, pan, leche, huevos, carne, pollo, pescado, verduras, frutas
+
+TRANSPORTE: uber, taxi, gasolina, combustible, bus, metro, tren, estacionamiento, peajes, pasaje, boleto, viaje en auto
+
+ROPA: camisa, pantalón, zapatos, zapatillas, vestido, falda, chaqueta, abrigo, ropa interior, calcetines, medias, sombrero, gorra, bolso, cartera, accesorios
+
+ENTRETENIMIENTO: cine, película, concierto, juego, videojuego, streaming, netflix, spotify, salida nocturna, bar, discoteca, teatro, museo
+
+SALUD: medicina, medicamento, consulta médica, doctor, dentista, gimnasio, productos de cuidado personal, shampoo, jabón, crema
+
+HOGAR: productos de limpieza, detergente, decoración, muebles, electrodomésticos, cocina, baño, dormitorio
+
+EDUCACIÓN: curso, libro, materiales de estudio, universidad, colegio, clases
+
+VIAJES: hotel, vuelo, avión, tour, equipaje, hospedaje, turismo
+
+OTROS: solo para gastos que realmente no encajan en ninguna categoría anterior
+
+EJEMPLOS:
+- "camisa 50" → ropa
+- "pizza 25" → alimentación  
+- "uber 15" → transporte
+- "netflix 12" → entretenimiento
 
 Debes responder EXACTAMENTE en este formato:
 
@@ -105,7 +121,7 @@ Responde solo con el formato especificado, nada más.`
               content: currentInput
             }
           ],
-          temperature: 0.3,
+          temperature: 0.1,
           max_tokens: 100
         }),
       });
@@ -170,7 +186,22 @@ Responde solo con el formato especificado, nada más.`
       
       // Fallback response if API fails
       setTimeout(() => {
-        const fallbackResponse = `Gasto añadido\n📌 ${currentInput.split(' ')[0]} (otros)\n💰 $ ${currentInput.split(' ')[1] || '0'}`;
+        const item = currentInput.split(' ')[0] || 'item';
+        const price = currentInput.split(' ')[1] || '0';
+        
+        // Simple categorization for fallback
+        let category = 'otros';
+        const itemLower = item.toLowerCase();
+        
+        if (['pizza', 'hamburguesa', 'comida', 'café', 'bebida'].some(word => itemLower.includes(word))) {
+          category = 'alimentación';
+        } else if (['camisa', 'pantalón', 'zapatos', 'ropa'].some(word => itemLower.includes(word))) {
+          category = 'ropa';
+        } else if (['uber', 'taxi', 'gasolina', 'bus'].some(word => itemLower.includes(word))) {
+          category = 'transporte';
+        }
+        
+        const fallbackResponse = `Gasto añadido\n📌 ${item} (${category})\n💰 $ ${price}`;
         
         const botMessage: Message = {
           id: Date.now() + 1,
@@ -183,13 +214,11 @@ Responde solo con el formato especificado, nada más.`
         setMessages(prev => [...prev, botMessage]);
         
         setTimeout(() => {
-          const priceMatch = currentInput.match(/\d+/);
-          const price = priceMatch ? priceMatch[0] : '100';
           const limitValue = Math.round(Number(price) * 1.5);
           
           const reminderMessage: Message = {
             id: Date.now() + 2,
-            text: `Estás cerca de alcanzar tu <strong>límite definido de $ ${limitValue}</strong> por mes en <strong>otros</strong>.`,
+            text: `Estás cerca de alcanzar tu <strong>límite definido de $ ${limitValue}</strong> por mes en <strong>${category}</strong>.`,
             sender: 'bot',
             time: getCurrentTime(),
           };
