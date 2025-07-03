@@ -102,7 +102,7 @@ const OfferSection = ({ onContinue }: OfferSectionProps) => {
 
       {/* Sign up button */}
       <Button
-        onClick={() => window.open("https://pay.hotmart.com/F100621713W?checkoutMode=10", "_blank")}
+        onClick={() => window.open("https://pay.hotmart.com/F100621713W?off=ksx4vefh&checkoutMode=10", "_blank")}
         className="w-full max-w-lg bg-[#FFA35B] hover:bg-[#FF9240] text-black font-bold text-xl rounded-lg mb-6 py-[28px]"
       >
         Quiero suscribirme
