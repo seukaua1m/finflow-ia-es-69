@@ -26,8 +26,8 @@ const PricingPlan = () => {
           <div className="text-right">
             <div className="text-lg">Solo</div>
             <div className="flex items-baseline">
-              <span className="text-3xl font-bold mr-1">$9</span>
-              <span className="text-lg">,00</span>
+              <span className="text-3xl font-bold mr-1">$5</span>
+              <span className="text-lg">,99</span>
             </div>
             <div className="text-sm">al contado</div>
           </div>
